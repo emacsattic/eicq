@@ -1,12 +1,12 @@
 ;;; eicq-convert.el --- Utilities to convert other ICQ configurations to EICQ
 
-;; Copyright (C) 2001 Steve Youngs, Erik Arneson
+;; Copyright (C) 2001, 2002 Steve Youngs, Erik Arneson
 
 ;; RCS: $Id$
 ;; OriginalAuthor: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 06, 2001
-;; Last-Modified: <2002-5-12 09:47:23 (steve)>
+;; Last-Modified: <2002-09-29 22:44:59 (steve)>
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -72,13 +72,19 @@
   (interactive)
   (let (user-alist
         unode me)
-    (set-buffer (find-file-noselect (expand-file-name "~/.micqrc")))
+    (set-buffer (find-file-noselect 
+		 (or (expand-file-name "micqrc"
+				       (file-name-as-directory
+					(expand-file-name ".micq"
+							  (getenv "HOME"))))
+		     (expand-file-name ".micqrc" (getenv "HOME")))))
     (goto-char (point-min))
     (if (re-search-forward "^UIN \\([0-9]+\\)$" nil t)
         (setq me (match-string 1)))
-    (if (re-search-forward "^Contacts$" nil t)
+    (if (re-search-forward "^Contacts$\\|^\\[Contacts\\]$" nil t)
         (setq user-alist
-              (loop while (re-search-forward "^[ \t]*\\*?\\([0-9]+\\)[ \t]+\\(.*\\)$" nil t)
+              (loop while (re-search-forward 
+			   "^[ \t]*\\*?\\([0-9]+\\)[ \t]+\\(.*\\)$" nil t)
                 do (setq unode (cons (match-string 1) (match-string 2)))
                 collect unode)))
     (kill-buffer (current-buffer))
@@ -98,5 +104,5 @@
 ;time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
 ;time-stamp-end: "\\\\?[\">]"
 ;time-stamp-line-limit: 10
-;time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
+;time-stamp-format: "%4y-%02m-%02d %02H:%02M:%02S (%u)"
 ;End: 

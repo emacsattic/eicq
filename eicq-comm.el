@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
 ;; Created:       2002-04-10
-;; Last-Modified: <2002-05-12 09:48:20 (steve)>
+;; Last-Modified: <2002-07-29 17:53:31 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -81,6 +81,11 @@ For debug only.")
 ;;; Internal variables
 ;;; Code - network:
 
+(defcustom eicq-user-password nil
+  "*Password for your ICQ account.
+Nil means prompt for entering password every time you login."
+ :group 'eicq-info)
+
 (defvar eicq-network nil
   "TCP network between XEmacs and ICQ.")
 
@@ -115,10 +120,43 @@ gets encrypted.  Everything else is sent in clear text.")
     (setq eicq-encrypted-password (nreverse encrypted-pass))))
 
 
+(defun eicq-network-mode ()
+  "Major mode for network debug output.
+Commands: \\{eicq-main-mode}"
+  (make-local-variable 'kill-buffer-hook)
+  (kill-all-local-variables)
+  (use-local-map eicq-main-map)
+  (setq mode-name "eicq-network")
+  (setq major-mode 'eicq-network-mode)
+  (easy-menu-add eicq-main-easymenu)
+  (make-local-variable 'kill-buffer-query-functions)
+  (add-to-list
+   'kill-buffer-query-functions
+   (lambda ()
+     (eicq-logout 'kill)))
+  (make-local-variable 'kill-buffer-hook)
+  (add-hook
+   'kill-buffer-hook
+   (lambda () "Kill network buffer."
+     (eicq-network-kill))))
+
+(defun eicq-network-kill (&optional process change)
+  "Kill `eicq-network'.
+PROCESS and CHANGE is for `set-process-sentinel'."
+  (if (processp eicq-network) (delete-process eicq-network))
+  (setq eicq-network nil)
+  (if (string= eicq-network-hostname "127.0.0.1")
+      (setq eicq-network-port nil)))
+
 (defun eicq-network-show-buffer ()
   "Switch to `eicq-bridge-buffer' for network dump info."
   (interactive)
   (switch-to-buffer eicq-network-buffer))
+
+(defun eicq-connected-p ()
+  "Return non-nil if the network is ready for sending string."
+  (and (processp eicq-network)
+       (eq (process-status eicq-network) 'open)))
 
 (defun eicq-connect ()
   "Make a connection to ICQ server.

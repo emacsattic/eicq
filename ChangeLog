@@ -1,3 +1,15 @@
+2002-09-29  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq-convert.el (eicq-import-from-micq): Support new micq rc
+	file format.
+
+2002-07-29  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-user-password): Move to eicq-comm.el
+	(eicq-connected-p): Ditto.
+	(eicq-network-mode): Ditto.
+	(eicq-network-kill): Ditto.
+
 2002-06-17  Steve Youngs  <youngs@xemacs.org>
 
 	* Makefile (SOURCES): Add eicq-comm.el.

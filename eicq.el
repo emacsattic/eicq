@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2002-05-16 15:58:02 (steve)>
+;; Last-Modified: <2002-07-29 17:53:08 (steve)>
 ;; Version: 0.5.0
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
@@ -673,11 +673,6 @@ Dynamically ALIAS and STATUS are binded to be used in hooks.")
 Run `eicq-world-update' after modifying this variable."
   :group 'eicq-info)
 
-(defcustom eicq-user-password nil
-  "*Password for your ICQ account.
-Nil means prompt for entering password every time you login."
- :group 'eicq-info)
-
 ;;;###autoload
 (defun eicq-version (&optional arg)
   "Return the version of eicq you are currently using.
@@ -1221,34 +1216,6 @@ COUNT means how many time this packets has been resent. Default is 0."
 (easy-menu-define
  eicq-main-easymenu nil "Eicq Main" eicq-main-menu)
 
-(defun eicq-network-mode ()
-  "Major mode for network debug output.
-Commands: \\{eicq-main-mode}"
-  (make-local-variable 'kill-buffer-hook)
-  (kill-all-local-variables)
-  (use-local-map eicq-main-map)
-  (setq mode-name "eicq-network")
-  (setq major-mode 'eicq-network-mode)
-  (easy-menu-add eicq-main-easymenu)
-  (make-local-variable 'kill-buffer-query-functions)
-  (add-to-list
-   'kill-buffer-query-functions
-   (lambda ()
-     (eicq-logout 'kill)))
-  (make-local-variable 'kill-buffer-hook)
-  (add-hook
-   'kill-buffer-hook
-   (lambda () "Kill network buffer."
-     (eicq-network-kill))))
-
-(defun eicq-network-kill (&optional process change)
-  "Kill `eicq-network'.
-PROCESS and CHANGE is for `set-process-sentinel'."
-  (if (processp eicq-network) (delete-process eicq-network))
-  (setq eicq-network nil)
-  (if (string= eicq-network-hostname "127.0.0.1")
-      (setq eicq-network-port nil)))
-
 (defvar eicq-frame nil
   "The frame where Eicq is displayed.")
 
@@ -1292,11 +1259,6 @@ PROCESS and CHANGE is for `set-process-sentinel'."
 	   (frame-live-p eicq-wharf-frame))
       (delete-frame eicq-wharf-frame))
   (setq eicq-wharf-frame nil))
-
-(defun eicq-connected-p ()
-  "Return non-nil if the network is ready for sending string."
-  (and (processp eicq-network)
-       (eq (process-status eicq-network) 'open)))
 
 (defun eicq-send-internal (bin)
   "Send a binary string BIN to `eicq-network'.

@@ -73,8 +73,8 @@ TAR_FLAGS = czf
 
 BIN = icq2tcp
 USERSH = eicq-user-install.sh
-SOURCES = eicq.el eicq-toolbar.el eicq-report.el eicq-convert.el \
-	eicq-wharf.el eicq-comm.el
+SOURCES = eicq-comm.el eicq.el eicq-toolbar.el eicq-report.el eicq-convert.el \
+	eicq-wharf.el 
 OBJECTS = $(SOURCES:.el=.elc)
 EXTRA_SRC = ChangeLog INSTALL NEWS README TODO
 EXTRA_OBJ = $(wildcard ./auto-autoloads.el*) $(wildcard ./custom-load.el*)
