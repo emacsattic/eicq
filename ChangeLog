@@ -1,3 +1,18 @@
+2001-08-18  Steve Youngs  <youngs@xemacs.org>
+
+	* README: Minor updates.
+
+	* Makefile (SOURCES): Add eicq-wharf.el.
+
+	* eicq.el (eicq-show-window): Fire up the EicqWharf frame.
+	(eicq-disconnect): Kill the EicqWharf frame if present.
+
+	* eicq-wharf.el (eicq-wharf-frame-use-p): New.
+
+2001-08-18  Erik Arneson  <erik@aarg.net>
+
+	* eicq-wharf.el: New file.
+
 2001-08-17  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-buddy-show-buffer): Remove the text "*** Bottom ***".

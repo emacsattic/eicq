@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2001-8-17 19:11:42 (steve)>
+;; Last-Modified: <2001-8-18 01:25:25 (steve)>
 ;; Keywords: bug-report
 
 ;; Eicq is free software; you can redistribute it and/or modify
@@ -97,7 +97,8 @@
   "Go through the Eicq source files and report what variables have been changed.
 The source file has to be in the load path."
   (interactive)
-  (let ((files '("eicq.el" "eicq-toolbar.el" "eicq-report.el"))
+  (let ((files '("eicq.el" "eicq-toolbar.el" "eicq-report.el"
+		 "eicq-wharf.el"))
 	(point (point))
 	file expr olist sym)
     (message "Please wait while we snoop your variables...")

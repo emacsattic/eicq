@@ -1,5 +1,18 @@
 -*- Outline -*-
 
+* 0.2.15 to 0.2.16
+
+- Bug report code cleanup/enhancement. (Me)
+- Use 'locate-data-directory' to find data files. (Me)
+- eicq-wharf.el New file (Erik Arneson)
+	Create a tiny frame suitable for docking.  Keeps track of
+	number of new messages.
+- New hooks to use with eicq-wharf.el (Me)
+- 2nd set of auto-response messages (Me)
+	To be used when you have idled away as opposed to explicitly
+	marking yourself away (not yet working).
+- Cleaner layout for query output. (Me)
+
 * 0.2.14 to 0.2.15
 
 - Cygwin builds (Thorsten Bonow)

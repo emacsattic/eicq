@@ -22,6 +22,8 @@ eicq uses version 5 protocol and it can:
 - authorize, search, query and update meta user info
 - receive contact list transfer
 - register new user, change password
+- convert Licq & Micq contact lists to Eicq format
+- a 'dockable' miniture frame that tracks the number of new messages
 
 eicq cannot yet transfer files, chat, or anything that need
 direct TCP connection. Of course, with XEmacs behind you'll
@@ -41,11 +43,11 @@ There are a few mailing lists. See <http://eicq.sf.net/#maillist>
 Have fun!
 
 * Submitting Patches
+
 If you've got a patch for a bug fix or some wiz-bang new feature mail
-them to <eicq-devel@lists.sourceforge.net>.  The Eicq developers will
-review your contribution and either accept it and add it to the Eicq
-code, or reject it.  Whether accepted or rejected, you'll hear back
-from us.
+them to <eicq-devel@lists.sf.net>.  The Eicq developers will review
+your contribution and either accept it and add it to the Eicq code, or
+reject it.  Whether accepted or rejected, you'll hear back from us.
 
 Two things, one an insistance, and one a preference...
 
@@ -75,7 +77,7 @@ example, "m" inside an incoming message acts like a reply.
 
 ** alias vs uin
 
-"SteveY" is my alias while "34307457" is my uin. In all prompts
+"JackaL" is my alias while "34307457" is my uin. In all prompts
 of entering an icq person, you can enter either an alias or
 an uin, although only alias completing read is provided. 
 (Press TAB when entering an alias!)
@@ -95,19 +97,24 @@ eicq-log-new-file occasionally.
 
 If you want to customize anything fancy:
 
-`eicq-do-message-hook'
-`eicq-do-status-update-hook'
+eicq-buddy-mode-hook
+eicq-log-mode-hook
+eicq-new-message-hook
+eicq-read-message-hook
+eicq-status-update-hook
+eicq-system-message-hook
 
-Interactive with eliza, forward messages to cell phone,
-launch a bomb, or whatever you like.
 
 ** newline
 
-How to enter new lines in minibuffer? Type "Hello",
-control-Q 12 "world", to get:
+How to enter new lines in minibuffer? 
 
-Hello
-world
+	Type 'Hello C-q 12 World'
+
+To get:
+
+	Hello
+	world
 
 ** ~/.emacs tips
 

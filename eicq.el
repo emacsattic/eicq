@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-17 19:51:13 (steve)>
-;; Version: 0.2.16pre1
+;; Last-Modified: <2001-8-18 13:01:31 (steve)>
+;; Version: 0.2.16pre2
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.16pre1"
+(defconst eicq-version "0.2.16pre2"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -1368,6 +1368,8 @@ PROCESS and CHANGE is for `set-process-sentinel'."
 (defvar eicq-frame nil
   "The frame where EICQ is displayed.")
 
+(defvar eicq-wharf-frame)
+
 (defun eicq-disconnect ()
   "Log out of ICQ and close all Eicq buffers."
   (interactive)
@@ -1382,7 +1384,10 @@ PROCESS and CHANGE is for `set-process-sentinel'."
   (delete-other-windows)
   (if eicq-start-in-new-frame
       (delete-frame eicq-frame))
-  (setq eicq-frame nil))
+  (setq eicq-frame nil)
+  (if (frame-live-p eicq-wharf-frame)
+      (delete-frame eicq-wharf-frame))
+  (setq eicq-wharf-frame nil))
 
 (defun eicq-connected-p ()
   "Return non-nil if the network is ready for sending string."
@@ -3339,12 +3344,17 @@ ALIAS is an alias/uin."
 (defvar eicq-log-buffer nil
   "Buffer for log.")
 
+(defvar eicq-wharf-frame-use-p)
+
 ;;;###autoload
 (defun eicq-show-window ()
   "Show windows of eicq buffers.
 Make them if not yet done.
 See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (interactive)
+  (if (featurep 'eicq-wharf)
+      (if eicq-wharf-frame-use-p
+	  (eicq-wharf-new-frame)))
   (unless (frame-live-p eicq-frame)
     (setq eicq-frame
           (if eicq-start-in-new-frame
@@ -3362,6 +3372,7 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (set-window-buffer
    (split-window nil eicq-status-window-height) eicq-buddy-buffer)
   (other-window 2))
+
 
 (defun eicq-hide-window ()
   "Hide windows of eicq buffers."
@@ -4182,6 +4193,9 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
 
 ;; otherwise sending large contact list leads to significant delay
 (byte-compile 'eicq-pack-contact-list)
+
+(defvar eicq-load-hook nil
+  "*Hooks run after Eicq has loaded everything up.")
 
 (run-hooks 'eicq-load-hook)
 

@@ -6,7 +6,7 @@
 ;; Author: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 10, 2001
-;; Last-Modified: <2001-8-10 12:40:43 (erik)>
+;; Last-Modified: <2001-8-18 12:05:58 (steve)>
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -60,6 +60,14 @@
   "Face used in EicqWharf window.  If you want this to be dockable, make sure
 you use a small but readable font."
   :group 'eicq-wharf)
+
+(defcustom eicq-wharf-frame-use-p nil
+  "If non-NIL, start up the EicqWharf mini-frame."
+  :type 'boolean
+  :group 'eicq-wharf
+  :tag "EicqWharf mini-frame")
+
+;;; Internal variables
 
 ;;;###autoload
 (defun eicq-wharf-new-frame ()
@@ -119,6 +127,7 @@ you use a small but readable font."
   "Decrement number of system messages in EicqWharf."
   (eicq-wharf-change-messages "Sys" -1))
 
+(provide 'eicq-wharf)
 ;;; eicq-wharf.el ends here
 
 ;Local Variables:
