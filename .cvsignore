@@ -1,3 +1,5 @@
 auto-autoloads.el
 custom-load.el
+*.info
+icq2tcp
 
