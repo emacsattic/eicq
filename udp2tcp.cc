@@ -31,7 +31,7 @@
  * Maintainer: Steve Youngs <youngs@xemacs.org>
  * License: GPL
  * Created: Aug 08, 1998
- * Version: 0.2.11
+ * Version: 0.2.12
  * Where: http://eicq.sourceforge.net/
  * Keywords: udp, tcp, network, bridge, icq, emacs
  * 
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in udp_local_addr, udp_remote_addr, 
         tcp_local_addr, tcp_remote_addr;
 
-    printf("UDP <-> TCP bridge v0.2.11\n\
+    printf("UDP <-> TCP bridge v0.2.12\n\
 \n\
 http://eicq.sourceforge.net/\n\n");
   

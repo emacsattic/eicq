@@ -1,8 +1,39 @@
-2001-03-15  Jack Twilley  <jmt@tbe.net>
+2001-04-21  Steve Youngs  <youngs@xemacs.org>
 
-	* eicq.el (eicq-user-auto-away-set):
-	Replaced timer with two timers, one each for auto-away and
-	auto-na. 
+	* Version 0.2.12 released.
+
+	* eicq-toolbar.el (eicq-toolbar-disconnect): Do 'eicq-logout' before
+	'eicq-disconnect'.
+	(eicq-buddy-toolbar): Remove.  Use the same toolbar for both the 
+	buddy and log buffers.
+	(eicq-install-buddy-toolbar): Use the log toolbar.
+
+	* eicq.el (eicq-do-login-confirm): Run 'eicq-show-window'.
+	(eicq-disconnect): Kill the Eicq buffers.
+	(eicq-log-mode): Load both the log menu and the buddy menu.
+	(eicq-buddy-mode): Ditto.
+
+2001-04-01  Steve Youngs  <youngs@xemacs.org>
+
+	* README: Added section about submitting patches.
+
+2001-03-21  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-log-next-unread): Make it interactive.
+	(eicq-log-previous-unread): Ditto.
+
+2001-03-19  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-log-mode-map): 'n' & 'p' are now next and previous
+	Unread messages.  'N' & 'P' are for next and previous message.  
+	Mark unread has been moved to 'v'.
+	(eicq-buddy-show-buffer): Add widgets for changing status via the 
+	buddy buffer.
+
+2001-03-18  Jack Twilley  <jmt@tbe.net>
+
+	* eicq.el (eicq-log-next-unread): New.
+	(eicq-log-previous-unread): New.
 
 2001-03-12  Jack Twilley  <jmt@tbe.net>
 

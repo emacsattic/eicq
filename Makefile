@@ -35,7 +35,7 @@ DATA_DIR = $(PREFIX)/lib/xemacs/site-packages/etc/$(PACKAGE)
 BIN_DIR = $(PREFIX)/bin
 
 # Where the info files go.
-INFO_DIR = $(PREFIX)/info
+INFO_DIR = $(PREFIX)/lib/xemacs/site-packages/info
 
 # Programs and their flags.
 EMACS = xemacs
@@ -99,6 +99,14 @@ install::
 	$(INSTALL) -m 644 $(SOURCES) $(EXTRA_SRC) $(OBJECTS) $(EXTRA_OBJ) \
 		$(LISP_DIR)
 	$(INSTALL_INFO) $(INSTALL_INFO_FLAGS)
+
+
+upgrade: uninstall install
+
+uninstall:: 
+	rm -rf $(DATA_DIR) $(LISP_DIR)
+	rm -f $(INFO_DIR)/$(INFO_FILES) $(BIN_DIR)/$(BIN) $(BIN_DIR)/$(USERSH)
+	$(INSTALL_INFO) --remove $(INSTALL_INFO_FLAGS)
 
 clean::
 	rm -f $(OBJECTS) $(BIN) $(INFO_FILES) \

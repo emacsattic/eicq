@@ -2,7 +2,7 @@
 
 * Introduction
 
-http://eicq.sourceforge.net/INSTALL (version 0.2.11)
+http://eicq.sourceforge.net/INSTALL (version 0.2.12)
 
 This file is best viewed under XEmacs. Press C-c C-o now to
 see the outline of topics. You can use XEmacs menu to
@@ -18,7 +18,7 @@ You can contact me for anything at <youngs@xemacs.org>.
 
 eicq uses version 5 protocol and it can:
 
-- send message/url to single or multi users or group
+- send message/url
 - authorize, search, query and update meta user info
 - receive contact list transfer
 - register new user, change password
@@ -39,6 +39,23 @@ See the file 'INSTALL' in this directory.
 There are a few mailing lists. See <http://eicq.sourceforge.net/#maillist>
 
 Have fun!
+
+* Submitting Patches
+If you've got a patch for a bug fix or some wiz-bang new feature mail
+them to <eicq-devel@lists.sourceforge.net>.  The Eicq developers will
+review your contribution and either accept it and add it to the Eicq
+code, or reject it.  Whether accepted or rejected, you'll hear back
+from us.
+
+Two things, one an insistance, and one a preference...
+
+	- I insist that every patch has a ChangeLog entry.  If you
+	  think your change isn't worth doing a ChangeLog entry for,
+	  do one anyway.  Leave it to me to decide whether or not it's
+	  worth it.
+
+	- I prefer unified diffs. (diff -u oldfile newfile > patch.diff). 
+	  I simply find unified diffs much easier to review.
 
 * Faq and tips
 

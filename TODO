@@ -9,8 +9,8 @@ This list is not in order of importance or any kind of order at all.
 And just because something is on the list doesn't mean that it will
 become part of Eicq.
 
-Feel free to do any of these things and send me a patch
-<youngs@xemacs.org>
+Feel free to do any of these things and send a patch to
+<eicq-devel@lists.sourceforge.net>
 
 * Todo list
 
@@ -71,7 +71,7 @@ Feel free to do any of these things and send me a patch
 
 	not necessary once Eicq is totally Lisp.
 
-** change status via mouse
+** implement a 'eicq-use-sound' flag
 
-	the statuses are listed in the buddy buffer, why not use them
-
+	Yep, somebody asked me how to switch off the sound.
+	Perhaps 3 settings - on, off, beep (pc speaker)

@@ -236,6 +236,7 @@ Argument EMAIL is the email address of the person you're searching for."
 (defun eicq-toolbar-disconnect ()
   "Disconnect from the toolbar."
   (interactive)
+  (eicq-logout)
   (eicq-disconnect))
 
 (defun eicq-toolbar-log-read ()
@@ -274,14 +275,9 @@ Argument EMAIL is the email address of the person you're searching for."
   (eicq-log-expand))
 
 ;; Now define the toolbar
-
-(defvar eicq-buddy-toolbar
+(defvar eicq-log-toolbar
   '([eicq-password-icon
      eicq-toolbar-change-password t "Change password"]
-    [eicq-show-log-icon
-     eicq-toolbar-show-log t "Show log"]
-    [eicq-hide-log-icon
-     eicq-toolbar-hide-log t "Hide log"]
     [eicq-send-message-here-icon
      eicq-toolbar-send-message-here t "Send message here"]
     [eicq-send-message-around-icon
@@ -294,35 +290,8 @@ Argument EMAIL is the email address of the person you're searching for."
      eicq-toolbar-query-info-here t "Query info here"]
     [eicq-query-info-around-icon
      eicq-toolbar-query-info-around t "Query info..."]
-    [eicq-update-info-icon
-     eicq-toolbar-update-info t "Update info"]
     [eicq-search-icon
      eicq-toolbar-search t "Search"]
-    [eicq-authorize-here-icon
-     eicq-toolbar-authorize-here t "Authorize here"]
-    [eicq-authorize-around-icon
-     eicq-toolbar-authorize-around t "Authorize..."]
-    [eicq-login-icon
-     eicq-toolbar-login t "Login"]
-    [eicq-logout-icon
-     eicq-toolbar-logout t "Logout"]
-    [eicq-disconnect-icon
-     eicq-toolbar-disconnect t "Disconnect"])
-  "The clickety click Eicq buddy toolbar.")
-
-(defvar eicq-log-toolbar
-  '([eicq-send-message-here-icon
-     eicq-toolbar-send-message-here t "Send message here"]
-    [eicq-send-message-around-icon
-     eicq-toolbar-send-message-around t "Send message..."]
-    [eicq-send-url-here-icon
-     eicq-toolbar-send-url-here t "Send URL here"]
-    [eicq-send-url-around-icon
-     eicq-toolbar-send-url-around t "Send URL..."]
-    [eicq-query-info-here-icon
-     eicq-toolbar-query-info-here t "Query info here"]
-    [eicq-query-info-around-icon
-     eicq-toolbar-query-info-around t "Query info..."]
     [eicq-authorize-here-icon
      eicq-toolbar-authorize-here t "Authorize here"]
     [eicq-authorize-around-icon
@@ -367,7 +336,7 @@ If it is non-nil, it must be a toolbar.  The five valid values are
   (and eicq-use-toolbar
        (set-specifier (symbol-value eicq-use-toolbar)
 		      (cons
-		       (current-buffer) eicq-buddy-toolbar))))
+		       (current-buffer) eicq-log-toolbar))))
 
 (defun eicq-install-log-toolbar ()
   "Install the toolbar for `eicq-log-mode' in Eicq."

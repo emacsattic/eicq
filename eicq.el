@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last Modified: Mar 9, 2001
-;; Version: 0.2.11
+;; Last Modified: Mar 19, 2001
+;; Version: 0.2.12
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
 
@@ -47,8 +47,9 @@
 (require 'browse-url)
 (require 'outline)
 (require 'timezone)
+(require 'wid-edit)
 
-(defconst eicq-version "0.2.11"
+(defconst eicq-version "0.2.12"
   "Version of eicq you are currently using.")
 
 (defgroup eicq nil
@@ -1078,7 +1079,10 @@ Normally should use `eicq-logout' to logout first."
   (interactive)
   (eicq-logout 'kill)
   (eicq-network-kill)
-  (eicq-bridge-kill))
+  (eicq-bridge-kill)
+  (loop for each in '(eicq-log-buffer eicq-buddy-buffer eicq-bridge-buffer)
+    do (kill-buffer (symbol-value each)))
+  (delete-other-windows))
 
 (defun eicq-connected-p ()
   "Return non-nil if the network is ready for sending string."
@@ -1898,7 +1902,8 @@ Dynamically ALIAS and STATUS are binded to be used in hooks.")
   ;; (eicq-send (eicq-pack-login-2))
   (eicq-keep-alive-start)
   (eicq-send-contact-list)
-  (message "Welcome to eicq..."))
+  (message "Welcome to Eicq...")
+  (eicq-show-window))
 
 (defun eicq-do-system-message (packet)  ; TODO
   "Handle server command 01c2 in PACKET."
@@ -2855,6 +2860,8 @@ Need to relogin afterwards."
        nil
      password)))
 
+(defvar eicq-user-auto-away-p)
+
 (defun eicq-send-message-helper (message aliases type log-message)
   "Send message, url, authorization or others.
 MESSAGE is the message to send.
@@ -3035,33 +3042,26 @@ Run this after changing any meta user info variables."
   "This variable is set when the auto-away timer expires, 
 and it is reset in eicq-send-message-helper and eicq-change-status.")
 
-(defun eicq-auto-away-timeout-set (&optional symbol away-value)
-  "Set timers for auto-away and auto-na.  See 'eicq-auto-away-timeout'."
-  (let ((na-value (* away-value 2)))
-    (delete-itimer "eicq auto-away")	; delete previous
-    (start-itimer
-     "eicq auto-away"
-     (lambda ()
-       ;; auto away for first idle
-       (when (member eicq-user-status '("online" "fcc"))
-	 (eicq-log-system "Auto away.")
-	 (eicq-change-status "away")
-	 (setq eicq-user-auto-away-p t))) 
-     away-value away-value
-     'is-idle)
-    (delete-itimer "eicq auto-na")      ; delete previous
-    (start-itimer
-     "eicq auto-na"
-     (lambda ()
-       ;; auto na for second idle
-       (when (and eicq-user-auto-away-p 
-		  (equal eicq-user-status "away"))
-	 (eicq-log-system "Auto na.")
-	 (eicq-change-status "na")
-	 ;; eicq-change-status resets this flag
-	 (setq eicq-user-auto-away-p t)))
-     na-value na-value
-     'is-idle)))
+(defun eicq-auto-away-timeout-set (&optional symbol value)
+  "Set timer for auto-away.  See 'eicq-auto-away-timeout'."
+  (delete-itimer "eicq auto-away")      ; delete previous
+  (start-itimer
+   "eicq auto-away"
+   (lambda ()
+     ;; auto na for second idle
+     (when (and eicq-user-auto-away-p 
+		(equal eicq-user-status "away"))
+       (eicq-log-system "Auto na.")
+       (eicq-change-status "na")
+       ;; eicq-change-status resets this flag
+       (setq eicq-user-auto-away-p t))
+     ;; auto away for first idle
+     (when (member eicq-user-status '("online" "fcc"))
+       (eicq-log-system "Auto away.")
+       (eicq-change-status "away")
+       (setq eicq-user-auto-away-p t))) 
+   value value
+   'is-idle))
 
 (defcustom eicq-auto-away-timeout 300
   "*Seconds of inactivity in Emacs before auto-away.
@@ -3122,7 +3122,8 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (set-window-buffer nil eicq-buddy-buffer)
   (delete-other-windows)
   (set-window-buffer
-   (split-window nil eicq-buddy-window-width t) eicq-log-buffer))
+   (split-window nil eicq-buddy-window-width t) eicq-log-buffer)
+  (other-window 1))
 
 (defun eicq-hide-window ()
   "Hide windows of eicq buffers."
@@ -3174,7 +3175,7 @@ therefore default value 50 will be nice."
     (define-key map [insert] 'eicq-log-expand)
     (define-key map [(control up)] 'eicq-log-previous)
     (define-key map [(control down)] 'eicq-log-next)
-    (define-key map [N] 'eicq-log-mark-unread)
+    (define-key map [v] 'eicq-log-mark-unread)
     (define-key map [c] 'eicq-log-mark-read)
     (define-key map [W] 'eicq-alias-around)
     (define-key map [s] 'eicq-select-alias-around)
@@ -3183,11 +3184,28 @@ therefore default value 50 will be nice."
     (define-key map [a] 'eicq-authorize-alias-around)
     (define-key map [i] 'eicq-query-info-alias-around)
     (define-key map [f] 'eicq-forward-message-around)
-    (define-key map [n] 'eicq-log-next)
+    (define-key map [n] 'eicq-log-next-unread)
+    (define-key map [N] 'eicq-log-next)
     (define-key map [o] 'other-window)
-    (define-key map [p] 'eicq-log-previous)
+    (define-key map [p] 'eicq-log-previous-unread)
+    (define-key map [P] 'eicq-log-previous)
     map)
   "Keymap for `eicq-log-mode'.")
+
+(defvar eicq-buddy-menu
+  '("Eicq-Buddy"
+    ["Select Here" eicq-select-alias-here t]
+    ["Select By Status" eicq-buddy-select-all-in-view-by-status t]
+    ["Select By Regexp" eicq-buddy-select-all-in-view-by-regexp t]
+    ["Send Message Here" eicq-send-message-alias-here t]
+    ["Send URL Here" eicq-send-url-alias-here t]
+    ["Authorize Here" eicq-authorize-alias-here t]
+    ["Query Info Here" eicq-query-info-alias-here t]
+    "---"
+    ["View Connected" eicq-buddy-view-connected t]
+    ["View Active" eicq-buddy-view-active t]
+    ["View All" eicq-buddy-view-all t])
+  "Menu for `eicq-buddy-mode'.")
 
 (defun eicq-log-mode ()
   "Major mode for logging messages in eicq.
@@ -3201,6 +3219,7 @@ Turning on `eicq-log-mode' runs the hook `eicq-log-mode-hook'."
   (setq major-mode 'eicq-log-mode)
   ;; put easy-menu-add after set mode-name
   (easy-menu-add eicq-main-easymenu)
+  (easy-menu-add eicq-buddy-menu)
   (easy-menu-add eicq-log-menu)
   (setq fill-column eicq-log-fill-column)
 
@@ -3438,22 +3457,26 @@ URL will be highlighted."
   "See `eicq-log-outgoing-flag'.
 ALIAS is an id to be logged under.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log alias (apply 'format messages) eicq-log-outgoing-flag eicq-log-outgoing-mark))
+  (eicq-log alias 
+	    (apply 'format messages) eicq-log-outgoing-flag eicq-log-outgoing-mark))
 
 (defun eicq-log-error (&rest messages)
   "See `eicq-log-error-flag'.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!error" (apply 'format messages) eicq-log-error-flag eicq-log-error-mark))
+  (eicq-log "!error" 
+	    (apply 'format messages) eicq-log-error-flag eicq-log-error-mark))
 
 (defun eicq-log-debug (&rest messages)
   "See `eicq-log-debug-flag'.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!debug" (apply 'format messages) eicq-log-debug-flag eicq-log-debug-mark))
+  (eicq-log "!debug" 
+	    (apply 'format messages) eicq-log-debug-flag eicq-log-debug-mark))
 
 (defun eicq-log-system (&rest messages)
     "See `eicq-log-system-flag'.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!system" (apply 'format messages) eicq-log-system-flag eicq-log-system-mark))
+  (eicq-log "!system" 
+	    (apply 'format messages) eicq-log-system-flag eicq-log-system-mark))
 
 (defface eicq-face-log-unread
   '((((background dark))
@@ -3609,24 +3632,43 @@ See `eicq-process-alias-input'."
 
 (defalias 'eicq-log-next 'outline-forward-same-level)
 
+(defun eicq-log-next-unread ()
+  "Moves point to the next unread message.  
+Does nothing if there are no unread messages after point."
+  (interactive)
+  (let ((here (point)))
+    (goto-char 
+     (catch 'where
+       (progn 
+	 (while (not (eq here (point-max))) ; mildly bogus target
+	   (let ((next (next-single-property-change here 'face)))
+	     (unless next
+	       (throw 'where (point)))
+	     (if (eq (get-text-property next 'face)
+		     (cdr (assoc 'unread eicq-log-mark-alist)))
+		 (throw 'where next)
+	       (setq here next)))))))))
+
+(defun eicq-log-previous-unread ()
+  "Moves point to the previous unread message.  
+Does nothing if there are no unread messages after point."
+  (interactive)
+  (let ((here (point)))
+    (goto-char 
+     (catch 'where
+       (progn 
+	 (while (not (eq here (point-max))) ; mildly bogus target
+	   (let ((prev (previous-single-property-change here 'face)))
+	     (unless prev
+	       (throw 'where (point)))
+	     (if (eq (get-text-property prev 'face)
+		     (cdr (assoc 'unread eicq-log-mark-alist)))
+		 (throw 'where prev)
+	       (setq here prev)))))))))
+
 ;;; Code - buddy:
 
 ;; contact list (list of aliases) buffer
-
-(defvar eicq-buddy-menu
-  '("Eicq-Buddy"
-    ["Select Here" eicq-select-alias-here t]
-    ["Select By Status" eicq-buddy-select-all-in-view-by-status t]
-    ["Select By Regexp" eicq-buddy-select-all-in-view-by-regexp t]
-    ["Send Message Here" eicq-send-message-alias-here t]
-    ["Send URL Here" eicq-send-url-alias-here t]
-    ["Authorize Here" eicq-authorize-alias-here t]
-    ["Query Info Here" eicq-query-info-alias-here t]
-    "---"
-    ["View Connected" eicq-buddy-view-connected t]
-    ["View Active" eicq-buddy-view-active t]
-    ["View All" eicq-buddy-view-all t])
-  "Menu for `eicq-buddy-mode'.")
 
 (easy-menu-define
  eicq-log-easymenu nil "Eicq Log" eicq-buddy-menu)
@@ -3672,6 +3714,7 @@ Turning on `eicq-buddy-mode' runs the hook `eicq-buddy-mode-hook'."
   ;; put easy-menu-add after set mode-name
   (easy-menu-add eicq-main-easymenu)
   (easy-menu-add eicq-buddy-menu)
+  (easy-menu-add eicq-log-menu)
   (setq modeline-format "%b")
 
   (run-hooks 'eicq-buddy-mode-hook))
@@ -3715,13 +3758,57 @@ See `eicq-buddy-view' and `eicq-buddy-status-color-hint-flag'."
       as status = (eicq-world-getf alias 'status)
       as face = (eicq-status-face status)
       do (insert-face (concat alias "\n") face))
-
     (insert "----\n")
-    (when eicq-buddy-status-color-hint-flag
-      (loop for status in eicq-valid-statuses
-        as face = (eicq-status-face status)
-        unless (string= status "invisible")
-        do (insert-face (concat status "\n") face)))
+    (widget-insert "\n")
+    (set (make-local-variable 'widget-button-face) 'eicq-face-online)
+    (widget-create 'link
+		   :help-echo "Change status to \"Online\""
+		   :action (lambda (&rest ignore)
+			     (eicq-change-status "online"))
+		   "online")
+    (widget-insert "\n")
+    (set (make-local-variable 'widget-button-face) 'eicq-face-away)
+    (widget-create 'link
+		   :help-echo "Change status to \"Away\""
+		   :action (lambda (&rest ignore)
+			     (eicq-change-status "away"))
+		   "away")
+    (widget-insert "\n")
+    (set (make-local-variable 'widget-button-face) 'eicq-face-occ)
+    (widget-create 'link
+		   :help-echo "Change status to \"Occupied\""
+		   :action (lambda (&rest ignore)
+			     (eicq-change-status "occ"))
+		   "occ")
+    (widget-insert "\n")
+    (set (make-local-variable 'widget-button-face) 'eicq-face-dnd)
+    (widget-create 'link
+		   :help-echo "Change status to \"Do Not Disturb\""
+		   :action (lambda (&rest ignore)
+			     (eicq-change-status "dnd"))
+		   "dnd")
+    (widget-insert "\n")
+    (set (make-local-variable 'widget-button-face) 'eicq-face-ffc)
+    (widget-create 'link
+		   :help-echo "Change status to \"Free For Chat\""
+		   :action (lambda (&rest ignore)
+			     (eicq-change-status "ffc"))
+		   "ffc")
+    (widget-insert "\n")
+    (set (make-local-variable 'widget-button-face) 'eicq-face-na)
+    (widget-create 'link
+		   :help-echo "Change status to \"Not Available\""
+		   :action (lambda (&rest ignore)
+			     (eicq-change-status "na"))
+		   "na")
+    (widget-insert "\n")
+    (set (make-local-variable 'widget-button-face) 'default)
+    (widget-create 'link
+		   :help-echo "Change status to \"Invisible\""
+		   :action (lambda (&rest ignore)
+			     (eicq-change-status "invisible"))
+		   "invisible")
+    (widget-insert "\n")
     (eicq-buddy-mode))
   (unless no-select
     (switch-to-buffer eicq-buddy-buffer)))
@@ -3953,6 +4040,9 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
 (byte-compile 'eicq-pack-contact-list)
 
 (run-hooks 'eicq-load-hook)
+
+
+
 (provide 'eicq)
 
 ;; Local Variables:
@@ -3961,3 +4051,6 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
 ;; End:
 
 ;;; eicq.el ends here
+
+
+;;::::::::::::::: Stuff I'm working on ::::::::::::::::::::::::::::::::::

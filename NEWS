@@ -1,4 +1,21 @@
--*- outline -*-
+-*- Outline -*-
+
+* from 0.2.11 to 0.2.12
+
+** Change status via widgets in the buddy buffer.
+** In log buffer:
+	'n' move to next unread message
+	'p' move to previous unread message
+	'N' move to next message (whether read or unread)
+	'P' move to previous message (whether read or unread)
+	Outgoing messages are automatically marked as read.
+** Auto away/na timeouts now work correctly.
+** Auto online after a auto away/na.
+** Use the same toolbar in both the log and buddy buffers.
+** M-x eicq-login automatically brings up the buddy and log buffers.
+** The toolbar button "Disconnect":
+	Does a 'eicq-logout'
+	Kills the Eicq buffers.
 
 * from 0.2.10 to 0.2.11
 
@@ -65,3 +82,5 @@
 ** search users, update basic info and extended info
 ** relogin quiently after being kicked out
 ** auto-na
+
+
