@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2002-2-17 11:46:48 (steve)>
+;; Last-Modified: <2002-05-12 01:41:05 (steve)>
 ;; Version: 0.5.0
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
@@ -50,6 +50,7 @@
 (require 'wid-edit)
 (require 'goto-addr)
 (require 'smiley)
+(require 'eicq-comm)
 
 (defconst eicq-version "0.5.0"
   "Version of eicq you are currently using.")
@@ -387,42 +388,6 @@ See `list-coding-systems'."
                (lambda (x) (list 'item x))
                (coding-system-list)))))
 
-(defcustom eicq-bridge-filename 
-  "icq2tcp"
-  "*Filename for `eicq-bridge' program."
-  :group 'eicq-option)
-
-(defcustom eicq-bridge-buffer nil
-  "Buffer for `eicq-bridge'.
-Nil means no associated buffer, or no debug info."
-  :group 'eicq-option)
-
-(defcustom eicq-bridge-hostname "127.0.0.1"
-  "*IP address of `eicq-bridge'.
-See `eicq-connect'."
-  :group 'eicq-option)
-
-(defcustom eicq-bridge-port
-  ;; plant random seed
-  (progn (random t) nil)
-  "*Port of `eicq-bridge'.
-See `eicq-connect'."
-  :group 'eicq-option)
-
-(defcustom eicq-local-bridge-p t
-  "If non-NIL, Eicq will look for a bridge running on a remote host defined
-by `eicq-bridge-hostname' and `eicq-bridge-port'."
-  :group 'eicq-option
-  :type 'boolean)
-
-(defcustom eicq-server-hostname "login.icq.com"
-  "*Hostname or IP address of Mirabilis ICQ server."
-  :group 'eicq-option)
-
-(defcustom eicq-server-port 5190
-  "*Port of Mirabilis ICQ server."
-  :group 'eicq-option)
-
 (defvar eicq-valid-statuses
   '("online" "away" "occ" "dnd" "ffc" "na" "invisible")
   "All statuses valid for selection.
@@ -675,23 +640,6 @@ See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
 
 (defvar eicq-user-status "offline"
   "Current user status.")
-
-(defvar eicq-dropped-packet-counter 0
-  "For debug purpose only.")
-
-(defvar eicq-resend-packet-counter 0
-  "For debug purpose only.")
-
-(defvar eicq-recent-packet nil
-  "The most recent incoming packet.
-For debug only.")
-
-(defvar eicq-trimmed-packet-counter 0
-  "For debug purpose only.")
-
-(defvar eicq-error-packets nil
-  "A list of error incoming packets.
-For debug only.")
 
 (defvar eicq-world-rc-filename "~/.eicq/world"
   "*Filename for resource file.")
@@ -1197,85 +1145,10 @@ COUNT means how many time this packets has been resent. Default is 0."
 
 ;;; Code - network:
 
-(defvar eicq-network nil
-  "TCP network between Emacs and `icq2tcp'.")
-
-(defvar eicq-bridge nil
-  "Process `icq2tcp'.
-It bridges UDP (ICQ server) and TCP (Emacs).")
-
-(defun eicq-bridge-show-buffer ()
-  "Switch to `eicq-bridge-buffer' for network dump info."
+(defun eicq-network-show-buffer ()
+  "Switch to `eicq-network-buffer' for network dump info."
   (interactive)
-  (switch-to-buffer eicq-bridge-buffer))
-
-(defun eicq-connect ()
-  "Make a connection to ICQ server.
-It needs to make `eicq-bridge' and to make `eicq-network'.
-
-A bridge can be running either internally or externally.  If it is running
-external, `eicq-network' will connect to `eicq-bridge-hostname' at
-`eicq-bridge-port'.  If it is running internally, `eicq-bridge-port' should
-be set to nil; then `eicq-bridge-hostname' will be set to \"127.0.0.1\" and
-`eicq-bridge-port' will be assigned a randomly port.
-
-Running externally means no convenient debug network dump inside Emacs, but
-this may allow central bridge servers in future."
-
-  (unless (or (and (processp eicq-bridge) ; running already
-                   (eq (process-status eicq-network) 'open))
-              (not eicq-local-bridge-p))  ; remote bridge
-    (setq eicq-bridge-hostname "127.0.0.1")
-    (setq eicq-bridge-port (+ 4000 (random 1000)))
-    (eicq-log-system
-     "Trying to run a local bridge %s at port %s..."
-     eicq-bridge-hostname eicq-bridge-port)
-    (setq eicq-bridge-buffer (get-buffer-create "*eicq bridge*"))
-    (setq eicq-bridge
-          (start-process
-           "eicq bridge"
-           "*eicq bridge*"
-           eicq-bridge-filename
-           eicq-server-hostname
-           (number-to-string eicq-server-port)
-           (number-to-string eicq-bridge-port)))
-
-    ;; should we implement using filter and accept-process-output?
-
-    (message "Starting up bridge...")
-    ;; wait for `icq2tcp' to execute
-    (accept-process-output eicq-bridge 5)
-    (message "Starting up network...")
-    ;; wait for `icq2tcp' to setup sockets
-    (sleep-for 2))
-
-  (unless (and eicq-local-bridge-p
-               (eicq-connected-p))
-    (eicq-log-system
-     "Trying to connect to the bridge %s at port %s..."
-     eicq-bridge-hostname eicq-bridge-port)
-    (setq eicq-network
-          (condition-case nil
-              (open-network-stream
-               "eicq network" nil eicq-bridge-hostname eicq-bridge-port)
-            (file-error nil))))          ; eicq-network = nil if fails
-
-  (cond
-   ((and (eicq-connected-p)
-         eicq-local-bridge-p)
-    (set-process-sentinel eicq-bridge 'eicq-bridge-kill)
-    (set-process-sentinel eicq-network 'eicq-network-kill)
-    (set-process-filter eicq-network 'eicq-network-filter)
-    (with-current-buffer eicq-bridge-buffer
-      (eicq-bridge-mode)))
-   ((and (eicq-connected-p)
-         (not eicq-local-bridge-p))
-    (set-process-sentinel eicq-network 'eicq-network-kill)
-    (set-process-filter eicq-network 'eicq-network-filter))
-   (t
-    (eicq-log-system "....connection failed"))))
-
-
+  (switch-to-buffer eicq-network-buffer))
 
 (defvar eicq-main-map
   (let ((map (make-keymap 'eicq-main-map)))
@@ -1303,7 +1176,7 @@ this may allow central bridge servers in future."
     (define-key map [V a] 'eicq-buddy-view-all)
     (define-key map [?1] 'eicq-buddy-show-buffer)
     (define-key map [?2] 'eicq-log-show-buffer)
-    (define-key map [?4] 'eicq-bridge-show-buffer)
+    (define-key map [?4] 'eicq-network-show-buffer)
     map)
   "Keyboard map common for `eicq-log-mode-map' and `eicq-buddy-mode-map'.")
 
@@ -1331,7 +1204,7 @@ this may allow central bridge servers in future."
     ["Resend Contact List" eicq-send-contact-list t]
     ["Buddy Buffer" eicq-buddy-show-buffer t]
     ["Log Buffer" eicq-log-show-buffer t]
-    ["Bridge Buffer" eicq-bridge-show-buffer t]
+    ["Network Buffer" eicq-network-show-buffer t]
     "---"
     ["Email Author" eicq-email-author t]
     ["Submit Bug Report" (eicq-report-bug eicq-blurb) t]
@@ -1341,14 +1214,14 @@ this may allow central bridge servers in future."
 (easy-menu-define
  eicq-main-easymenu nil "Eicq Main" eicq-main-menu)
 
-(defun eicq-bridge-mode ()
-  "Major mode for bridge debug output.
+(defun eicq-network-mode ()
+  "Major mode for network debug output.
 Commands: \\{eicq-main-mode}"
   (make-local-variable 'kill-buffer-hook)
   (kill-all-local-variables)
   (use-local-map eicq-main-map)
-  (setq mode-name "eicq-bridge")
-  (setq major-mode 'eicq-bridge-mode)
+  (setq mode-name "eicq-network")
+  (setq major-mode 'eicq-network-mode)
   (easy-menu-add eicq-main-easymenu)
   (make-local-variable 'kill-buffer-query-functions)
   (add-to-list
@@ -1358,23 +1231,16 @@ Commands: \\{eicq-main-mode}"
   (make-local-variable 'kill-buffer-hook)
   (add-hook
    'kill-buffer-hook
-   (lambda () "Kill bridge buffer."
-     (eicq-network-kill)
-     (eicq-bridge-kill))))
+   (lambda () "Kill network buffer."
+     (eicq-network-kill))))
 
 (defun eicq-network-kill (&optional process change)
   "Kill `eicq-network'.
 PROCESS and CHANGE is for `set-process-sentinel'."
   (if (processp eicq-network) (delete-process eicq-network))
-  (setq eicq-network nil))
-
-(defun eicq-bridge-kill  (&optional process change)
-  "Kill `eicq-network'.
-PROCESS and CHANGE is for `set-process-sentinel'."
-  (if (processp eicq-bridge) (delete-process eicq-bridge))
-  (setq eicq-bridge nil)
-  (if (string= eicq-bridge-hostname "127.0.0.1")
-      (setq eicq-bridge-port nil)))
+  (setq eicq-network nil)
+  (if (string= eicq-network-hostname "127.0.0.1")
+      (setq eicq-network-port nil)))
 
 (defvar eicq-frame nil
   "The frame where Eicq is displayed.")
@@ -1404,11 +1270,10 @@ PROCESS and CHANGE is for `set-process-sentinel'."
 	  (delete-file eicq-log-filename))))
   (eicq-logout 'kill)
   (eicq-network-kill)
-  (eicq-bridge-kill)
   (loop for each in '(eicq-log-buffer 
 		      eicq-buddy-buffer 
 		      eicq-status-buffer
-		      eicq-bridge-buffer)
+		      eicq-network-buffer)
     do (if (buffer-live-p (symbol-value each))
            (kill-buffer (symbol-value each))))
   (delete-other-windows)
@@ -1518,8 +1383,7 @@ Use `eicq-send' to send the string."
 
 (defun eicq-pack-login ()
   "Pack login packet 03e8."
-  (let* ((password (or eicq-user-password
-                       (read-passwd "password: ")))
+  (let* ((password eicq-encrypted-password)
          (password-len (eicq-int-bin (1+ (length password))))
          (status (eicq-status-bin eicq-user-initial-status)))
     (eicq-pack
@@ -1843,13 +1707,6 @@ Foreigner is someone not on my contact list.
 Also used to request permission to add someone
 with 'authorized' status to my contact list."
   (eicq-pack "\x56\x04"))
-
-;; protocol v2-specific (obsoleted)
-;; - update info 04a6 \xa6\x04
-;; - update extended info 04b0 \xb0\x04
-;; - login 1 044c \x4c\x04
-;; - login 2 0528 \x28\x05
-;; - change password 049c \x04\x9c
 
 ;;; Code - server to client packets:
 
@@ -2193,9 +2050,6 @@ Called by `eicq-do-message-heler'."
   "Handle server command 005a in PACKET."
   (eicq-log-debug "Successfully logged in to ICQ server")
   (eicq-change-status eicq-user-initial-status 'no-network)
-  ;; not used by v5
-  ;; (eicq-send (eicq-pack-login-1))
-  ;; (eicq-send (eicq-pack-login-2))
   (eicq-keep-alive-start)
   (eicq-send-contact-list)
   (message "Welcome to Eicq...")
@@ -3233,7 +3087,7 @@ Need to relogin afterwards."
      password)))
 
 (defun eicq-auto-away-timeout-set (&optional symbol value)
-  "Set timer for auto-away.  See 'eicq-auto-away-timeout'."
+  "Set timer for auto-away.  See `eicq-auto-away-timeout'."
   (delete-itimer "eicq auto-away")      ; delete previous
   (start-itimer
    "eicq auto-away"
@@ -3296,7 +3150,7 @@ ALIASES is a list of aliases/uin to send to.
 See `eicq-process-alias-input'."
   (interactive "P")
   (let ((prompt
-         (concat "message"
+         (concat "Message"
                  ;; display alias if given
                  (if (car aliases)
                      (concat " to "
@@ -3522,7 +3376,7 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (loop for each in '(eicq-buddy-buffer 
 		      eicq-log-buffer 
 		      eicq-status-buffer 
-		      eicq-bridge-buffer)
+		      eicq-network-buffer)
     do (delete-windows-on (symbol-value each))))
 
 ;;; Code - log:
@@ -4355,5 +4209,5 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
 ;time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
 ;time-stamp-end: "\\\\?[\">]"
 ;time-stamp-line-limit: 10
-;time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
+;time-stamp-format: "%4y-%02m-%02d %02H:%02M:%02S (%u)"
 ;End: 

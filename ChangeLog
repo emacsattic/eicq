@@ -1,3 +1,38 @@
+2002-05-12  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-dropped-packet-counter): Moved to eicq-comm.el.
+	(eicq-resend-packet-counter): Ditto.
+	(eicq-recent-packet): Ditto.
+	(eicq-trimmed-packet-counter): Ditto.
+	(eicq-error-packets): Ditto.
+	(eicq-network): Ditto.
+	(eicq-bridge): Removed.
+	(eicq-connect): Moved to eicq-comm.el.
+	(eicq-main-map): We don't have "bridges" anymore, we use
+	"networks". 
+	(eicq-main-menu): Ditto.
+	(eicq-bridge-mode): Renamed to 'eicq-network-mode'.
+	(eicq-bridge-kill): Removed.
+	(eicq-disconnect): Bridges are now networks.
+	(eicq-pack-login): Use the encrypted password from eicq-comm.el.
+	(eicq-hide-window): Bridges are now networks.
+
+2002-05-11  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-bridge-filename): Removed.
+	(eicq-bridge-buffer): Ditto.
+	(eicq-bridge-hostname): Ditto.
+	(eicq-bridge-port): Ditto.
+	(eicq-local-bridge-p): Ditto.
+
+	* eicq-comm.el: New file.
+
+	* eicq.el (eicq-comm): Require it.
+
+2002-04-10  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq-report.el (eicq-report-debug): Add eicq-comm.el.
+
 2002-02-17  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-version): Boost it up to version 0.5.0 as the
