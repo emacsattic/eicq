@@ -4,6 +4,8 @@
 	'select-frame'. 
 	(eicq-disconnect): Emergency fix - Uncomment something I'd
 	commented out for debugging purposes.
+	(eicq-do-kicked-out): Test for 'eicq-user-password', don't attempt
+	auto-reconnect if it's nil.
 
 2001-09-15  Steve Youngs  <youngs@xemacs.org>
 

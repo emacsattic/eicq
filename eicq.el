@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-16 03:39:20 (steve)>
+;; Last-Modified: <2001-9-16 17:07:44 (steve)>
 ;; Version: 0.2.17pre1
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
@@ -1979,8 +1979,10 @@ Remove acknowledged packets from `eicq-outgoing-queue'."
   (eicq-log-error "You are kicked out of ICQ server")
   (eicq-logout 'kill)
   (sit-for 2)
-  (eicq-log-system "Attempting auto-reconnect...")
-  (eicq-login))
+  (if eicq-user-password
+      (progn
+	(eicq-log-system "Attempting auto-reconnect...")
+	(eicq-login))))
 
 (defun eicq-do-already-logged-in (packet)
   "Handle server command 00fa PACKET."
@@ -3228,9 +3230,9 @@ See `eicq-process-alias-input'."
 
       ;; apply encode only TEXT portion of packet
       (loop for x in (eicq-spliter message)
-        do (eicq-send-message-helper
-            ;; encoding outgoing but not that to be insert in log buffer
-            (eicq-encode-string x) aliases 'normal x)))))
+	do (eicq-send-message-helper
+	    ;; encoding outgoing but not that to be insert in log buffer
+	    (eicq-encode-string x) aliases 'normal x)))))
 
 (defvar eicq-buddy-buffer nil
   "Buffer for contact list.")
