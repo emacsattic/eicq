@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2001-6-6 00:29:58 (steve)>
+;; Last-Modified: <2001-8-17 19:11:42 (steve)>
 ;; Keywords: bug-report
 
 ;; Eicq is free software; you can redistribute it and/or modify
@@ -30,12 +30,21 @@
 ;;; Code:
 (require 'eicq)
 (require 'gnus)
+(require 'shadow)
+(require 'font-lock)
 
 ;; To keep the byte-compiler from spewing out warnings.
 (defvar after-sep-pos)
 (defvar final-resting-place)
 
 ;;; Variables
+
+(defcustom eicq-report-bug-send-init nil
+  "*If non-nil, include the user's init.el file in the bug report."
+  :group 'eicq-option
+  :type 'boolean)
+
+;;; Internal variables
 
 (defconst eicq-report-salutations
   ["Dear bug team:"
@@ -50,7 +59,7 @@
   "A list of salutations used for `eicq-report-bug'.")
 
 (defvar eicq-bug-address
-  "Eicq Bugs <eicq-bugs@lists.sourceforge.net>"
+  "Eicq Bugs <eicq-bugs@lists.sf.net>"
   "The address used for submitting bug reports.")
 
 (defvar eicq-report-blurb nil)
@@ -71,6 +80,7 @@
   "Post hook run by report-submit-bug-report."
   (save-excursion
     (message-goto-subject)
+    (font-lock-fontify-buffer)
     (let ((subj (read-string "Subject header: ")))
       (if (string-equal subj "")
 	  (subst-char-in-region
@@ -87,7 +97,7 @@
   "Go through the Eicq source files and report what variables have been changed.
 The source file has to be in the load path."
   (interactive)
-  (let ((files '("eicq.el" "eicq-toolbar.el"))
+  (let ((files '("eicq.el" "eicq-toolbar.el" "eicq-report.el"))
 	(point (point))
 	file expr olist sym)
     (message "Please wait while we snoop your variables...")
@@ -149,16 +159,63 @@ Then put it all into a mail buffer, nicely formatted."
   (forward-line 1)
   (setq after-sep-pos (point))
   (setq final-resting-place (point-marker))
-  (insert "\n\n"
-	  (emacs-version) "\n")
+  (insert 
+   "\n\n"
+   "===============================================================\n"
+   "System info to help the Eicq boys and girls try to fix your bug:\n"
+   "==============================================================="
+   "\n\n")
   (eicq-version 1)
-  (insert "\n\nCurrent State:\n==============")
-  (eicq-report-debug)
-  (insert
-   (format "\n\nFeatures:\n\t%s" (symbol-value 'features)))
-  (message "Formatting output so the bug team can read it.  Please wait...")
-  (fill-paragraph t)
-  (insert "\n\n")
+  ;; Insert the output of 'describe-installation'.
+  (insert "\n\n"
+	  (symbol-value 'Installation-string))
+  ;; Load-path shadows can cause some grief.
+  (flet ((append-message
+	   (&rest args) ())
+	 (clear-message
+	   (&optional label frame stdout-p no-restore)
+	   ()))
+    (insert "\n\nLoad-Path Lisp Shadows:\n"
+	    "----------------------\n")
+    (let ((before-shadows (point)))
+      (insert
+	(format "%s"
+		(find-emacs-lisp-shadows load-path)))
+      (save-restriction
+	(narrow-to-region before-shadows (point))
+	(fill-paragraph t)
+	(insert "\n"))))
+  ;; Insert a list of installed packages.
+  (insert "\n\nInstalled XEmacs Packages:\n"
+	  "-------------------------\n")
+  (cl-prettyprint
+   (symbol-value 'packages-package-list))
+  (insert "\n")
+  ;; Insert a list of loaded features
+  (let ((before-features (point)))
+    (insert
+     (format "\n\nFeatures:\n--------\n\n%s" (symbol-value 'features)))
+    (save-restriction
+      (narrow-to-region before-features (point))
+      (fill-paragraph t)
+      (insert "\n\n")))
+  ;; Insert the contents of the user's init file if it exists 
+  ;; and the user wants it sent.
+  (if eicq-report-bug-send-init
+      (if (file-readable-p user-init-file)
+	  (save-excursion
+	    (message-goto-signature)
+	    (forward-line -3)
+	    (beginning-of-line)
+	    (insert "\n\nUser Init File:\n--------------\n\n")
+	    (insert-file-contents user-init-file))))
+  ;; Insert all the Eicq vars that have been changed from default
+  (save-excursion
+    (message-goto-signature)
+    (forward-line -3)
+    (beginning-of-line)
+    (insert "\n\nEicq variables of note:\n----------------------\n")
+    (eicq-report-debug))
   (eicq-report-pre-hook)
   (eicq-report-post-hook)
   (mail-text)

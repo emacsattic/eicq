@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-12 02:14:21 (steve)>
-;; Version: 0.2.15
+;; Last-Modified: <2001-8-17 19:51:13 (steve)>
+;; Version: 0.2.16pre1
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.15"
+(defconst eicq-version "0.2.16pre1"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -346,7 +346,7 @@ other than SOUND-CARD will turn the sound off."
   :tag "Use Sound")
 
 (defcustom eicq-sound-directory 
-  "/usr/local/lib/xemacs/xemacs-packages/etc/sounds/"
+  (locate-data-directory "sounds")
   "*Directory where sound files are kept."
   :group 'eicq-sound
   :type 'directory 
@@ -481,6 +481,28 @@ This message has been automatically sent to you
 by the XEmacs ICQ client \"Eicq\".
 <http://eicq.sf.net/>"
   "Auto reply with this when you are not available."
+  :group 'eicq-option)
+
+;; FIXME: How can I make this display the value of eicq-auto-away-timeout
+(defcustom eicq-idle-reply-away
+   "I must be too busy to talk because I have
+been idle now for at least...seconds
+
+This message has been automatically sent to you
+by the XEmacs ICQ client \"Eicq\".
+<http://eicq.sf.net/>"
+  "Auto reply with this when you have idled away."
+  :group 'eicq-option)
+
+;; FIXME: How can I make this display the value of eicq-auto-away-timeout
+(defcustom eicq-idle-reply-na
+   "I must be too busy to talk because I have
+been idle now for at least...seconds
+
+This message has been automatically sent to you
+by the XEmacs ICQ client \"Eicq\".
+<http://eicq.sf.net/>"
+  "Auto reply with this when you have idled to na."
   :group 'eicq-option)
 
 (defcustom eicq-delete-offline-messages-flag 'ask
@@ -661,13 +683,20 @@ For debug only.")
 (defvar eicq-world-rc-filename "~/.eicq/world"
   "*Filename for resource file.")
 
-(defvar eicq-do-message-hook nil
+(defvar eicq-new-message-hook nil
   "*Hooks to run when there is an incoming message.
 Dynamically ALIAS and MESSAGE are binded to be used in hooks.")
 
-(defvar eicq-do-status-update-hook nil
+(defvar eicq-status-update-hook nil
   "*Hooks to run when a buddy change his status.
 Dynamically ALIAS and STATUS are binded to be used in hooks.")
+
+(defvar eicq-read-message-hook nil
+  "*Hooks run when a message is marked as \"read\".")
+
+(defvar eicq-system-message-hook nil
+  "*Hooks run when a \"system\" message is received.")
+
 
 ;;; Internal variables
 
@@ -1961,6 +1990,10 @@ Remove acknowledged packets from `eicq-outgoing-queue'."
 
 It is used in `eicq-do-message-helper' and `eicq-send-message-helper'.")
 
+(defvar eicq-user-auto-away-p nil
+  "This variable is set when the auto-away timer expires, 
+and it is reset in eicq-send-message-helper and eicq-change-status.")
+
 (defun eicq-do-message-helper (uin-bin message type-bin)
   "Helper for handling offline and online messages.
 UIN-BIN is uin of message sender in binary string.
@@ -1980,10 +2013,13 @@ Possible type: `eicq-message-types'."
       (setq url (eicq-decode-string (second url))))
 
     (when (member eicq-user-status '("away" "na" "dnd" "occ"))
-      (setq eicq-auto-reply-p t)
-      (eicq-auto-reply alias))
+      (if eicq-user-auto-away-p
+	  (progn
+	    (setq eicq-auto-reply-p t)
+	    (eicq-idle-reply alias))
+	(eicq-auto-reply alias)))
 
-    (run-hooks 'eicq-do-message-hook)
+    (run-hooks 'eicq-new-message-hook)
     
     (case type
       (normal 
@@ -2066,11 +2102,18 @@ Called by `eicq-do-message-heler'."
     (if message
         (eicq-send-message message alias))))
 
+(defun eicq-idle-reply (alias)
+  "Auto-reply to ALIAS/uin depending on `eicq-user-status'.
+Called by `eicq-do-message-heler'."
+  (let ((message (symbol-value (eicq-status-idle-reply eicq-user-status))))
+    (if message
+        (eicq-send-message message alias))))
+
 (defun eicq-do-status-update (packet)
   "Handle server command 01a4 in PACKET."
   (let ((alias (eicq-bin-alias packet 21))
         (status (eicq-status-name (substring packet 25 26))))
-    (run-hooks 'eicq-do-status-update-hook)
+    (run-hooks 'eicq-status-update-hook)
     (eicq-buddy-update-status alias status)))
 
 (defun eicq-do-online (packet)
@@ -2112,7 +2155,7 @@ Called by `eicq-do-message-heler'."
 
 (defun eicq-do-system-message (packet)  ; TODO
   "Handle server command 01c2 in PACKET."
-  )
+  (run-hooks 'eicq-system-message-hook))
 
 (defun eicq-do-info (packet)
   "Handle server command 0118 in PACKET.
@@ -2136,12 +2179,13 @@ Server response to `eicq-pack-info-request'."
      (eicq-decode-string
       (format
        "Query result =
-uin: %s
-Local alias: %s
-Nick name: %s
-First name: %s
-Last name: %s
-Email: %s
+
+          uin: %s
+  Local alias: %s
+    Nick name: %s
+   First name: %s
+    Last name: %s
+        Email: %s
 Authorization: %s"
        uin alias nick-name first-name last-name email
        (if (= authorization 0) "Needed" "Not Needed"))))))
@@ -2172,16 +2216,18 @@ Server response to `eicq-pack-info-ext-request'."
      (eicq-decode-string
       (format
        "Extended query result =
-uin: %s
+
+        uin: %s
 Local alias: %s
-Country: %s
-State: %s
-City: %s
-Age: %s
-Sex: %s
-Phone: %s
-Homepage: %s
-About:
+    Country: %s
+      State: %s
+       City: %s
+        Age: %s
+        Sex: %s
+      Phone: %s
+   Homepage: %s
+      About:
+
 %s"
        uin alias
        (cdr (assoc country eicq-country-code))
@@ -2888,6 +2934,13 @@ Zero-Padded to make it 4 byte-long."
             :key 'second
             :test 'string=))))
 
+(defun eicq-status-idle-reply (name)
+  "Return the symbol of auto-reply of status from its NAME."
+  (fourth (car
+           (member* name eicq-statuses
+            :key 'second
+            :test 'string=))))
+
 (defun eicq-status-name (bin)
   "Return the name of status from its the binary string BIN."
   (cadr (assoc bin eicq-statuses)))
@@ -3039,10 +3092,6 @@ Need to relogin afterwards."
    (if (zerop (length password))
        nil
      password)))
-
-(defvar eicq-user-auto-away-p nil
-  "This variable is set when the auto-away timer expires, 
-and it is reset in eicq-send-message-helper and eicq-change-status.")
 
 (defun eicq-auto-away-timeout-set (&optional symbol value)
   "Set timer for auto-away.  See 'eicq-auto-away-timeout'."
@@ -3634,7 +3683,9 @@ Non-nil MARK-REGION or prefix argument means marks all log in the region."
   (interactive "P")
   (if mark-region
       (eicq-log-mark-region (region-beginning) (region-end) 'read)
-    (eicq-log-mark 'read)))
+    (eicq-log-mark 'read))
+  (if (interactive-p)
+      (run-hooks 'eicq-read-message-hook)))
 
 (defun eicq-alias-around ()
   "Return an alias/uin on current line or lines before.
@@ -3832,7 +3883,6 @@ See `eicq-buddy-view' and `eicq-buddy-status-color-hint-flag'."
       as status = (eicq-world-getf alias 'status)
       as face = (eicq-status-face status)
       do (insert-face (concat alias "\n") face))
-    (insert "*** Bottom ***\n")
     (eicq-buddy-mode))
   (unless no-select
     (switch-to-buffer eicq-buddy-buffer)))

@@ -1,3 +1,36 @@
+2001-08-17  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-buddy-show-buffer): Remove the text "*** Bottom ***".
+	(eicq-sound-directory): Use 'locate-data-directory'.
+	(eicq-read-message-hook): New.
+	(eicq-system-message-hook): New.
+	(eicq-do-message-hook): Rename to 'eicq-new-message-hook'.
+	(eicq-do-status-update-hook): Rename to 'eicq-status-update-hook'.
+	(eicq-do-system-message): Use 'eicq-system-message-hook'.
+	(eicq-log-mark-read): Use 'eicq-read-message-hook' if called
+	interactively. 
+	(eicq-idle-reply-away): New.
+	(eicq-idle-reply-na): New.
+	(eicq-status-idle-reply): New.
+	(eicq-idle-reply): New.
+	(eicq-do-message-helper): Use 'eicq-idle-reply'.
+	(eicq-do-info-ext): Hopefully, nicer layout for query results.
+	(eicq-do-info): Ditto.
+
+	* eicq-toolbar.el (eicq-icon-directory): Use
+	'locate-data-directory. 
+
+	* eicq-report.el: Require shadow and font-lock.
+	(eicq-report-bug-send-init): New.
+	(eicq-report-debug): Include checking eicq-report.el for changed
+	variables.
+	(eicq-prepare-report): Include load-path shadows, list of
+	installed XEmacs Packages and optionally the contents of the 
+	user's init.el.
+	(eicq-report-post-hook): Force font-locking so the prompt for
+	a Subject isn't hidden with font-locking messages.
+	
+
 2001-08-11  Steve Youngs  <youngs@xemacs.org>
 
 	* Version 0.2.15 released.

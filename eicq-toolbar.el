@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2001-8-11 15:45:44 (steve)>
+;; Last-Modified: <2001-8-17 20:01:35 (steve)>
 ;; Keywords: eicq, toolbar, comm
 
 ;; Eicq is free software; you can redistribute it and/or modify it
@@ -31,11 +31,11 @@
 
 ;;; Code:
 (defcustom eicq-icon-directory
-  "/usr/local/lib/xemacs/site-packages/etc/eicq/"
+  (locate-data-directory "eicq")
   "*The directory where the icon files for Eicq are installed."
-  :group 'eicq-option
   :type 'directory
-  :tag "Toolbar Directory")
+  :tag "Toolbar Directory"
+  :group 'eicq-interface)
 
 (defcustom eicq-use-toolbar (if (featurep 'toolbar)
 				'default-toolbar
