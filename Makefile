@@ -91,7 +91,7 @@ custom-load.el : $(SOURCES)
 	$(EMACS) $(EMACS_FLAGS) -f Custom-make-dependencies ./
 	$(EMACS) $(EMACS_FLAGS) -f batch-byte-compile ./custom-load.el
 
-install:: 
+install: all
 	$(INSTALL) -d $(BIN_DIR) $(DATA_DIR) $(INFO_DIR) $(LISP_DIR)
 	$(INSTALL) -s -m 755 $(BIN) $(BIN_DIR)
 	$(INSTALL) -m 755 $(USERSH) $(BIN_DIR)
@@ -116,3 +116,6 @@ clean::
 distclean: clean
 	rm -f core *~
 
+# Targets for Steve only.
+superupgrade: distclean upgrade
+	chown -R steve.xemacs /usr/local/lib/xemacs/site-packages/*

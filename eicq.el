@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-5-5 01:23:34 (steve)>
+;; Last-Modified: <2001-5-7 23:18:34 (steve)>
 ;; Version: 0.2.13
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
@@ -81,6 +81,10 @@ Run `eicq-update-meta-info' after changing any of these variables."
 
 (defgroup eicq-sound nil
   "Sound preferences."
+  :group 'eicq)
+
+(defgroup eicq-interface nil
+  "Change the look and \"feel\"."
   :group 'eicq)
 
 (defun eicq-version ()
@@ -2798,8 +2802,8 @@ I'll come back to you soon."
 \tWhat happened.
 \tWhat you thought should happen.
 \tAnything else that you think is relevant.\n
-*** Please delete these instructions before submit the report. ***
-==================================================================\n"
+*** Please delete these instructions before submitting the report. ***
+======================================================================\n"
   "Preamble to the bug report.")
 
 ;;;###autoload
@@ -2875,7 +2879,9 @@ Need to relogin afterwards."
        nil
      password)))
 
-(defvar eicq-user-auto-away-p)
+(defvar eicq-user-auto-away-p nil
+  "This variable is set when the auto-away timer expires, 
+and it is reset in eicq-send-message-helper and eicq-change-status.")
 
 (defun eicq-send-message-helper (message aliases type log-message)
   "Send message, url, authorization or others.
@@ -3053,10 +3059,6 @@ Run this after changing any meta user info variables."
   (eicq-send (eicq-pack-meta-user-update-more))
   (eicq-send (eicq-pack-meta-user-update-about)))
 
-(defvar eicq-user-auto-away-p nil
-  "This variable is set when the auto-away timer expires, 
-and it is reset in eicq-send-message-helper and eicq-change-status.")
-
 (defun eicq-auto-away-timeout-set (&optional symbol value)
   "Set timer for auto-away.  See 'eicq-auto-away-timeout'."
   (delete-itimer "eicq auto-away")      ; delete previous
@@ -3071,7 +3073,7 @@ and it is reset in eicq-send-message-helper and eicq-change-status.")
        ;; eicq-change-status resets this flag
        (setq eicq-user-auto-away-p t))
      ;; auto away for first idle
-     (when (member eicq-user-status '("online" "fcc"))
+     (when (member eicq-user-status '("online" "ffc"))
        (eicq-log-system "Auto away.")
        (eicq-change-status "away")
        (setq eicq-user-auto-away-p t))) 
@@ -3127,9 +3129,6 @@ ALIAS is an alias/uin."
   "*Height of window for `eicq-status-buffer'."
   :group 'eicq-interface)
 
-;;;*** REMOVE ME when done
-(setq eicq-status-window-height 9)
-
 (defvar eicq-status-buffer nil
   "Buffer for statuses.")
 
@@ -3157,7 +3156,10 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
 (defun eicq-hide-window ()
   "Hide windows of eicq buffers."
   (interactive)
-  (loop for each in '(eicq-buddy-buffer eicq-log-buffer eicq-bridge-buffer)
+  (loop for each in '(eicq-buddy-buffer 
+		      eicq-log-buffer 
+		      eicq-status-buffer 
+		      eicq-bridge-buffer)
     do (delete-windows-on (symbol-value each))))
 
 ;;; Code - log:
@@ -3461,7 +3463,9 @@ MESSAGES is an argument list for `format' to be inserted."
   "See `eicq-log-buddy-status-flag'.
 ALIAS is an id to be logged under.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log alias (apply 'format messages) eicq-log-buddy-status-flag eicq-log-buddy-status-mark))
+  (eicq-log alias 
+	    (apply 'format messages) 
+	    eicq-log-buddy-status-flag eicq-log-buddy-status-mark))
 
 (defun eicq-log-buddy-message (alias &rest messages)
   "See `eicq-log-buddy-message-flag'.
@@ -3793,12 +3797,11 @@ See `eicq-buddy-view' and `eicq-buddy-status-color-hint-flag'."
     (setq eicq-buddy-buffer (get-buffer-create "*eicq buddy*"))
     (set-buffer eicq-buddy-buffer)
     (erase-buffer)
-    (insert "*** Contacts ***\n")
     (loop for alias in (symbol-value eicq-buddy-view)
       as status = (eicq-world-getf alias 'status)
       as face = (eicq-status-face status)
       do (insert-face (concat alias "\n") face))
-    (insert "*** End ***\n")
+    (insert "*** Bottom ***\n")
     (eicq-buddy-mode))
   (unless no-select
     (switch-to-buffer eicq-buddy-buffer)))
@@ -4113,6 +4116,3 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
 ;time-stamp-line-limit: 10
 ;time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
 ;End: 
-
-
-;;::::::::::::::: Stuff I'm working on ::::::::::::::::::::::::::::::::::

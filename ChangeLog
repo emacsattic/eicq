@@ -1,3 +1,12 @@
+2001-05-07  Steve Youngs  <youngs@xemacs.org>
+
+	* Makefile (superupgrade): New target for me only.
+
+	* eicq.el (eicq-buddy-show-buffer): Remove "*** Contacts ***".
+	(eicq-auto-away-timeout-set): Typo.
+	(eicq-interface): New customize group.
+	(eicq-hide-window): Add eicq-status-window.
+
 2001-05-05  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-status-show-buffer): Change name of buffer to "*Status*".
