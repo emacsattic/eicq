@@ -1,3 +1,12 @@
+2001-09-18  Erik Arneson  <erik@aarg.net>
+
+	* eicq.el (eicq-connect): Removed check for `eicq-bridge-port', as
+	some folks might want to set variable before running
+	`eicq-connect'.  Besides, we're already checking
+	`eicq-bridge-local-p'.
+	(eicq-disconnect): Check to see if a symbol indicates a live
+	buffer before killing it.
+
 2001-09-19  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-logout): Reset counters in EicqWharf to zero.

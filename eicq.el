@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-19 08:01:39 (steve)>
+;; Last-Modified: <2001-9-18 15:20:46 (erik)>
 ;; Version: 0.2.17pre2
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
@@ -1225,8 +1225,7 @@ this may allow central bridge servers in future."
 
   (unless (or (and (processp eicq-bridge) ; running already
                    (eq (process-status eicq-network) 'run))
-              (not eicq-local-bridge-p)   ; remote bridge
-              eicq-bridge-port)           ; remote bridge
+              (not eicq-local-bridge-p))  ; remote bridge
     (setq eicq-bridge-hostname "127.0.0.1")
     (setq eicq-bridge-port (+ 4000 (random 1000)))
     (eicq-log-system
@@ -1411,7 +1410,8 @@ PROCESS and CHANGE is for `set-process-sentinel'."
 		      eicq-buddy-buffer 
 		      eicq-status-buffer
 		      eicq-bridge-buffer)
-    do (kill-buffer (symbol-value each)))
+    do (if (buffer-live-p (symbol-value each))
+           (kill-buffer (symbol-value each))))
   (delete-other-windows)
   (if (and eicq-start-in-new-frame
 	   (frame-live-p eicq-frame))
