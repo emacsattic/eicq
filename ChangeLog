@@ -1,3 +1,8 @@
+2001-09-25  Erik Arneson  <erik@aarg.net>
+
+	* eicq-wharf.el (eicq-wharf-change-messages): If the Wharf buffer
+	hasn't been created, don't try to do anything.
+
 2001-09-26  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-status-bin): Send correct packet for web-aware so

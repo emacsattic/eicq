@@ -6,7 +6,7 @@
 ;; Author: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 10, 2001
-;; Last-Modified: <2001-9-2 14:12:26 (steve)>
+;; Last-Modified: <2001-9-20 16:30:10 (erik)>
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -97,19 +97,20 @@ you use a small but readable font."
 
 (defun eicq-wharf-change-messages (type num)
   (let (oldnum newnum)
-    (save-excursion
-      (set-buffer eicq-wharf-buf)
-      (goto-char (point-min))
-      (if (re-search-forward (concat "^\\("
-                                     type
-                                     " *\\([0-9]+\\)\\)$")
-                             nil t)
-          (progn
-            (setq oldnum (string-to-int (match-string 2))
-                  newnum (+ oldnum num))
-            (if (> 0 newnum)
-                (setq newnum 0))
-            (replace-match (format "%-3s %03d" type newnum)))))))
+    (if eicq-wharf-buf
+        (save-excursion
+          (set-buffer eicq-wharf-buf)
+          (goto-char (point-min))
+          (if (re-search-forward (concat "^\\("
+                                         type
+                                         " *\\([0-9]+\\)\\)$")
+                                 nil t)
+              (progn
+                (setq oldnum (string-to-int (match-string 2))
+                      newnum (+ oldnum num))
+                (if (> 0 newnum)
+                    (setq newnum 0))
+                (replace-match (format "%-3s %03d" type newnum))))))))
 
 (defun eicq-wharf-inc-messages ()
   "Increment number of new messages in EicqWharf."
