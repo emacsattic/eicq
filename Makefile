@@ -74,7 +74,7 @@ EXTRA_SRC = ChangeLog INSTALL NEWS README TODO
 EXTRA_OBJ = $(wildcard ./auto-autoloads.el*) $(wildcard ./custom-load.el*)
 DATA_FILES = $(wildcard ./etc/$(PACKAGE)/*.xpm) ./etc/$(PACKAGE)/world
 TEXI_FILES = $(PACKAGE).texi
-INFO_FILES = $(PACKAGE).info
+INFO_FILES = $(TEXI_FILES:.texi=.info)
 
 EICQ_INFO_COMPILE = ./infohack.el 
 PRELOADS = -eval \("push default-directory load-path"\)
@@ -83,10 +83,12 @@ AUTO_PRELOADS = -eval \("setq autoload-package-name \"$(PACKAGE)\""\)
 .SUFFIXES:
 .SUFFIXES: .info .texi .elc .el
 
-all:: bin autoloads $(OBJECTS) customloads texinfo
+all:: $(BIN) autoloads $(OBJECTS) customloads texinfo
 
-bin: $(BIN).cc
+$(BIN): $(BIN).cc
 	$(CC) $(CFLAGS) -o $(BIN) $(BIN).cc
+
+bin: $(BIN)
 
 autoloads: auto-autoloads.el
 
@@ -95,8 +97,10 @@ customloads: custom-load.el
 .el.elc:
 	$(EMACS) $(EMACS_FLAGS) $(PRELOADS) -f batch-byte-compile $<
 
-texinfo: $(TEXI_FILES)
+.texi.info:
 	$(EMACS) $(EMACS_FLAGS) -l $(EICQ_INFO_COMPILE) -f batch-makeinfo $<
+
+texinfo: $(INFO_FILES)
 
 auto-autoloads.el : $(SOURCES)
 	$(EMACS) $(EMACS_FLAGS) $(AUTO_PRELOADS) -f batch-update-directory ./
