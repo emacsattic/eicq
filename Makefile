@@ -137,6 +137,10 @@ clean::
 distclean: clean
 	rm -f core *~
 
+# Developer targets
+tags: README
+	find . -name '*.el' -o -name '*.[ch]' | xargs etags
+
 # Targets for Steve only.
 superupgrade: distclean upgrade
 	chown -R steve.xemacs /usr/local/lib/xemacs/site-packages/*
