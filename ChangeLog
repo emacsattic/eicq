@@ -1,3 +1,13 @@
+2001-08-08  Erik Arneson  <erik@aarg.net>
+
+	* Makefile ($(BIN)): Fixed to compile icq2tcp.c instead of the C++
+	version.  Woohoo!
+
+	* icq2tcp.c: Replacement for icq2tcp.cc.  It's a direct port to C,
+	and now should compile pretty cleanly on FreeBSD and Linux.
+
+	* icq2tcp.cc: Removed.  Obsolete!  Kaput!
+
 2001-08-07  Erik Arneson  <erik@aarg.net>
 
 	* Makefile (INFO_FILES): Changed.
