@@ -1,3 +1,18 @@
+2001-05-20  Steve Youngs  <youngs@xemacs.org>
+
+	* Makefile (superupgrade): Make sure owner/group is set correctly
+	in source tree.
+
+	* eicq.texi: Finally started to write this.  Not finished yet,
+	but maybe by the end of the weekend.
+
+	* eicq.el (eicq-log-buddy-message): Switch to log buffer for smileys.
+	(eicq-auto-away-timeout-set): Use a 2nd itimer so auto na works 
+	properly.
+
+	* etc/eicq/world: Updated.  Somehow it got overwritten with an old
+	version of itself.
+
 2001-05-07  Steve Youngs  <youngs@xemacs.org>
 
 	* Makefile (superupgrade): New target for me only.

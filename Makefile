@@ -119,3 +119,4 @@ distclean: clean
 # Targets for Steve only.
 superupgrade: distclean upgrade
 	chown -R steve.xemacs /usr/local/lib/xemacs/site-packages/*
+	chown -R steve.xemacs ./*

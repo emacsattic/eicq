@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-5-7 23:18:34 (steve)>
+;; Last-Modified: <2001-5-20 15:34:18 (steve)>
 ;; Version: 0.2.13
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
@@ -3065,20 +3065,26 @@ Run this after changing any meta user info variables."
   (start-itimer
    "eicq auto-away"
    (lambda ()
+     ;; auto away for first idle
+     (when (member eicq-user-status '("online" "ffc"))
+       (eicq-log-system "Auto away.")
+       (eicq-change-status "away")
+       (setq eicq-user-auto-away-p t)))
+   value value
+   'is-idle)
+  (delete-itimer "eicq auto-na")
+  (start-itimer
+   "eicq auto-na"
+   (lambda ()
      ;; auto na for second idle
      (when (and eicq-user-auto-away-p 
 		(equal eicq-user-status "away"))
        (eicq-log-system "Auto na.")
        (eicq-change-status "na")
        ;; eicq-change-status resets this flag
-       (setq eicq-user-auto-away-p t))
-     ;; auto away for first idle
-     (when (member eicq-user-status '("online" "ffc"))
-       (eicq-log-system "Auto away.")
-       (eicq-change-status "away")
-       (setq eicq-user-auto-away-p t))) 
+       (setq eicq-user-auto-away-p t)))
    value value
-   'is-idle))
+   nil))
 
 (defcustom eicq-auto-away-timeout 300
   "*Seconds of inactivity in Emacs before auto-away.
@@ -3474,8 +3480,10 @@ MESSAGES is an argument list for `format' to be inserted."
   (eicq-log alias 
 	    (apply 'format messages) 
 	    eicq-log-buddy-message-flag eicq-log-buddy-message-mark)
-  (smiley-buffer)
-  (goto-address))
+  (save-excursion
+    (set-buffer eicq-log-buffer)
+    (smiley-buffer)
+    (goto-address)))
 
 (defvar eicq-url-map
   (let ((map (make-sparse-keymap 'eicq-url-map)))

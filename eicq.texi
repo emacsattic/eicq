@@ -1,16 +1,16 @@
 \input texinfo @c eicq.texi   -*-TeXinfo-*-
 @c $Id$
-@c Copyright (C) 2000 Steve Youngs
-@c Last-Modified: <2001-4-24 16:13:57 (steve)>
+@c Copyright (C) 2000, 2001 Steve Youngs
+@c Last-Modified: <2001-5-20 11:05:43 (steve)>
 @c %**start of header
 @setfilename eicq.info
 @settitle A Mirabilis ICQ clone for XEmacs
 @finalout
 @setchapternewpage odd
 @c %**end of header
-@set EDITION 1.0
+@set EDITION 1.1
 @set VERSION 0.2.13
-@set UPDATED Mar 19, 2001
+@set UPDATED May 20, 2001
 
 @dircategory Lisp
 @direntry
@@ -30,7 +30,7 @@ This file documents Eicq, a Mirabilis ICQ clone for XEmacs
 @author by Steve Youngs
 
 @end titlepage
-Copyright @copyright{} 2000 Steve Youngs.
+Copyright @copyright{} 2000, 2001 Steve Youngs.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.1 or
@@ -51,23 +51,132 @@ into another language, under the above conditions for modified versions.
 
 @contents
 
-@node Top, Licenses, (dir), (dir)
+@node Top, Overview, (dir), (dir)
 
 @ifinfo 
 This file documents the @code{Eicq} elisp package.
 
-This manual corresponds with @code{Eicq} @value{VERSION}.
+It corresponds with @code{Eicq} @value{VERSION}.
 @end ifinfo
 
-Umm, well, you see, it's like this... The info file isn't actually done yet.  But I will do it soon.
 
 @menu
-* Licenses::                    Your rights
-* Concept Index::               Go here to find what you're after
+* Overview::                    A brief introduction.
+* Invoking::                    User commands and key bindings.
+* Buddy Buffer::                Yes, you too can have buddies.
+* Log Buffer::                  This is where it's at, man.
+* Status Buffer::               Change your status here.
+* Bridge Buffer::               Keeping an eye on the behind the scenes stuff.
+* World File::                  A place for your buddies.
+* Licenses::                    Your rights.
+* Concept Index::               Go here to find what you're after.
 @end menu
 
 
-@node Licenses, Software License, Top, Top
+@node Overview, Invoking, Top, Top
+@chapter Overview
+@cindex overview
+Eicq is a Mirabilis ICQ clone, written mainly in elisp.  It @emph{only}
+runs in XEmacs.  So all of you die hard GNU/Emacs users, you'll just
+have to install that other breed of emacsen.  You never know, you
+might even like it.  Of course this is GPL software, so you are quite
+welcome to port it.
+
+Now you have one more reason to @emph{not} leave XEmacs.
+
+@subsection Features
+@itemize @bullet
+@item
+Eicq uses version 5 protocol.
+@item
+Send/receive messages/urls.
+@item
+Authorise, search, query and update meta user info.
+@item
+Receive contact list transfer.
+@item
+Register new user, change password.
+@item
+Play sounds for different events.
+@item
+Auto online after a auto away/na.
+@item
+Interactive customisation through XEmacs Custom widgets.
+@item
+Key binding, "scripting" in elisp.
+@item
+Send/receive multi-lingual languages (XEmacs with Mule).
+@item
+A clickety click toolbar for the mouse impaired.
+@item
+Change your status with your rat.
+@end itemize
+
+At this point @code{Eicq} can not yet transfer files, do client to
+client chats, or anything else that requires a direct TCP connection.
+This is something that we are working on and it is a priority.
+
+@node Invoking, Buddy Buffer, Overview, Top
+@chapter Invoking
+@cindex Invoking
+@cindex Initial Setup
+
+@subsection First Time Setup.
+Hang on a minute, Eicq isn't gonna do much for you until you set up a
+couple of things.  To make it easier for you there is a "user setup
+script" provided.
+
+Just run @code{eicq-user-setup.sh} as the user that will be using
+@code{Eicq}. 
+
+@cindex world
+That will setup the user directory, @samp{~/.eicq/}, placing in it a
+skeleton @file{world} file. @xref{World File}
+
+Edit @file{~/.eicq/world} to suit your situation and add the following
+to your @file{~/.xemacs/init.el} or @file{~/.emacs}:
+
+@lisp
+(require 'eicq)
+(require 'eicq-toolbar)
+(setq eicq-user-alias "me")
+(eicq-world-update)
+@end lisp
+
+Re-start XEmacs and you're ready to rock and roll. @code{M-x eicq-login RET}, 
+enter your password and away you go.
+
+@menu
+* User Commands::               M-xerie things you can do.
+* Global Key Bindings::         Key bindings common througout Eicq.
+@end menu
+
+@node User Commands, Global Key Bindings, Invoking, Invoking
+@chapter User Commands
+@cindex User Commands
+@cindex commands
+
+@cindex alias
+@cindex uin
+@code{eicq-alias-around}
+
+
+@node Buddy Buffer, Log Buffer, Invoking, Top
+@chapter Buddy Buffer
+
+@node Log Buffer, Status Buffer, Buddy Buffer, Top
+@chapter Log Buffer
+
+@node Status Buffer, Bridge Buffer, Log Buffer, Top
+@chapter Status Buffer
+
+@node Bridge Buffer, World File, Status Buffer, Top
+@chapter Bridge Buffer
+
+@node World File, Licenses, Bridge Buffer, Top
+@chapter World File
+
+@node Licenses, Software License, World File, Top
 @chapter Licenses
 @cindex Licenses
 @menu
@@ -81,7 +190,7 @@ Umm, well, you see, it's like this... The info file isn't actually done yet.  Bu
 @cindex Software License
 Eicq - a Mirabilis ICQ clone for XEmacs
 
-Copyright @copyright{} 2000 Steve Youngs
+Copyright @copyright{} 2000, 2001 Steve Youngs
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

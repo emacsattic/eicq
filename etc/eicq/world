@@ -12,5 +12,12 @@ reads alias name until the end of the line. You can customize this
 behaviour with variable `eicq-world-rc-regexp'. Any other lines are
 ignored. 
 
+Adding your own UIN:
+
+Just change "12345678 me" above to your UIN/alias.  And don't forget
+to change the (setq eicq-user-alias "me") line in ~/.emacs to match.
+
+BTW, that 1st buddy up there, (34307457 eicq), is a valid UIN, it's
+mine. :-)
 
 Remember to M-x eicq-world-update after changing this rc file.

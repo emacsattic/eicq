@@ -14,8 +14,6 @@ Feel free to do any of these things and send a patch to
 
 * Todo list
 
-** write the info docs (this one probably is a priority)
-
 ** hilarious auto reply messages
 
 ** face colors for light background
@@ -74,4 +72,4 @@ Feel free to do any of these things and send a patch to
 ** implement a 'eicq-use-sound' flag
 
 	Yep, somebody asked me how to switch off the sound.
-	Perhaps 3 settings - on, off, beep (pc speaker)
+	Perhaps 3 settings - on, off, beep (pc speaker).
