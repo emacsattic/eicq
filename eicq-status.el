@@ -3,10 +3,10 @@
 ;; Copyright (C) 2002,03 Steve Youngs
 
 ;; RCS: $Id$
-;; Author:        Steve Youngs <youngs@xemacs.org>
-;; Maintainer:    Steve Youngs <youngs@xemacs.org>
+;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
+;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
 ;; Created:       2002-10-02
-;; Last-Modified: <2003-09-19 11:50:16 (steve)>
+;; Last-Modified: <2003-10-02 15:36:50 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 

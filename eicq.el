@@ -5,9 +5,9 @@
 
 ;; RCS: $Id$
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
-;; Maintainer:     Steve Youngs <youngs@xemacs.org>
+;; Maintainer:     Steve Youngs <sryoungs@bigpond.net.au>
 ;; Created:        Aug 08, 1998
-;; Last-Modified:  <2003-09-19 11:54:59 (steve)>
+;; Last-Modified:  <2003-10-02 15:38:16 (steve)>
 ;; Version:        0.5.0pre2
 ;; Homepage:       http://eicq.sf.net/
 ;; Keywords:       comm ICQ

@@ -1,3 +1,32 @@
+2003-10-02  Steve Youngs  <sryoungs@bigpond.net.au>
+
+	* README: Update my email address.
+
+	* eicq-v8proto.el: Ditto.
+
+	* eicq.el: Ditto.
+
+	* eicq-world.el: Ditto.
+
+	* eicq-toolbar.el: Ditto.
+
+	* eicq-status.el: Ditto.
+
+	* eicq-setup.el: Ditto.
+
+	* eicq-report.el: Ditto.
+	(eicq-prepare-email-author): Ditto.
+
+	* eicq-meta.el: Ditto.
+
+	* eicq-menu.el: Ditto.
+
+	* eicq-log.el: Ditto.
+
+	* eicq-comm.el: Ditto.
+
+	* eicq-buddy.el: Ditto.
+
 2003-10-01  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq-v8proto.el (eicq::CLI_IDENT): Fix 'Invalid read syntax:

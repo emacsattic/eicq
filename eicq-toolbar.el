@@ -3,9 +3,9 @@
 ;; Copyright (C) 2000,01,03 Steve Youngs
 
 ;; RCS: $Id$
-;; Author:        Steve Youngs <youngs@xemacs.org>
-;; Maintainer:    Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2003-09-19 11:50:41 (steve)>
+;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
+;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
+;; Last-Modified: <2003-10-02 15:37:10 (steve)>
 ;; Keywords:      eicq, toolbar, comm
 
 ;; This file is part of Eicq.

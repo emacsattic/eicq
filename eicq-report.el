@@ -3,9 +3,9 @@
 ;; Copyright (C) 2001,03 Steve Youngs
 
 ;; RCS: $Id$
-;; Author:        Steve Youngs <youngs@xemacs.org>
-;; Maintainer:    Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2003-09-19 11:49:39 (steve)>
+;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
+;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
+;; Last-Modified: <2003-10-02 15:36:14 (steve)>
 ;; Keywords:      bug-report
 
 ;; This file is part of Eicq.
@@ -293,7 +293,7 @@ the MUA of Gods.  Bwahahaha."
 (defun eicq-prepare-email-author ()
   "Prepare the mail buffer for `eicq-email-author'."
   (message-goto-to)
-  (insert "Steve Youngs <youngs@xemacs.org>")
+  (insert "Steve Youngs <sryoungs@bigpond.net.au>")
   (message-goto-cc)
   (insert "Eicq-Users <eicq-users@lists.sourceforge.net>")
   (message-goto-subject)
