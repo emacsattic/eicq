@@ -17,12 +17,12 @@
 # the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-VERSION = 1.03
-AUTHOR_VERSION = 0.2.8
+VERSION = 1.04
+AUTHOR_VERSION = 0.2.9
 MAINTAINER = Steve Youngs <youngs@xemacs.org>
 PACKAGE = eicq
 PKG_TYPE = regular
-REQUIRES = xemacs-base mail-lib eicq
+REQUIRES = xemacs-base mail-lib eicq gnus
 CATEGORY = comm
 
 ELCS = eicq.elc eicq-toolbar.elc

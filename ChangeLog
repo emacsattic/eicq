@@ -1,6 +1,6 @@
 2001-03-01  Steve Youngs  <youngs@xemacs.org>
 
-	* Makefile (REQUIRES): Add eicq.
+	* Makefile (REQUIRES): Add eicq, gnus.
 
 	* eicq.el (eicq-blurb): New
 	(eval-when-compile): Remove require 'eicq-report.
