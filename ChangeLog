@@ -7,6 +7,9 @@
 
 2001-08-08  Erik Arneson  <erik@aarg.net>
 
+	* eicq.el (eicq-connect): Better support for remote icq2tcp
+	bridges.
+
 	* Makefile ($(BIN)): Fixed to compile icq2tcp.c instead of the C++
 	version.  Woohoo!
 
