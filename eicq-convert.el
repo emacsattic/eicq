@@ -6,7 +6,7 @@
 ;; OriginalAuthor: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 06, 2001
-;; Last-Modified: $Date$
+;; Last-Modified: <2001-8-7 03:58:47 (steve)>
 ;; Version: 0.2.14
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
@@ -65,3 +65,10 @@
     (kill-buffer (current-buffer))))
 
 ;; End of file.
+
+;Local Variables:
+;time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
+;time-stamp-end: "\\\\?[\">]"
+;time-stamp-line-limit: 10
+;time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
+;End: 
