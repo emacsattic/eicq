@@ -1,3 +1,7 @@
+2002-06-17  Steve Youngs  <youngs@xemacs.org>
+
+	* Makefile (SOURCES): Add eicq-comm.el.
+
 2002-06-16  Jack Twilley  <jmt@tbe.net>
 
         * eicq.el (eicq-log-buddy-message): Made smileys optional.
