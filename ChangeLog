@@ -1,3 +1,13 @@
+2001-09-28  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-do-info): Prompt for a group to add a new user
+	to. 
+
+2001-09-27  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-do-info): Check for blank or invalid nick-names
+	for 'eicq-add-user'.  Prompt for an alternative.
+
 2001-09-25  Erik Arneson  <erik@aarg.net>
 
 	* eicq-wharf.el (eicq-wharf-change-messages): If the Wharf buffer

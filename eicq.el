@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-26 02:03:42 (steve)>
-;; Version: 0.2.17pre3
+;; Last-Modified: <2001-9-28 02:44:36 (steve)>
+;; Version: 0.2.17pre4
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.17pre3"
+(defconst eicq-version "0.2.17pre4"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -2205,9 +2205,10 @@ Called by `eicq-do-message-heler'."
   "Handle server command 01c2 in PACKET."
   (run-hooks 'eicq-system-message-hook))
 
-(defvar eicq-add-user-p)
-(defvar eicq-new-buddy)
-(defvar eicq-new-uin)
+(defvar eicq-add-user-p nil)
+(defvar eicq-new-buddy nil)
+(defvar eicq-new-uin nil)
+(defvar fix-nick)
 
 (defun eicq-do-info (packet)
   "Handle server command 0118 in PACKET.
@@ -2227,21 +2228,47 @@ Server response to `eicq-pack-info-request'."
          (email-len (eicq-bin-int packet i))
          (email (substring packet (incf i 2) (1- (incf i email-len))))
          (authorization (eicq-byte-int packet i)))
+    ;; Dynamically add a new user to your contact list.
     (if eicq-add-user-p
 	(progn
-	  (set-buffer
-	   (find-file-noselect (expand-file-name eicq-world-rc-filename)))
-	  (goto-char (point-max))
-	  (insert "\n")
-	  (insert
-	   (format ":icq %s %s\n" uin nick-name))
-	  (save-buffer (current-buffer))
-	  (kill-buffer (current-buffer))
-	  (eicq-log-info
-	   (eicq-decode-string
-	    (format "Alias: %s, UIN: %s added to contact list."
-		    nick-name uin)))
-	  (setq eicq-new-buddy nick-name))
+	  ;; Prompt for zero or more group names to add to.
+	  (let ((new-group 
+		 (read-string 
+		  "Add user to group[s] (fmt: :group1 :group2 or RET for none): ")))
+	    ;; Test for blank or invalid alias.  Prompt for alternative
+	    ;; alias if needed.  Use the UIN if user simply hits RET.
+	    (if (or (string-equal nick-name "")
+		    (string-match "^:" nick-name))
+		(let ((fix-nick (read-string "Blank or invalid Alias.  Enter new Alias (or RET to use UIN): ")))
+		  (if (string-equal fix-nick "")
+		      (setq nick-name uin)
+		    (if (string-match "^:" fix-nick)
+			(loop until (string-match "^[^:]" fix-nick)
+			  do (setq fix-nick
+				   (read-string 
+				    "Invalid Alias (can't begin with \":\"): "))
+			  do (if (string-equal fix-nick "")
+				 (setq nick-name uin
+				       fix-nick "valid")
+			       (setq nick-name fix-nick)))
+		      (setq nick-name fix-nick)))))
+	    (setq fix-nick nil)
+	    ;; Write the new UIN Alias Group[s] to the world file.
+	    (set-buffer
+	     (find-file-noselect (expand-file-name eicq-world-rc-filename)))
+	    (goto-char (point-max))
+	    (insert "\n")
+	    (insert
+	     (format ":icq %s %s %s\n" uin nick-name new-group))
+	    (save-buffer (current-buffer))
+	    (kill-buffer (current-buffer))
+	    ;; Inform the user in the log.
+	    (eicq-log-info
+	     (eicq-decode-string
+	      (format "Alias: %s, UIN: %s added to contact list."
+		      nick-name uin)))
+	    (setq eicq-new-buddy nick-name)
+	    (setq new-group nil)))
       (eicq-log-info
        (eicq-decode-string
 	(format
