@@ -1,3 +1,7 @@
+2001-03-01  Steve Youngs  <youngs@xemacs.org>
+
+	* udp2tcp.cc (main): Update URL.
+
 2001-02-28  Ben Wing  <ben@xemacs.org>
 
 	* udp2tcp.cc (main): Conditionalize change to third arg to accept

@@ -31,7 +31,7 @@
  * License: GPL
  * Created: Aug 08, 1998
  * Version: 0.2.6
- * Where: http://users.ozlinx.com.au/~youngs_s/eicq/
+ * Where: http://eicq.sourceforge.net/
  * Keywords: udp, tcp, network, bridge, icq, emacs
  * 
  * 
@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
 
     printf("UDP <-> TCP bridge v0.2.6\n\
 \n\
-http://users.ozlinx.com.au/~youngs_s/eicq/\n\n");
+http://eicq.sourceforge.net/\n\n");
   
     if (argc != 4) {
 	printf("Invalid number of parameters.\n\
