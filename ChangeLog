@@ -1,3 +1,44 @@
+2003-10-15  Steve Youngs  <sryoungs@bigpond.net.au>
+
+	* Makefile (EMACS): Removed, this is XEmacs not Emacs.
+	(EMACS_FLAGS): Ditto.
+	(XEMACS): New.
+	(XEMACS_FLAGS): New, add '-no-autoloads' to ensure we are building
+	in a clean environment.
+	(AUTO_PRELOADS): Removed.
+	(AUTOLOAD_PACKAGE_NAME): New.
+	(AUTOLOAD_FILE): New.
+	(all): Use 'compile' target instead of '$(OBJECTS)'.  This is so
+	we can compile all the .el files from a single instance of
+	XEmacs.  The old way loaded XEmacs for each and every file that
+	was built.
+	(.el.elc): Removed.
+	(compile): New.
+	(auto-autoloads.el): Set it up to use '-no-autoloads'
+	(custom-loads.el): Ditto.
+	(distclean): Remove core* files.
+
+	* eicq-buddy.el: Require advice at compile time.
+
+	* eicq-comm.el: Require passwd at compile time.
+	(eicq-encrypt-password): Return in hex.
+
+	* eicq-log.el: Require smiley and goto-addr at compile time.
+
+	* eicq-report.el: Require font-lock, yow, and pp at compile time.
+
+	* eicq-v8proto.el: Require eicq-world, eicq.
+	(eicq-put-alist): Removed.
+	(eicq-alist-hex-to-bin): Simplified.
+	(eicq-fun-hex-to-bin): New.
+	(deficq): Simplified.
+	(eicq-valid-prefix-list): New.
+
+	* eicq-world.el: Require font-lock and sort at compile time.
+
+	* eicq.el: Require ehelp, cus-edit, browse-url, and passwd at
+	compile time.
+
 2003-10-02  Steve Youngs  <sryoungs@bigpond.net.au>
 
 	* README: Update my email address.

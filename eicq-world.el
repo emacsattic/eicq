@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
 ;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
 ;; Created:       2002-10-01
-;; Last-Modified: <2003-10-02 15:37:41 (steve)>
+;; Last-Modified: <2003-10-13 22:56:17 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -56,6 +56,10 @@
 (autoload 'eicq-completing-aliases "eicq")
 (autoload 'eicq-valid-uin-p "eicq")
 (autoload 'eicq-alias-bin "eicq")
+
+(eval-when-compile
+  (require 'font-lock)
+  (require 'sort))
 
 (defvar eicq-world-rc-filename "~/.eicq/world"
   "*Filename for resource file.")

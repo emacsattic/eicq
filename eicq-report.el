@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
 ;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
-;; Last-Modified: <2003-10-02 15:36:14 (steve)>
+;; Last-Modified: <2003-10-13 22:53:54 (steve)>
 ;; Keywords:      bug-report
 
 ;; This file is part of Eicq.
@@ -55,7 +55,10 @@
 (eval-when-compile
   (defvar after-sep-pos)
   (defvar final-resting-place)
-  (defvar eicq-version))
+  (defvar eicq-version)
+  (require 'font-lock)
+  (require 'yow)
+  (require 'pp))
 
 
 ;;; Variables

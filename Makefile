@@ -62,8 +62,8 @@ INFO_STAGING = $(STAGING)/info
 LISP_STAGING = $(STAGING)/lisp/$(PACKAGE)
 
 # Programs and their flags.
-EMACS = xemacs
-EMACS_FLAGS = -batch
+XEMACS = xemacs
+XEMACS_FLAGS = -batch -no-autoloads
 MAKEINFO = makeinfo
 INSTALL = install -o 0 -g 0
 # Solaris #  Comment out above line and uncomment the line below
@@ -85,32 +85,42 @@ TEXI_FILES = $(PACKAGE).texi
 INFO_FILES = $(TEXI_FILES:.texi=.info)
 
 PRELOADS = -eval \("push default-directory load-path"\)
-AUTO_PRELOADS = -eval \("setq autoload-package-name \"$(PACKAGE)\""\)
+
+AUTOLOAD_PACKAGE_NAME = (setq autoload-package-name \"$(PACKAGE)\")
+AUTOLOAD_FILE = (setq generated-autoload-file \"./auto-autoloads.el\")
+
 
 .SUFFIXES:
 .SUFFIXES: .info .texi .elc .el
 
-all:: autoloads $(OBJECTS) customloads texinfo
+all:: autoloads compile customloads texinfo
 
 autoloads: auto-autoloads.el
 
 customloads: custom-load.el
 
-.el.elc:
-	$(EMACS) $(EMACS_FLAGS) $(PRELOADS) -f batch-byte-compile $<
+compile: $(SOURCES)
+	$(XEMACS) $(XEMACS_FLAGS) $(PRELOADS) -l bytecomp \
+		-f batch-byte-compile $^
 
 .texi.info:
 	$(MAKEINFO) $<
 
 texinfo: $(INFO_FILES)
 
-auto-autoloads.el : $(SOURCES)
-	$(EMACS) $(EMACS_FLAGS) $(AUTO_PRELOADS) -f batch-update-directory ./
-	$(EMACS) $(EMACS_FLAGS) -f batch-byte-compile ./auto-autoloads.el
+auto-autoloads.el: $(SOURCES)
+	$(XEMACS) $(XEMACS_FLAGS) \
+		-eval "$(AUTOLOAD_PACKAGE_NAME)" \
+		-eval "$(AUTOLOAD_FILE)" \
+		-l autoload -f batch-update-autoloads $^
+	$(XEMACS) $(XEMACS_FLAGS) -l bytecomp \
+		-f batch-byte-compile ./auto-autoloads.el
 
-custom-load.el : $(SOURCES)
-	$(EMACS) $(EMACS_FLAGS) -f Custom-make-dependencies ./
-	$(EMACS) $(EMACS_FLAGS) -f batch-byte-compile ./custom-load.el
+custom-load.el: $(SOURCES)
+	$(XEMACS) $(XEMACS_FLAGS) -l cus-dep \
+		-f Custom-make-dependencies ./
+	$(XEMACS) $(XEMACS_FLAGS) -l bytecomp \
+		-f batch-byte-compile ./custom-load.el
 
 install: all
 	$(INSTALL) -d $(INFO_DIR) $(LISP_DIR)
@@ -150,7 +160,7 @@ clean::
 		auto-autoloads.el* custom-load.el*
 
 distclean: clean
-	rm -f core *~
+	rm -f core* *~
 
 # Developer targets
 tags: TAGS

@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
 ;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
 ;; Created:       2002-10-01
-;; Last-Modified: <2003-10-02 15:32:33 (steve)>
+;; Last-Modified: <2003-10-15 09:24:50 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -43,6 +43,9 @@
   (require 'eicq-menu)
   (require 'eicq-status)
   (require 'eicq-world))
+
+(eval-when-compile
+  (require 'advice))
 
 
 (defgroup eicq-buddy nil

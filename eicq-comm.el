@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
 ;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
 ;; Created:       2002-04-10
-;; Last-Modified: <2003-10-02 15:33:15 (steve)>
+;; Last-Modified: <2003-10-13 22:51:03 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -43,6 +43,9 @@
   (require 'eicq-log)
   (require 'eicq-menu)
   (require 'eicq-v8proto))
+
+(eval-when-compile
+  (require 'passwd))
 
 (defgroup eicq-network nil
   "All things networkish."
@@ -111,9 +114,6 @@ gets encrypted.  Everything else is sent in clear text.")
 
 (autoload 'eicq-int-byte "eicq")
 
-;;; FIXME: This is wrong.  It is giving a binary string, but what we
-;;; really want is a list of hex numbers, something like '(0xAE 0x5F
-;;; 0x55 0x2E4 0xAE 0x5F 0x55 0x2E4)'
 (defun eicq-encrypt-password ()
   "Encrypt `eicq-user-password' for login."
   (let ((pass (or (string-to-list eicq-user-password)
@@ -131,7 +131,12 @@ gets encrypted.  Everything else is sent in clear text.")
     (while encrypted-pass
       (setq secret (concat secret (eicq-int-byte (car encrypted-pass))))
       (setq encrypted-pass (cdr encrypted-pass)))
-    (setq eicq-encrypted-password secret)))
+    (let ((passlist (nreverse (string-to-list secret)))
+	  result)
+      (while passlist
+	(setq result (push (format "0x%02X" (car passlist)) result))
+	(setq passlist (cdr passlist)))
+      (setq eicq-encrypted-password result))))
 
 
 (autoload 'eicq-logout "eicq")

@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer:     Steve Youngs <sryoungs@bigpond.net.au>
 ;; Created:        Aug 08, 1998
-;; Last-Modified:  <2003-10-02 15:38:16 (steve)>
+;; Last-Modified:  <2003-10-13 22:58:13 (steve)>
 ;; Version:        0.5.0pre2
 ;; Homepage:       http://eicq.sf.net/
 ;; Keywords:       comm ICQ
@@ -76,7 +76,11 @@
   (defvar eicq-buddy-buffer)
   (defvar eicq-buddy-window-width)
   (defvar eicq-status-buffer)
-  (defvar eicq-status-window-height))
+  (defvar eicq-status-window-height)
+  (require 'ehelp)
+  (require 'cus-edit)
+  (require 'browse-url)
+  (require 'passwd))
 
 (autoload 'eicq-status-auto-reply "eicq-status")
 (autoload 'eicq-status-idle-reply "eicq-status")

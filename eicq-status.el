@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
 ;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
 ;; Created:       2002-10-02
-;; Last-Modified: <2003-10-02 15:36:50 (steve)>
+;; Last-Modified: <2003-10-15 09:27:33 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 

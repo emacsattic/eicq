@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
 ;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
 ;; Created:       2002-10-01
-;; Last-Modified: <2003-10-02 15:33:34 (steve)>
+;; Last-Modified: <2003-10-13 22:52:13 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -46,6 +46,10 @@
 (eval-and-compile
   (require 'eicq-menu)
   (require 'outline))
+
+(eval-when-compile
+  (require 'smiley)
+  (require 'goto-addr))
 
 (defgroup eicq-log nil
   "Message logging preferences."
