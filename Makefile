@@ -18,7 +18,7 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 PACKAGE = eicq
-VER = 0.5.0
+VER = 0.5.9
 
 # csh... yell no, we won't go!
 

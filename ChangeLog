@@ -1,3 +1,70 @@
+2003-09-06  Steve Youngs  <youngs@xemacs.org>
+
+	* Makefile (VER): Bump.
+
+	* eicq-comm.el (eicq-network-buffer):
+	(eicq-network-hostname): Removed.
+	(eicq-server-hostname):
+	(eicq-network-port): Removed.
+	(eicq-local-network-p): Removed.
+	(eicq-network):
+	(eicq-int-byte):
+	(eicq-network-kill):
+	(eicq-connected-p):
+	(eicq-binary-process): New.
+	(eicq-connect):
+	
+	* eicq-convert.el:
+	
+	* eicq-meta.el (eicq-pack):
+
+	* eicq-report.el (eicq-version):
+	* eicq-status.el:
+
+	* eicq-toolbar.el (eicq-change-password):
+
+	* eicq-v8proto.el (eicq-use-firewall): New.
+	(eicq-hex-to-bin): New.
+	(eicq-put-alist): New.
+	(eicq-alist-hex-to-bin): New.
+	(deficq): New.
+	(eicq::FLAP_header): New.
+	(eicq::FLAP_channels): New.
+	(eicq::CLI_bytefiller): New.
+	(eicq::CLI_IDENT): New.
+	(eicq::CLI_READY): New.
+	(eicq::CLI_RATESREQUEST): New.
+	(eicq::CLI_ACKRATES): New.
+	(eicq::CLI_REQINFO): New.
+	(eicq::CLI_SNAC1_11): New.
+	(eicq::CLI_FAMILIES): New.
+	(eicq::CLI_SETSTATUS): New.
+	(eicq::CLI_REQLOCATION): New.
+	(eicq::CLI_SETUSERINFO): New.
+	(eicq::CLI_REQBUDDY): New.
+	(eicq::CLI_ADDCONTACT): New.
+	(eicq::CLI_REMCONTACT): New.
+	(eicq::CLI_SETICBM): New.
+	(eicq::CLI_REQICBM): New.
+	(eicq::CLI_REQBOS): New.
+	
+	* eicq-world.el:
+
+	* eicq.el (eicq-version):
+	(eicq-status-auto-reply):
+	(eicq-frame):
+	(eicq-network-show-buffer): Removed.
+	(eicq-send-internal):
+	(eicq-pack-login-a):
+	(eicq-login):
+
+	Big huge changes trying to get ICQv8 protocol working.  This is a
+	long way from complete and Eicq is totally broken at this point.
+
+2003-03-02  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq-v8proto.el (deficq): New macro to define ICQ packets.
+
 2002-10-03  Steve Youngs  <youngs@xemacs.org>
 
 	* etc/*: Removed, we do it all in lisp now.

@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2002-10-03 14:34:32 (steve)>
+;; Last-Modified: <2003-03-08 12:23:05 (steve)>
 ;; Keywords:      eicq, toolbar, comm
 
 ;; This file is part of Eicq.
@@ -30,23 +30,22 @@
 ;;            A toolbar for eicq.
 ;;
 
-(eval-when-compile
+(eval-and-compile
   (require 'eicq-meta)
   (require 'eicq-log))
 
-(eval-when-compile
-  (autoload 'eicq-change-password "eicq" nil t)
-  (autoload 'eicq-send-message-alias-here "eicq" nil t)
-  (autoload 'eicq-send-message "eicq" nil t)
-  (autoload 'eicq-send-url-alias-here "eicq" nil t)
-  (autoload 'eicq-send-url "eicq" nil t)
-  (autoload 'eicq-query-info-alias-here "eicq" nil t)
-  (autoload 'eicq-query-info "eicq" nil t)
-  (autoload 'eicq-search "eicq" nil t)
-  (autoload 'eicq-authorize-alias-here "eicq" nil t)
-  (autoload 'eicq-login "eicq" nil t)
-  (autoload 'eicq-logout "eicq" nil t)
-  (autoload 'eicq-disconnect "eicq" nil t))
+(autoload 'eicq-change-password "eicq" nil t)
+(autoload 'eicq-send-message-alias-here "eicq" nil t)
+(autoload 'eicq-send-message "eicq" nil t)
+(autoload 'eicq-send-url-alias-here "eicq" nil t)
+(autoload 'eicq-send-url "eicq" nil t)
+(autoload 'eicq-query-info-alias-here "eicq" nil t)
+(autoload 'eicq-query-info "eicq" nil t)
+(autoload 'eicq-search "eicq" nil t)
+(autoload 'eicq-authorize-alias-here "eicq" nil t)
+(autoload 'eicq-login "eicq" nil t)
+(autoload 'eicq-logout "eicq" nil t)
+(autoload 'eicq-disconnect "eicq" nil t)
 
 ;;; Code:
 ; (defcustom eicq-icon-directory

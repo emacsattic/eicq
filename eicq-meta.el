@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
 ;; Created:       2002-10-02
-;; Last-Modified: <2002-10-02 22:18:45 (steve)>
+;; Last-Modified: <2003-03-08 08:27:54 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -272,19 +272,18 @@ Run `eicq-update-meta-info' after modifying this variable."
 
 ;;; Internal variables
 
-(eval-when-compile
-  (autoload 'eicq-pack "eicq")
-  (autoload 'eicq-int-bin "eicq")
-  (autoload 'eicq-alias-bin "eicq")
-  (autoload 'eicq-int-byte "eicq")
-  (autoload 'eicq-log-info "eicq-log")
-  (autoload 'eicq-log-debug "eicq-log")
-  (autoload 'eicq-bin-hex "eicq")
-  (autoload 'eicq-bin-pretty-hex "eicq")
-  (autoload 'eicq-bin-int "eicq")
-  (autoload 'eicq-byte-int "eicq")
-  (autoload 'eicq-decode-string "eicq")
-  (autoload 'eicq-send "eicq"))
+(autoload 'eicq-pack "eicq")
+(autoload 'eicq-int-bin "eicq")
+(autoload 'eicq-alias-bin "eicq")
+(autoload 'eicq-int-byte "eicq")
+(autoload 'eicq-log-info "eicq-log")
+(autoload 'eicq-log-debug "eicq-log")
+(autoload 'eicq-bin-hex "eicq")
+(autoload 'eicq-bin-pretty-hex "eicq")
+(autoload 'eicq-bin-int "eicq")
+(autoload 'eicq-byte-int "eicq")
+(autoload 'eicq-decode-string "eicq")
+(autoload 'eicq-send "eicq")
 
 (defun eicq-pack-meta-user-change-password (password)
   "Pack meta user change password packet 064a:042e.

@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
 ;; Created:       2002-10-01
-;; Last-Modified: <2002-10-03 12:29:12 (steve)>
+;; Last-Modified: <2003-07-02 11:12:21 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -31,20 +31,20 @@
 ;;; Commentary:
 ;;
 
-
-(eval-when-compile
+(eval-and-compile
   (require 'eicq-meta)
-  (require 'eicq-menu)
-  (autoload 'eicq-search-by-uin "eicq" nil t)
-  (autoload 'eicq-buddy-show-buffer "eicq-buddy" nil t)
-  (autoload 'eicq-send "eicq")
-  (autoload 'eicq-pack "eicq")
-  (autoload 'eicq-uin-bin "eicq")
-  (autoload 'eicq-process-alias-input "eicq")
-  (autoload 'eicq-buddy-update-face "eicq-buddy")
-  (autoload 'eicq-completing-aliases "eicq")
-  (autoload 'eicq-valid-uin-p "eicq")
-  (autoload 'eicq-alias-bin "eicq"))
+  (require 'eicq-menu))
+
+(autoload 'eicq-search-by-uin "eicq" nil t)
+(autoload 'eicq-buddy-show-buffer "eicq-buddy" nil t)
+(autoload 'eicq-send "eicq")
+(autoload 'eicq-pack "eicq")
+(autoload 'eicq-uin-bin "eicq")
+(autoload 'eicq-process-alias-input "eicq")
+(autoload 'eicq-buddy-update-face "eicq-buddy")
+(autoload 'eicq-completing-aliases "eicq")
+(autoload 'eicq-valid-uin-p "eicq")
+(autoload 'eicq-alias-bin "eicq")
 
 (defvar eicq-world-rc-filename "~/.eicq/world"
   "*Filename for resource file.")

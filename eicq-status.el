@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
 ;; Created:       2002-10-02
-;; Last-Modified: <2002-10-03 14:22:55 (steve)>
+;; Last-Modified: <2003-03-08 12:22:32 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -27,15 +27,18 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-(eval-when-compile
+(eval-and-compile
   (require 'eicq-comm)
   (require 'eicq-log)
   (require 'eicq-world)
   (require 'eicq-meta)
   (require 'eicq)
-  (require 'wid-edit)
-  (defvar eicq-buddy-view)
-  (autoload 'eicq-buddy-update-face "eicq-buddy"))
+  (require 'wid-edit))
+
+(eval-when-compile
+  (defvar eicq-buddy-view))
+
+(autoload 'eicq-buddy-update-face "eicq-buddy")
 
 
 (defcustom eicq-buddy-status-color-hint-flag t

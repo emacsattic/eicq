@@ -6,7 +6,7 @@
 ;; OriginalAuthor: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 06, 2001
-;; Last-Modified: <2002-10-03 09:42:09 (steve)>
+;; Last-Modified: <2003-03-08 12:16:14 (steve)>
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -27,7 +27,7 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-(eval-when-compile
+(eval-and-compile
   (require 'eicq-world))
 
 ;;;###autoload

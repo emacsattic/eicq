@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2002-10-03 16:48:52 (steve)>
+;; Last-Modified: <2003-03-08 08:28:51 (steve)>
 ;; Keywords:      bug-report
 
 ;; This file is part of Eicq.
@@ -31,14 +31,13 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (autoload 'eicq-version "eicq" 
-    "Version of eicq you are currently using." t nil)
-  (require 'sendmail)
-  (require 'shadow)
-  (require 'gnus-msg)
-  (require 'gnus-util)
-  (require 'message))
+(autoload 'eicq-version "eicq" 
+  "Version of eicq you are currently using." t nil)
+(require 'sendmail)
+(require 'shadow)
+(require 'gnus-msg)
+(require 'gnus-util)
+(require 'message)
 
 ;; To keep the byte-compiler from spewing out warnings.
 (eval-when-compile

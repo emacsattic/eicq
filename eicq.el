@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer:     Steve Youngs <youngs@xemacs.org>
 ;; Created:        Aug 08, 1998
-;; Last-Modified:  <2002-10-03 15:22:21 (steve)>
-;; Version:        0.5.0
+;; Last-Modified:  <2003-09-06 14:28:51 (steve)>
+;; Version:        0.5.0pre2
 ;; Homepage:       http://eicq.sf.net/
 ;; Keywords:       comm ICQ
 
@@ -47,16 +47,17 @@
 ;;; Code:
 
 ;;;###autoload
-(defconst eicq-version "0.5.0pre1"
+(defconst eicq-version "0.5.9"
   "Version of eicq you are currently using.")
 
-(eval-when-compile
+(eval-and-compile
   (require 'timezone)
   (require 'outline)
   (require 'eicq-comm)
   (require 'eicq-log)
   (require 'eicq-meta)
-  (require 'eicq-world))
+  (require 'eicq-world)
+  (require 'eicq-v8proto))
 
 (eval-when-compile
   (defvar eicq-user-status)
@@ -66,16 +67,15 @@
   (defvar eicq-status-buffer)
   (defvar eicq-status-window-height))
 
-(eval-when-compile
-  (autoload 'eicq-status-auto-reply "eicq-status")
-  (autoload 'eicq-status-idle-reply "eicq-status")
-  (autoload 'eicq-status-name "eicq-status")
-  (autoload 'eicq-change-status "eicq-status" nil t)
-  (autoload 'eicq-status-show-buffer "eicq-status" nil t)
-  (autoload 'eicq-buddy-update-status "eicq-status")
-  (autoload 'eicq-buddy-selected-in-view "eicq-buddy")
-  (autoload 'eicq-buddy-show-buffer "eicq-buddy" nil t)
-  (autoload 'eicq-buddy-select-all-in-view "eicq-buddy"))
+(autoload 'eicq-status-auto-reply "eicq-status")
+(autoload 'eicq-status-idle-reply "eicq-status")
+(autoload 'eicq-status-name "eicq-status")
+(autoload 'eicq-change-status "eicq-status" nil t)
+(autoload 'eicq-status-show-buffer "eicq-status" nil t)
+(autoload 'eicq-buddy-update-status "eicq-status")
+(autoload 'eicq-buddy-selected-in-view "eicq-buddy")
+(autoload 'eicq-buddy-show-buffer "eicq-buddy" nil t)
+(autoload 'eicq-buddy-select-all-in-view "eicq-buddy")
 
 ;; Customize Groups.
 
@@ -533,14 +533,6 @@ COUNT means how many time this packets has been resent. Default is 0."
   (setq eicq-outgoing-queue nil)
   (delete-itimer "eicq send-queue"))
 
-;;; Code - network:
-
-(defun eicq-network-show-buffer ()
-  "Switch to `eicq-network-buffer' for network dump info."
-  (interactive)
-  (switch-to-buffer eicq-network-buffer))
-
-
 (defvar eicq-frame nil
   "The frame where Eicq is displayed.")
 
@@ -592,14 +584,14 @@ It is sent anyway but it may not go through.\n"
        (length bin)
        eicq-message-max-size))
 
-  (if (eicq-connected-p)
+;  (if (eicq-connected-p)
       (process-send-string
-       eicq-network
+       eicq-network-buffer
        (concat (eicq-int-bin (length bin))
-               bin))
-    (eicq-log-error
-     "Network is not connected when it tries to send a packet")
-    (eicq-logout 'kill)))
+               bin)))
+;    (eicq-log-error
+;     "Network is not connected when it tries to send a packet")
+;    (eicq-logout 'kill)))
 
 (defun eicq-network-filter (process bin)
   "Handle a binary string from `eicq-network'.
@@ -694,26 +686,25 @@ Use `eicq-send' to send the string."
   "ICQ Inc. - Product of ICQ (TM).2002a.5.37.1.3728.85"
   "A string to identify ourselves as a nice well behaved ICQ client.")
 
-;;;FIXME: Don't hardcode 'language' and 'country' here.
 (defun eicq-pack-login-a ()
-  "Pack stage 1 of the 2 stage login process."
-  (let* ((password eicq-encrypted-password)
-	 (uin (eicq-uin-bin (car (cdr (eicq-world-info eicq-user-alias)))))
-	 (language "en")
-	 (country "au"))
-    (eicq-pack
-     "\x00\x00\x00\x01"
-     "\x00\x01" uin
-     "\x00\x02" password
-     "\x00\x03" eicq-icq-client-id-string
-     "\x00\x16\x00\x02\x01\x0a"
-     "\x00\x17\x00\x02\x00\x05"
-     "\x00\x18\x00\x02\x00\x25"
-     "\x00\x19\x00\x02\x00\x01"
-     "\x00\x1a\x00\x02\x0e\x90"
-     "\x00\x14\x00\x04\x00\x00\x00\x55"
-     "\x00\x0f" language
-     "\x00\x0e" country)))
+  "Send stage 1 of the 2 stage login process."
+  (let* ((hello (cdr (assq 'hello eicq::CLI_IDENT)))
+	 (uin (cdr (assq 'uin eicq::CLI_IDENT)))
+	 (password (cdr (assq 'password eicq::CLI_IDENT)))
+	 (version (cdr (assq 'version eicq::CLI_IDENT)))
+	 (unk (cdr (assq 'unk eicq::CLI_IDENT)))
+	 (ver-major (cdr (assq 'ver-major eicq::CLI_IDENT)))
+	 (ver-minor (cdr (assq 'ver-minor eicq::CLI_IDENT)))
+	 (ver-lessor (cdr (assq 'ver-lessor eicq::CLI_IDENT)))
+	 (ver-build (cdr (assq 'ver-build eicq::CLI_IDENT)))
+	 (ver-subbuild (cdr (assq 'ver-subbuild eicq::CLI_IDENT)))
+	 (language (cdr (assq 'language eicq::CLI_IDENT)))
+	 (country (cdr (assq 'country eicq::CLI_IDENT)))
+	 (login-str (concat hello uin password version
+			    unk ver-major ver-minor ver-lessor
+			    ver-build ver-subbuild country language)))
+    (process-send-string eicq-network login-str)))
+
 
 (defun eicq-pack-login-b ()
   "Pack stage 2 of the login process."
@@ -1564,7 +1555,8 @@ Make connection to server and network if necessary."
     (eicq-connect)
     (when (eicq-connected-p)
       (message "Logging on the ICQ server...")
-      (eicq-send (eicq-pack-login-a)))))
+      (eicq-pack-login-a))))
+
 
 (autoload 'eicq-wharf-change-messages "eicq-wharf")
 
