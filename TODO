@@ -1,6 +1,6 @@
 -*- outline -*-
 
-* Last Updated: August 7, 2001
+* Last Updated: September 4, 2001
 
 Here's a list of things I may or may not get around to putting
 into Eicq.
@@ -108,3 +108,10 @@ Feel free to do any of these things and send a patch to
 	biff meets Eicq.  "Hey, you just got some email.  You better 
 	read it."  Or maybe "The power is out and your UPS just kicked 
 	on.".  The sky is the limit.
+
+** Register new user.
+
+	Eicq can do this, but only if you are already connected which
+	means that you need an ICQ account to make one.  That's
+	crazy.  A new user should be able to create a new ICQ account
+	with Eicq even if they don't have one to log in with.
