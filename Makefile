@@ -138,8 +138,10 @@ distclean: clean
 	rm -f core *~
 
 # Developer targets
-tags: README
-	find . -name '*.el' -o -name '*.[ch]' | xargs etags
+tags: TAGS
+
+TAGS: $(SOURCES)
+	etags $(SOURCES)
 
 # Targets for Steve only.
 superupgrade: distclean upgrade
