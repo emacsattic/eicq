@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-18 15:20:46 (erik)>
+;; Last-Modified: <2001-9-25 19:23:55 (steve)>
 ;; Version: 0.2.17pre2
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
@@ -1224,7 +1224,7 @@ Running externally means no convenient debug network dump inside Emacs, but
 this may allow central bridge servers in future."
 
   (unless (or (and (processp eicq-bridge) ; running already
-                   (eq (process-status eicq-network) 'run))
+                   (eq (process-status eicq-network) 'open))
               (not eicq-local-bridge-p))  ; remote bridge
     (setq eicq-bridge-hostname "127.0.0.1")
     (setq eicq-bridge-port (+ 4000 (random 1000)))
