@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-25 19:23:55 (steve)>
-;; Version: 0.2.17pre2
+;; Last-Modified: <2001-9-26 02:03:42 (steve)>
+;; Version: 0.2.17pre3
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.17pre2"
+(defconst eicq-version "0.2.17pre3"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -170,8 +170,7 @@ Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-web-aware t
-  "*Set this to non-nil if you want your presence know on the web.
-Run `eicq-update-meta-info' after modifying this variable."
+  "*Set this to non-nil if you want your presence know on the web."
   :type 'boolean
   :group 'eicq-meta)
 
@@ -1761,9 +1760,7 @@ ALIAS is the alias/uin to query info for."
    (eicq-int-bin (length eicq-user-meta-about))
    eicq-user-meta-about))
 
-(defun eicq-pack-search-by-uin (uin) ; TODO
-  "Pack search by UIN packet 041a."
-  (eicq-pack "\x1a\x04"))
+
 
 (defun eicq-pack-search (nick-name first-name last-name email)
   "Pack search packet 0424."
@@ -1789,9 +1786,7 @@ ALIAS is the alias/uin to query info for."
 ;        "\x00\x00\x00\x00"
 ;      "\x01\x00\x00\x00")))
 
-(defun eicq-pack-add-user-to-contact-list ()
-  "Pack add packet 053c."
-  (eicq-pack "\x3c\x05"))
+(defconst eicq-pack-add-user-to-contact-list "\x3c\x05")
 
 (defvar eicq-random-groups
   '(("general" . "\x01\x00\x00\x00")
@@ -1979,7 +1974,8 @@ Remove acknowledged packets from `eicq-outgoing-queue'."
   (eicq-log-error "You are kicked out of ICQ server")
   (eicq-logout 'kill)
   (sit-for 2)
-  (if eicq-user-password
+  (if (and eicq-user-password
+	   (not (string= eicq-delete-offline-messages-flag "ask")))
       (progn
 	(eicq-log-system "Attempting auto-reconnect...")
 	(eicq-login))))
@@ -2209,6 +2205,10 @@ Called by `eicq-do-message-heler'."
   "Handle server command 01c2 in PACKET."
   (run-hooks 'eicq-system-message-hook))
 
+(defvar eicq-add-user-p)
+(defvar eicq-new-buddy)
+(defvar eicq-new-uin)
+
 (defun eicq-do-info (packet)
   "Handle server command 0118 in PACKET.
 Server response to `eicq-pack-info-request'."
@@ -2227,10 +2227,25 @@ Server response to `eicq-pack-info-request'."
          (email-len (eicq-bin-int packet i))
          (email (substring packet (incf i 2) (1- (incf i email-len))))
          (authorization (eicq-byte-int packet i)))
-    (eicq-log-info
-     (eicq-decode-string
-      (format
-       "Query result =
+    (if eicq-add-user-p
+	(progn
+	  (set-buffer
+	   (find-file-noselect (expand-file-name eicq-world-rc-filename)))
+	  (goto-char (point-max))
+	  (insert "\n")
+	  (insert
+	   (format ":icq %s %s\n" uin nick-name))
+	  (save-buffer (current-buffer))
+	  (kill-buffer (current-buffer))
+	  (eicq-log-info
+	   (eicq-decode-string
+	    (format "Alias: %s, UIN: %s added to contact list."
+		    nick-name uin)))
+	  (setq eicq-new-buddy nick-name))
+      (eicq-log-info
+       (eicq-decode-string
+	(format
+	 "Query result =
 
           uin: %s
   Local alias: %s
@@ -2239,8 +2254,15 @@ Server response to `eicq-pack-info-request'."
     Last name: %s
         Email: %s
 Authorization: %s"
-       uin alias nick-name first-name last-name email
-       (if (= authorization 0) "Needed" "Not Needed"))))))
+	 uin alias nick-name first-name last-name email
+	 (if (= authorization 0) "Needed" "Not Needed")))))))
+
+(defun eicq-add-user (uin)
+  (interactive "sUIN: ")
+  (setq eicq-new-uin uin)
+  (setq eicq-add-user-p t)
+  (eicq-search-by-uin uin))
+
 
 (defvar country-status)
 
@@ -2307,8 +2329,12 @@ Local alias: %s
   "Handle server command 00a0 in PACKET."
   (let ((result (eicq-byte-int packet 8)))
     (case result
-      (0 (eicq-log-info "All search results returned"))
-      (1 (eicq-log-info "Too many seach results")))))
+      (0 
+       (if eicq-add-user-p
+	   (eicq-add-new-user-to-buddy-buffer)
+	 (eicq-log-info "All search results returned")))
+      (1 
+       (eicq-log-info "Too many seach results")))))
 
 (defun eicq-do-update-info-confirm (packet)
   "Handle server command 01e0 in PACKET."
@@ -2501,15 +2527,15 @@ Secondary email: %s
        (eicq-decode-string
         (format
          "meta user work info =
-City: %s
-State: %s
-Phone: %s
-Fax: %s
-Address: %s
-Company: %s
+      City: %s
+     State: %s
+     Phone: %s
+       Fax: %s
+   Address: %s
+   Company: %s
 Department: %s
-Position: %s
-Homepage: %s"
+  Position: %s
+  Homepage: %s"
          city state phone fax address company department position homepage))))))
 
 (defun eicq-do-meta-user-more (data)
@@ -2532,10 +2558,10 @@ Homepage: %s"
        (eicq-decode-string
         (format
          "meta user more info =
-Age: %s
-Sex: %s
-Homepage: %s
-Birthday: %s %s, 19%02s
+       Age: %s
+       Sex: %s
+  Homepage: %s
+  Birthday: %s %s, 19%02s
 Language-1: %s
 Language-2: %s
 Language-3: %s"
@@ -2683,6 +2709,29 @@ white spaces is alias.  For example,
     (define-key map [button2] 'eicq-send-message-via-mouse)
     map)
   "Keymap for alias extent.")
+
+(defun eicq-add-new-user-to-buddy-buffer ()
+  "Push the nick name from `eicq-add-user' into the buddy buffer.
+Sort of a cut-down version or `eicq-world-update'"
+  (add-to-list (symbol-value 'eicq-buddy-view) eicq-new-buddy)
+  (set-extent-properties
+   (make-extent 0 (length eicq-new-buddy) eicq-new-buddy)
+   `(highlight t duplicable t start-open t keymap ,eicq-alias-map))
+  (save-excursion
+    (set-buffer (find-file-noselect eicq-world-rc-filename))
+    (goto-char (point-max))
+    (search-backward-regexp eicq-world-rc-regexp nil t)
+    (let* ((buddy (list eicq-new-buddy eicq-new-uin 'rc-index (point))))
+      (push buddy eicq-world)))
+  (setq eicq-all-aliases (mapcar 'first eicq-world))
+  (setq eicq-all-uin (mapcar 'second eicq-world))
+  (eicq-buddy-show-buffer 'new 'no-select)
+  (eicq-send
+   (eicq-pack "\x3c\x05"
+	      (eicq-uin-bin (car eicq-all-uin))))
+  (setq eicq-add-user-p nil)
+  (setq eicq-new-buddy nil)
+  (setq eicq-new-uin nil))
 
 (defun eicq-world-update ()
   "Read `eicq-world-rc-filename' and update various user variables.
@@ -2976,7 +3025,9 @@ Zero-Padded to make it 4 byte-long."
      (member* name eicq-statuses
               :key 'second
               :test 'string=))
-    "\x00\x00\x00")
+    (if eicq-user-meta-web-aware
+	"\x00\x01\x00"
+      "\x00\x00\x00"))
    0 4))
 
 (defun eicq-status-auto-reply (name)
@@ -3340,6 +3391,14 @@ variable and modeline."
   "Search ICQ users."
   (interactive "sNick-name: \nsFirst-name: \nsLast-name: \nsEmail: ")
   (eicq-send (eicq-pack-search nick-name first-name last-name email)))
+
+(defconst eicq-pack-search-by-uin "\x1a\x04")
+
+(defun eicq-search-by-uin (uin)
+  (interactive "sUIN: ")
+  (eicq-send
+   (eicq-pack eicq-pack-search-by-uin
+	      (eicq-uin-bin uin))))
 
 (defun eicq-search-random-user (group)
   "Search random user in GROUP."

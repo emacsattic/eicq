@@ -1,7 +1,26 @@
+2001-09-26  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-status-bin): Send correct packet for web-aware so
+	'eicq-user-meta-web-aware' works.
+
 2001-09-25  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-connect): Test for 'open' not 'run' in
 	process-status because it is a network stream.
+	(eicq-do-kicked-out): Don't try to auto-reconnect if
+	'eicq-delete-offline-messages-flag' is set to "ask".
+	(eicq-add-user): New.
+	(eicq-add-user-p): New.
+	(eicq-new-buddy): New.
+	(eicq-new-uin): New.
+	(eicq-do-info): Handle doing a 'eicq-add-user'.
+	(eicq-add-new-user-to-buddy-buffer): New.
+	(eicq-do-search-end): Use it.
+
+2001-09-23  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-pack-search-by-uin): Changed to a defconst.
+	(eicq-search-by-uin): New.
 
 2001-09-18  Erik Arneson  <erik@aarg.net>
 

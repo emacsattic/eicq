@@ -63,11 +63,6 @@ Feel free to do any of these things and send a patch to
 
 	Send message to multiple contacts etc etc.
 
-** Extend the 'world' code.
-
-	Interactively add to your contact list.
-	Perhaps some sort of bbdb automagic kind of thing???
-
 ** Implement an 'oops' function.
 
 	When you accidently send a message to the wrong person you can
