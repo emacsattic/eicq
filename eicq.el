@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-19 00:19:56 (steve)>
+;; Last-Modified: <2001-9-19 08:01:39 (steve)>
 ;; Version: 0.2.17pre2
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
@@ -3107,8 +3107,11 @@ useful for emergency logout when being kicked out by server."
   (eicq-send-queue-stop)
   (eicq-world-update)
   (eicq-send-contact-list)
-  (eicq-wharf-change-messages "New" -9999)
-  (eicq-wharf-change-messages "Sys" -9999))
+  (if (and (featurep 'eicq-wharf)
+	   (frame-live-p eicq-wharf-frame))
+      (progn
+	(eicq-wharf-change-messages "New" -9999)
+	(eicq-wharf-change-messages "Sys" -9999))))
 
 (defvar eicq-contact-list-packets nil
   "Lists of remaining contact list packets to be sent.

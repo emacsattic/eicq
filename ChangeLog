@@ -1,6 +1,7 @@
 2001-09-19  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-logout): Reset counters in EicqWharf to zero.
+	(eicq-logout): Test for EicqWharf before trying to reset it.
 
 2001-09-17  Steve Youngs  <youngs@xemacs.org>
 
