@@ -1,12 +1,12 @@
 ;;; eicq-wharf.el --- DockApp/status window for Eicq
 
-;; Copyright (C) 2001,03 Steve Youngs, Erik Arneson
+;; Copyright (C) 2001,03,04 Steve Youngs, Erik Arneson
 
 ;; RCS: $Id$
 ;; Author:        Erik Arneson <erik@aarg.net>
 ;; Maintainer:    Erik Arneson <erik@aarg.net>
 ;; Created:       Aug 10, 2001
-;; Last-Modified: <2003-09-19 11:51:29 (steve)>
+;; Last-Modified: <2004-05-30 11:16:06 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 

@@ -1,11 +1,11 @@
 ;;; eicq-report.el --- Generate a bug report   -*-Emacs-Lisp-*-
 
-;; Copyright (C) 2001,03 Steve Youngs
+;; Copyright (C) 2001,03,04 Steve Youngs
 
 ;; RCS: $Id$
-;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
-;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
-;; Last-Modified: <2003-10-13 22:53:54 (steve)>
+;; Author:        Steve Youngs <steve@youngs.au.com>
+;; Maintainer:    Steve Youngs <steve@youngs.au.com>
+;; Last-Modified: <2004-05-30 11:14:42 (steve)>
 ;; Keywords:      bug-report
 
 ;; This file is part of Eicq.
@@ -296,7 +296,7 @@ the MUA of Gods.  Bwahahaha."
 (defun eicq-prepare-email-author ()
   "Prepare the mail buffer for `eicq-email-author'."
   (message-goto-to)
-  (insert "Steve Youngs <sryoungs@bigpond.net.au>")
+  (insert "Steve Youngs <steve@youngs.au.com>")
   (message-goto-cc)
   (insert "Eicq-Users <eicq-users@lists.sourceforge.net>")
   (message-goto-subject)

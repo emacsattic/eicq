@@ -1,12 +1,12 @@
 ;; eicq-comm.el --- Handle ICQ communications.
 
-;; Copyright (C) 2002,03 Steve Youngs
+;; Copyright (C) 2002,03,04 Steve Youngs
 
 ;; RCS: $Id$
-;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
-;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
+;; Author:        Steve Youngs <steve@youngs.au.com>
+;; Maintainer:    Steve Youngs <steve@youngs.au.com>
 ;; Created:       2002-04-10
-;; Last-Modified: <2003-10-13 22:51:03 (steve)>
+;; Last-Modified: <2004-05-30 11:13:00 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 

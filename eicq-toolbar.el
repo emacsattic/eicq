@@ -1,11 +1,11 @@
 ;;; eicq-toolbar.el --- A toolbar for Eicq   -*-Emacs-Lisp-*-
 
-;; Copyright (C) 2000,01,03 Steve Youngs
+;; Copyright (C) 2000,01,03,04 Steve Youngs
 
 ;; RCS: $Id$
-;; Author:        Steve Youngs <sryoungs@bigpond.net.au>
-;; Maintainer:    Steve Youngs <sryoungs@bigpond.net.au>
-;; Last-Modified: <2003-10-02 15:37:10 (steve)>
+;; Author:        Steve Youngs <steve@youngs.au.com>
+;; Maintainer:    Steve Youngs <steve@youngs.au.com>
+;; Last-Modified: <2004-05-30 11:15:32 (steve)>
 ;; Keywords:      eicq, toolbar, comm
 
 ;; This file is part of Eicq.

@@ -1,12 +1,12 @@
 ;;; eicq-convert.el --- Utilities to convert other ICQ configurations to EICQ
 
-;; Copyright (C) 2001,02,03 Steve Youngs, Erik Arneson
+;; Copyright (C) 2001,02,03,04 Steve Youngs, Erik Arneson
 
 ;; RCS: $Id$
 ;; OriginalAuthor: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 06, 2001
-;; Last-Modified: <2003-09-19 11:46:46 (steve)>
+;; Last-Modified: <2004-05-30 11:13:28 (steve)>
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 

@@ -1,7 +1,7 @@
 ## Makefile for Eicq   -*-Makefile-*-
 ## $Id$
 ##
-## Copyright (C) 2001,03 Steve Youngs
+## Copyright (C) 2001,03,04 Steve Youngs
 ##
 ## This file is part of Eicq.
 

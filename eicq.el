@@ -1,13 +1,13 @@
 ;;; eicq.el --- ICQ client for Emacs
 
 ;; Copyright (C) 1999 by Stephen Tse
-;; Copyright (C) 2000,01,02,03 Steve Youngs
+;; Copyright (C) 2000,01,02,03,04 Steve Youngs
 
 ;; RCS: $Id$
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
-;; Maintainer:     Steve Youngs <sryoungs@bigpond.net.au>
+;; Maintainer:     Steve Youngs <steve@youngs.au.com>
 ;; Created:        Aug 08, 1998
-;; Last-Modified:  <2003-10-13 22:58:13 (steve)>
+;; Last-Modified:  <2004-05-30 11:16:44 (steve)>
 ;; Version:        0.5.0pre2
 ;; Homepage:       http://eicq.sf.net/
 ;; Keywords:       comm ICQ

@@ -1,7 +1,7 @@
 \input texinfo @c eicq.texi   -*-TeXinfo-*-
 @c $Id$
-@c Copyright (C) 2000, 2001, Steve Youngs
-@c Last-Modified: <2003-9-19 12:05:20 (steve)>
+@c Copyright (C) 2000, 2001, 2002, 2003, 2004 Steve Youngs
+@c Last-Modified: <2004-5-30 11:18:28 (steve)>
 @c %**start of header
 @setfilename eicq.info
 @settitle A Mirabilis ICQ clone for XEmacs
@@ -48,7 +48,7 @@ This manual is far from finished.  Actually, it hasn't even been started
 yet.  At this stage you would be better off looking at the source .el
 files to answer your questions.  You are very welcome to direct any
 questions to either @email{eicq-users@@lists.sf.net, the Eicq Users
-mailing list} or to me at @email{youngs@@xemacs.org, Steve Youngs}.
+mailing list} or to me at @email{steve@@youngs.au.com, Steve Youngs}.
 
 
 @menu
