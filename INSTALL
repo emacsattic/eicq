@@ -1,16 +1,28 @@
 
 ========================================================================
 As of the latest version, I develop and test Eicq _only_ on my system,
-XEmacs 21.2.x on GNU/Linux. I use some XEmacs 20 specific codes and thus
+XEmacs 21.5.x on GNU/Linux. I use some XEmacs 20 specific code and thus
 Eicq will not run in other versions of Emacs without modifications. Feel
 free to test and port it in other platforms, and send me the patch.
+
+The Windows/Cygwin port requires at least version 1.3.2 of the Cygwin
+dll (http://www.cygwin.com) and shut work on every system Cygwin is
+running (i.e. Win32) It was tested on Windows 2000/98SE on XEmacs
+21.1.14.
 ========================================================================
 
 This installation is definitely a 'no-brainer'
 
 1) Check the Makefile, and edit anything as required.
+
+   On Windows, check the eicq-user-install.sh script, too.
+   Caveat: You must have set your HOME variable (e.g. on Windows 98 in
+   your autoexec.bat, add 'set HOME=C:\' before installation. You
+   should have set HOME for Cygwin anyway). Reboot if necessary before
+   installing eicq!
 2) 'make'
-3) become 'root' and then 'make install'
+3) become 'root' and then 'make install'. On Windows just type
+   'make install'
 
 Hold it, you're not finished yet...
 
@@ -39,14 +51,16 @@ Just edit ~/.eicq/world and change the UIN beside 'me' to reflect your
 own UIN.
 
 Of course you can change the alias ('me') of your own UIN to be whatever
-you want.  But you'll have to change the (setq eicq-user-alias "...") line
-in your ~/.emacs to match.
+you want.  But you'll have to change the (setq eicq-user-alias "...") 
+line in your ~/.emacs to match.
 
 
 Ok, now you're done.
 
-Fire up XEmacs, run M-x eicq-login and M-x eicq-show-window. 
-There you go! Use XEmacs eicq menu to send messages,
-authorize, customize... For new XEmacs users, you can press
-C-h t for a tutorial on XEmacs. Don't hesitate to message me
-a success report or mail me your screenshots!
+Fire up XEmacs, and do 'M-x eicq-login'.  There you go! Use XEmacs
+eicq menu to send messages, authorize, customize... On Windows you
+will at least have to customize the path to the toolbar icons!  Use
+the Eicq/Customize menu.  It's in the 'Option' group under 'Toolbar
+Directory'.  Or simply, 'M-x eicq-customize'.  For new XEmacs users,
+you can press C-h t for a tutorial on XEmacs.  Don't hesitate to
+message me a success report or mail me your screenshots!

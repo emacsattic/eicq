@@ -22,9 +22,14 @@ VER = 0.2.14
 
 # csh... yell no, we won't go!
 SHELL = /bin/sh
+# for Windows/Cygwin comment out line above and uncomment the following line
+# SHELL = /usr/bin/sh
 
 # Everything hangs off this.  
 PREFIX = /usr/local/lib/xemacs/site-packages
+# for Windows/Cygwin comment out the line above and uncomment the
+# following line (/cygdrive/c is Cygwin notation for C:\ !!!)
+# PREFIX = /cygdrive/c/Program\ Files/XEmacs/site-packages
 
 # Where the lisp files go.
 LISP_DIR = $(PREFIX)/lisp/$(PACKAGE)

@@ -1,3 +1,11 @@
+2001-08-02  Thorsten Bonow  <thorsten.bonow@post.rwth-aachen.de>
+
+	* Makefile: Add program locations/path for Windows/Cygwin.
+
+	* eicq-user-install.sh: ditto.
+
+	* INSTALL: Add Windows/Cygwin Installation instructions.
+
 2001-07-22  Steve Youngs  <youngs@xemacs.org>
 
 	* Version 0.2.14 released.

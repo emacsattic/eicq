@@ -1,5 +1,12 @@
 -*- Outline -*-
 
+* 0.2.14 to 0.2.15
+
+- Cygwin builds (Thorsten Bonow <thorsten.bonow@post.rwth-aachen.de>)
+	- Add cygwin related comments to Makefile, INSTALL,
+	  eicq-user-install.sh 
+
+
 * 0.2.13 to 0.2.14
 
 - Rewrote the bug report code.  
