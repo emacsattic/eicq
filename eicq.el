@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-28 02:44:36 (steve)>
-;; Version: 0.2.17pre4
+;; Last-Modified: <2001-9-29 09:27:56 (steve)>
+;; Version: 0.2.17
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.17pre4"
+(defconst eicq-version "0.2.17"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.

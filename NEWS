@@ -1,5 +1,22 @@
 -*- Outline -*-
 
+* 0.2.16 to 0.2.17
+
+- Auto-reconnect (Me)
+	Don't attempt to reconnect if a password isn't set or if
+	delete-offline-messages is set to 'ask.
+- Buddy buffer reset to pre-logged-in-state on logout. (Me)
+- eicq-connect/disconnect cleanup (Erik Arneson, Me)
+- New function 'eicq-search-by-uin' (Me)
+	Search for a user by their ICQ number.
+- New function 'eicq-add-user' (Me)
+	Dynamically add a new contact to you buddy list.
+- Eicq is now "web-aware" capable. (Me)
+- EicqWharf cleanup (Erik Arneson)
+	Don't try to do anything unless the Wharf frame has been
+	created. 
+
+
 * 0.2.15 to 0.2.16
 
 - Bug report code cleanup/enhancement. (Me)

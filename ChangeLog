@@ -1,3 +1,7 @@
+2001-09-29  Steve Youngs  <youngs@xemacs.org>
+
+	* Version 0.2.17 released.
+
 2001-09-28  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-do-info): Prompt for a group to add a new user
