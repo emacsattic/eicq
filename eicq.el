@@ -2863,6 +2863,8 @@ TYPE is the type of message in `eicq-message-types'.
 LOG-MESSAGE is a message to put in log.
 
 See `eicq-send-message', `eicq-send-url' and `eicq-authorize'."
+  (if eicq-user-auto-away-p
+      (eicq-change-status "online"))
   (add-to-list 'eicq-alias-list-history aliases)
   (loop for alias in aliases
     do (add-to-list 'eicq-active-aliases alias)
@@ -2981,6 +2983,8 @@ variable and modeline."
   (interactive
    (list (eicq-completing-read "status: " eicq-valid-statuses nil t)))
   (unless (equal status eicq-user-status)
+    (if eicq-user-auto-away-p
+	(setq eicq-user-auto-away-p nil))
     (eicq-log-system "Changed status to %s" status)
     (setq eicq-user-status status)
     (redraw-modeline 'all)
@@ -3027,20 +3031,28 @@ Run this after changing any meta user info variables."
   (eicq-send (eicq-pack-meta-user-update-more))
   (eicq-send (eicq-pack-meta-user-update-about)))
 
+(defvar eicq-user-auto-away-p nil
+  "This variable is set when the auto-away timer expires, 
+and it is reset in eicq-send-message-helper and eicq-change-status.")
+
 (defun eicq-auto-away-timeout-set (&optional symbol value)
-  "Set `eicq-auto-away-timeout'."
+  "Set timer for auto-away.  See 'eicq-auto-away-timeout'."
   (delete-itimer "eicq auto-away")      ; delete previous
   (start-itimer
    "eicq auto-away"
    (lambda ()
-     ;; auto away for first idle
-     (when (member eicq-user-status '("online" "occ" "fcc" "dnd"))
-       (eicq-log-system "Auto away.")
-       (eicq-change-status "away"))
      ;; auto na for second idle
-     (when (equal eicq-user-status "away")
+     (when (and eicq-user-auto-away-p 
+		(equal eicq-user-status "away"))
        (eicq-log-system "Auto na.")
-       (eicq-change-status "na")))
+       (eicq-change-status "na")
+       ;; eicq-change-status resets this flag
+       (setq eicq-user-auto-away-p t))
+     ;; auto away for first idle
+     (when (member eicq-user-status '("online" "fcc"))
+       (eicq-log-system "Auto away.")
+       (eicq-change-status "away")
+       (setq eicq-user-auto-away-p t))) 
    value value
    'is-idle))
 
@@ -3242,6 +3254,13 @@ See `eicq-log-filename'."
   (interactive)
   (eicq-log-show-buffer 'new))
 
+(defcustom eicq-log-buffer-position-flag 'tail
+  "*Non-nil means automatically updating buffer position.
+Nil means no automatic update, 'tail means keeping the bottom of the buffer 
+visible, other non-nil means keeping the top of the buffer visible."
+  :group 'eicq-log
+  :type '(choice (item t) (item tail) (item nil)))  
+
 (defcustom eicq-log-info-flag 'tail
   "*Non-nil means log misc info.
 These include any info from ICQ server other than buddy messages, status
@@ -3294,9 +3313,56 @@ buffer, other non-nil means putting new log at the beginning."
   :group 'eicq-log
   :type '(choice (item t) (item tail) (item nil)))
 
-(defun eicq-log (id message option)
+(defcustom eicq-log-info-mark nil
+  "*Non-nil means mark unread.
+These include any info from ICQ server other than buddy messages, status change notice, and query results.
+Nil means mark read."
+  :group 'eicq-log
+  :type '(choice (item t) (item nil)))
+
+(defcustom eicq-log-buddy-status-mark nil
+  "*Non-nil means mark buddy status change notice unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type '(choice (item t) (item nil)))
+
+(defcustom eicq-log-buddy-message-mark t
+  "*Non-nil means mark buddy messages unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type '(choice (item t) (item nil)))
+
+(defcustom eicq-log-outgoing-mark nil
+  "*Non-nil means mark outgoing messages unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type '(choice (item t) (item nil)))
+
+(defcustom eicq-log-error-mark t
+  "*Non-nil means mark critical error messages unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type '(choice (item t) (item nil)))
+
+(defcustom eicq-log-debug-mark t
+  "*Non-nil means mark verbose debugging messages unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type '(choice (item t) (item nil)))
+
+(defcustom eicq-log-system-mark nil
+  "*Non-nil means mark system messages unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type '(choice (item t) (item nil)))
+
+(defconst eicq-log-entry-re "^[SMTWRFA][0-9][0-9]:[0-9][0-9]"
+  "Regular expression matching the beginning of a log entry.")
+
+(defun eicq-log (id message option mark-unread)
   "Log message under ID.
-Put MESSAGE at the end of log buffer if OPTION is non-nil."
+Put MESSAGE at the end of log buffer if OPTION is non-nil.
+Mark MESSAGE unread if MARK-UNREAD is non-nil"
   (if (and option (buffer-live-p eicq-log-buffer))
       (with-current-buffer eicq-log-buffer
         (save-excursion
@@ -3313,24 +3379,34 @@ Put MESSAGE at the end of log buffer if OPTION is non-nil."
              (concat "[" id "] " message "\n\n"))
             (fill-region start-point (point))
             (goto-char start-point)
-            (eicq-log-mark-unread))))))
+	    (if mark-unread
+		(eicq-log-mark-unread)
+	      (eicq-log-mark-read))))
+	(if eicq-log-buffer-position-flag
+	    (if (eq eicq-log-buffer-position-flag 'tail)
+		(progn
+		  (goto-char (point-max))
+		  (re-search-backward eicq-log-entry-re))
+	      (progn 
+		(goto-char (point-min))
+		(re-search-forward eicq-log-entry-re)))))))
 
 (defun eicq-log-info (&rest messages)
   "See `eicq-log-info-flag'.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!info" (apply 'format messages) eicq-log-info-flag))
+  (eicq-log "!info" (apply 'format messages) eicq-log-info-flag eicq-log-info-mark))
 
 (defun eicq-log-buddy-status (alias &rest messages)
   "See `eicq-log-buddy-status-flag'.
 ALIAS is an id to be logged under.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log alias (apply 'format messages) eicq-log-buddy-status-flag))
+  (eicq-log alias (apply 'format messages) eicq-log-buddy-status-flag eicq-log-buddy-status-mark))
 
 (defun eicq-log-buddy-message (alias &rest messages)
   "See `eicq-log-buddy-message-flag'.
 ALIAS is an id to be logged under.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log alias (apply 'format messages) eicq-log-buddy-message-flag))
+  (eicq-log alias (apply 'format messages) eicq-log-buddy-message-flag eicq-log-buddy-message-mark))
 
 (defvar eicq-url-map
   (let ((map (make-sparse-keymap 'eicq-url-map)))
@@ -3349,28 +3425,28 @@ URL will be highlighted."
    (make-extent 0 (length url) url)
    `(highlight t duplicable t keymap ,eicq-url-map))
   (eicq-log alias (concat message "\nURL: " url)
-            eicq-log-buddy-message-flag))
+            eicq-log-buddy-message-flag eicq-log-buddy-message-mark))
 
 (defun eicq-log-outgoing (alias &rest messages)
   "See `eicq-log-outgoing-flag'.
 ALIAS is an id to be logged under.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log alias (apply 'format messages) eicq-log-outgoing-flag))
+  (eicq-log alias (apply 'format messages) eicq-log-outgoing-flag eicq-log-outgoing-mark))
 
 (defun eicq-log-error (&rest messages)
   "See `eicq-log-error-flag'.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!error" (apply 'format messages) eicq-log-error-flag))
+  (eicq-log "!error" (apply 'format messages) eicq-log-error-flag eicq-log-error-mark))
 
 (defun eicq-log-debug (&rest messages)
   "See `eicq-log-debug-flag'.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!debug" (apply 'format messages) eicq-log-debug-flag))
+  (eicq-log "!debug" (apply 'format messages) eicq-log-debug-flag eicq-log-debug-mark))
 
 (defun eicq-log-system (&rest messages)
     "See `eicq-log-system-flag'.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!system" (apply 'format messages) eicq-log-system-flag))
+  (eicq-log "!system" (apply 'format messages) eicq-log-system-flag eicq-log-system-mark))
 
 (defface eicq-face-log-unread
   '((((background dark))
@@ -3664,32 +3740,33 @@ See `eicq-buddy-view' and `eicq-active-aliases'."
 (defun eicq-buddy-update-status (alias status)
   "Update ALIAS with new STATUS."
   ;; update alias variables
-  (if (member status (mapcar 'second eicq-statuses))
-      (eicq-log-buddy-status alias "*** %s" status)
+  (unless (member status (mapcar 'second eicq-statuses))
     (push (cons 'unknown-status eicq-recent-packet)
           eicq-error-packets)
     (eicq-log-error "Unknown status: %s" status)
     (setq status "online"))             ; assumed online
 
-  (eicq-world-putf alias 'status status)
-  (if (string= status "offline")
-      (if (member alias eicq-connected-aliases)
-          (setq eicq-connected-aliases
-                (delete alias eicq-connected-aliases))
-        (eicq-log-buddy-status alias "*** has been invisible"))
-    ;; if not offline
-    (add-to-list 'eicq-connected-aliases alias))
+  (unless (equal status (eicq-world-getf alias 'status))
+    (eicq-log-buddy-status alias "*** %s" status)
+    (eicq-world-putf alias 'status status)
+    (if (string= status "offline")
+	(if (member alias eicq-connected-aliases)
+	    (setq eicq-connected-aliases
+		  (delete alias eicq-connected-aliases))
+	  (eicq-log-buddy-status alias "*** has been invisible"))
+      ;; if not offline
+      (add-to-list 'eicq-connected-aliases alias))
 
-  ;; update buffer
+    ;; update buffer
 
-  ;; view != all + offline -> delete
-  ;; view = all + offline -> offline-face
-  (if (and (string= status "offline")
-           (not (eq eicq-buddy-view 'eicq-all-aliases)))
-      (eicq-buddy-update-face alias 'delete)
-    (if (or (member alias (symbol-value eicq-buddy-view))
-            (string= status "offline"))
-        (eicq-buddy-update-face alias))))
+    ;; view != all + offline -> delete
+    ;; view = all + offline -> offline-face
+    (if (and (string= status "offline")
+	     (not (eq eicq-buddy-view 'eicq-all-aliases)))
+	(eicq-buddy-update-face alias 'delete)
+      (if (or (member alias (symbol-value eicq-buddy-view))
+	      (string= status "offline"))
+	  (eicq-buddy-update-face alias)))))
 
 (defun eicq-buddy-update-face (alias &optional delete)
   "Update face of ALIAS.
