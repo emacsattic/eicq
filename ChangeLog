@@ -1,3 +1,10 @@
+2001-09-11  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-auto-reply): Use a modified subset of
+	'eicq-send-message-helper' so the outgoing message doesn't get
+	logged.  Instead use 'eicq-log-system "Automatic response sent."'
+	(eicq-idle-reply): Ditto.
+
 2001-09-07  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-do-kicked-out): Attempt auto-reconnect.

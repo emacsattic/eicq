@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-7 18:37:21 (steve)>
-;; Version: 0.2.16pre4
+;; Last-Modified: <2001-9-11 21:38:39 (steve)>
+;; Version: 0.2.16pre5
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.16pre4"
+(defconst eicq-version "0.2.16pre5"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -2117,14 +2117,22 @@ Possible type: `eicq-message-types'."
 Called by `eicq-do-message-heler'."
   (let ((message (symbol-value (eicq-status-auto-reply eicq-user-status))))
     (if message
-        (eicq-send-message message alias))))
+	(progn
+	  (add-to-list 'eicq-active-aliases alias)
+	  (eicq-send (eicq-pack-send-message alias message 'normal))
+	  (eicq-log-system "Automatic response sent.")))))
 
+;; FIXME - This ain't workin.
 (defun eicq-idle-reply (alias)
   "Auto-reply to ALIAS/uin depending on `eicq-user-status'.
 Called by `eicq-do-message-heler'."
   (let ((message (symbol-value (eicq-status-idle-reply eicq-user-status))))
     (if message
-        (eicq-send-message message alias))))
+	(progn
+	  (add-to-list 'eicq-active-aliases alias)
+	  (eicq-send (eicq-pack-send-message alias message 'normal))
+	  (eicq-log-system "Automatic response sent (idle).")))))
+
 
 (defun eicq-do-status-update (packet)
   "Handle server command 01a4 in PACKET."
