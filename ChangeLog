@@ -1,5 +1,10 @@
 2003-10-17  Steve Youngs  <sryoungs@bigpond.net.au>
 
+	* eicq-v8proto.el (eicq::CLI_IDENT): Comment out entries that were
+	causing "Variable binding depth exceeds max-specpdl-size" errors.
+	BE AWARE! The code is STILL broken, this is just a temporary
+	workaround so that Eicq compiles.
+
 	* Makefile (distclean): Delete the TAGS file too.
 
 2003-10-15  Steve Youngs  <sryoungs@bigpond.net.au>
