@@ -1,3 +1,36 @@
+2002-10-01  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq-buddy.el: New file.
+
+	* eicq-log.el: New file.
+
+	* eicq-menu.el: New file.
+
+	* eicq-world.el: New file.
+
+	* eicq-v8proto.el: New file.
+
+	* eicq.el (eicq-log-*): Moved to eicq-log.el.
+	(eicq-buddy-*): Moved to eicq-buddy.el.
+	(eicq-*-menu): Moved to eicq-menu.el.
+	(eicq-*-map): Ditto.
+	(eicq-alias-*): Moved to eicq-world.el
+	(eicq-world-*): Ditto.
+
+	* eicq-report.el (eicq-report-debug): Add eicq-menu.el,
+	eicq-buddy.el, eicq-log.el eicq-world.el
+
+	* Makefile: Remove stuff concerning icq2tcp binary, we do it all
+	in lisp now.
+	(SOURCES): Add eicq-menu.el eicq-buddy.el eicq-log.el
+	eicq-world.el eicq-v8proto.el.
+
+2002-09-30  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-pack-login-a): New.  The login is now a 2 stage
+	process so 'eicq-pack-login' has been split into -a & -b.
+	(eicq-pack-login-b): New.
+
 2002-09-29  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq-convert.el (eicq-import-from-micq): Support new micq rc

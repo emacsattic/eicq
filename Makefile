@@ -18,7 +18,7 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 PACKAGE = eicq
-VER = 0.2.17
+VER = 0.5.0
 
 # csh... yell no, we won't go!
 
@@ -57,8 +57,8 @@ LISP_STAGING = $(STAGING)/lisp/$(PACKAGE)
 # Programs and their flags.
 EMACS = xemacs
 EMACS_FLAGS = -batch
-CC = gcc
-CFLAGS = -O2 -Wall
+# CC = gcc
+# CFLAGS = -O2 -Wall
 INSTALL = install -o 0 -g 0
 # Solaris #  Comment out above line and uncomment the line below
 # INSTALL = install -u 0 -g 0
@@ -71,10 +71,11 @@ TAR_FLAGS = czf
 ##                No User Configurable Items Below Here                   ##
 ############################################################################
 
-BIN = icq2tcp
+# BIN = icq2tcp
 USERSH = eicq-user-install.sh
 SOURCES = eicq-comm.el eicq.el eicq-toolbar.el eicq-report.el eicq-convert.el \
-	eicq-wharf.el 
+	eicq-wharf.el eicq-menu.el eicq-log.el eicq-buddy.el eicq-world.el \
+	eicq-v8proto.el
 OBJECTS = $(SOURCES:.el=.elc)
 EXTRA_SRC = ChangeLog INSTALL NEWS README TODO
 EXTRA_OBJ = $(wildcard ./auto-autoloads.el*) $(wildcard ./custom-load.el*)
@@ -89,15 +90,15 @@ AUTO_PRELOADS = -eval \("setq autoload-package-name \"$(PACKAGE)\""\)
 .SUFFIXES:
 .SUFFIXES: .info .texi .elc .el
 
-all:: $(BIN) autoloads $(OBJECTS) customloads texinfo
+all:: autoloads $(OBJECTS) customloads texinfo
 
-$(BIN): $(BIN).c
-	$(CC) $(CFLAGS) -o $(BIN) $(BIN).c
+# $(BIN): $(BIN).c
+# 	$(CC) $(CFLAGS) -o $(BIN) $(BIN).c
 # Solaris # Comment out the above and uncomment the following.
 # $(BIN): $(BIN).c
 # 	$(CC) $(CFLAGS) -o $(BIN) $(BIN).c -lsocket -lnsl
 
-bin: $(BIN)
+# bin: $(BIN)
 
 autoloads: auto-autoloads.el
 
@@ -121,7 +122,7 @@ custom-load.el : $(SOURCES)
 
 install: all
 	$(INSTALL) -d $(BIN_DIR) $(DATA_DIR) $(INFO_DIR) $(LISP_DIR)
-	$(INSTALL) -s -m 755 $(BIN) $(BIN_DIR)
+	# $(INSTALL) -s -m 755 $(BIN) $(BIN_DIR)
 	$(INSTALL) -m 755 $(USERSH) $(BIN_DIR)
 	$(INSTALL) -m 644 $(DATA_FILES) $(DATA_DIR)
 	$(INSTALL) -m 644 $(INFO_FILES) $(INFO_DIR)
@@ -150,7 +151,7 @@ install: all
 pkg: all
 	$(PKG_INSTALL) -d $(STAGING) $(BIN_STAGING) $(DATA_STAGING) \
 		$(INFO_STAGING) $(LISP_STAGING)
-	$(PKG_INSTALL) -s -m 755 $(BIN) $(BIN_STAGING)
+	# $(PKG_INSTALL) -s -m 755 $(BIN) $(BIN_STAGING)
 	$(PKG_INSTALL) -m 755 $(USERSH) $(BIN_STAGING)
 	$(PKG_INSTALL) -m 644 $(DATA_FILES) $(DATA_STAGING)
 	$(PKG_INSTALL) -m 644 $(INFO_FILES) $(INFO_STAGING)
@@ -163,10 +164,10 @@ upgrade: uninstall install
 
 uninstall:: 
 	rm -rf $(DATA_DIR) $(LISP_DIR)
-	rm -f $(INFO_DIR)/$(INFO_FILES) $(BIN_DIR)/$(BIN) $(BIN_DIR)/$(USERSH)
+	rm -f $(INFO_DIR)/$(INFO_FILES) $(BIN_DIR)/$(USERSH)
 
 clean::
-	rm -f $(OBJECTS) $(BIN) $(INFO_FILES) \
+	rm -f $(OBJECTS) $(INFO_FILES) \
 		auto-autoloads.el* custom-load.el*
 
 distclean: clean

@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2002-5-12 09:46:55 (steve)>
+;; Last-Modified: <2002-10-1 12:28:01 (steve)>
 ;; Keywords: bug-report
 
 ;; This file is part of Eicq.
@@ -101,7 +101,8 @@
 The source file has to be in the load path."
   (interactive)
   (let ((files '("eicq.el" "eicq-toolbar.el" "eicq-report.el"
-		 "eicq-wharf.el" "eicq-comm.el"))
+		 "eicq-wharf.el" "eicq-comm.el" "eicq-menu.el"
+		 "eicq-log.el" "eicq-buddy.el" "eicq-world.el"))
 	(point (point))
 	file expr olist sym)
     (message "Please wait while we snoop your variables...")

@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2002-07-29 17:53:08 (steve)>
+;; Last-Modified: <2002-10-01 13:58:21 (steve)>
 ;; Version: 0.5.0
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
@@ -74,14 +74,6 @@ Run `eicq-update-meta-info' after changing any of these variables."
 
 (defgroup eicq-option nil
   "System settings and general preferences."
-  :group 'eicq)
-
-(defgroup eicq-log nil
-  "Message logging preferences."
-  :group 'eicq)
-
-(defgroup eicq-buddy nil
-  "Contact list preferences."
   :group 'eicq)
 
 (defgroup eicq-sound nil
@@ -492,153 +484,9 @@ messages again next time you login."
   :group 'eicq-interface
   :type '(choice (item t) (item nil)))
 
-(defcustom eicq-buddy-window-width 20
-  "*Width of window for `eicq-buddy-buffer'."
-  :group 'eicq-interface)
-
 (defcustom eicq-status-window-height 9
   "*Height of window for `eicq-status-buffer'."
   :group 'eicq-interface)
-
-(defcustom eicq-log-fill-column 50
-  "Fill column for `eicq-log-buffer'.
-Log in buffer is auto-filled, that is, word-wrapped upto this column.
-Normally frame width is 80 and window width of `eicq-buddy-buffer' is 20,
-therefore default value 50 will be nice."
-  :group 'eicq-log)
-
-(defcustom eicq-log-filename "~/.eicq/log"
-  "*Pathname and filename for storing eicq log.
-Automatically created if the directory is non-existent."
-  :group 'eicq-log)
-
-(defcustom eicq-log-buffer-position-flag 'tail
-  "*Non-nil means automatically updating buffer position.
-Nil means no automatic update, 'tail means keeping the bottom of the buffer 
-visible, other non-nil means keeping the top of the buffer visible."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))  
-
-(defcustom eicq-log-info-flag 'tail
-  "*Non-nil means log misc info.
-These include any info from ICQ server other than buddy messages, status
-change notice, and query results.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-buddy-status-flag 'tail
-  "*Non-nil means log buddy status change notice.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-buddy-message-flag 'tail
-  "*Non-nil means log buddy messages from ICQ server.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-outgoing-flag 'tail
-  "*Non-nil means log outgoing messages to ICQ server.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-error-flag 'tail
-  "*Non-nil means log critical error messages.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-debug-flag nil
-  "*Non-nil means log verbose debugging messages.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-system-flag 'tail
-  "*Non-nil means log system messages.
-These include network status, login status, and others.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-info-mark nil
-  "*Non-nil means mark unread.
-These include any info from ICQ server other than buddy messages, 
-status change notice, and query results.
-Nil means mark read."
-  :group 'eicq-log
-  :type 'boolean)
-
-(defcustom eicq-log-buddy-status-mark nil
-  "*Non-nil means mark buddy status change notice unread.
-Nil means mark read."
-  :type 'boolean
-  :group 'eicq-log)
-
-(defcustom eicq-log-buddy-message-mark t
-  "*Non-nil means mark buddy messages unread.
-Nil means mark read."
-  :type 'boolean
-  :group 'eicq-log)
-
-(defcustom eicq-log-outgoing-mark nil
-  "*Non-nil means mark outgoing messages unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type 'boolean)
-
-(defcustom eicq-log-error-mark t
-  "*Non-nil means mark critical error messages unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type 'boolean)
-
-(defcustom eicq-log-debug-mark t
-  "*Non-nil means mark verbose debugging messages unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type 'boolean)
-
-(defcustom eicq-log-system-mark nil
-  "*Non-nil means mark system messages unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type 'boolean)
-
-(defcustom eicq-save-log-on-exit-p t
-  "*Non-nil means the log file will be automatically saved when exiting."
-  :group 'eicq-log
-  :type 'boolean
-  :tag "Save log on exit")
-
-(defcustom eicq-buddy-status-color-hint-flag t
-  "*Non-nil means put status color hints."
-  :type 'boolean
-  :group 'eicq-buddy)
-
-(defcustom eicq-buddy-view 
-  'eicq-connected-aliases
-  "*View of buddy buffer.
-It determines what aliases to be display in buddy buffer.  For example,
-\(eicq-connected-aliases) means display all connected aliases.
-
-See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
-`eicq-buddy-view-active'."
-  :group 'eicq-buddy
-  :type '(choice (item eicq-all-aliases)
-                 (item eicq-connected-aliases)
-                 (item eicq-active-aliases))
-  :initialize 'custom-initialize-default)
 
 (defcustom eicq-start-in-new-frame nil
   "*If non-NIL, Eicq will start in its own frame."
@@ -647,9 +495,6 @@ See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
 
 (defvar eicq-user-status "offline"
   "Current user status.")
-
-(defvar eicq-world-rc-filename "~/.eicq/world"
-  "*Filename for resource file.")
 
 (defvar eicq-new-message-hook nil
   "*Hooks to run when there is an incoming message.
@@ -667,11 +512,6 @@ Dynamically ALIAS and STATUS are binded to be used in hooks.")
 
 
 ;;; Internal variables
-
-(defcustom eicq-user-alias "me"
-  "*Your alias in `eicq-world'.
-Run `eicq-world-update' after modifying this variable."
-  :group 'eicq-info)
 
 ;;;###autoload
 (defun eicq-version (&optional arg)
@@ -1152,77 +992,11 @@ COUNT means how many time this packets has been resent. Default is 0."
   (interactive)
   (switch-to-buffer eicq-network-buffer))
 
-(defvar eicq-main-map
-  (let ((map (make-keymap 'eicq-main-map)))
-    (suppress-keymap map)
-    (define-key map [X] nil)            ; BUG?
-    (define-key map [X i] 'eicq-login)
-    (define-key map [X o] 'eicq-logout)
-    (define-key map [X s] 'eicq-change-status)
-    (define-key map [S] 'eicq-group-select-aliases)
-    (define-key map [s] 'eicq-group-select-aliases)
-    (define-key map [w] 'eicq-show-window)
-    (define-key map [h] 'eicq-hide-window)
-    (define-key map [M] 'eicq-send-message)
-    (define-key map [m] 'eicq-send-message)
-    (define-key map [U] 'eicq-send-url)
-    (define-key map [u] 'eicq-send-url)
-    (define-key map [A] 'eicq-authorize)
-    (define-key map [a] 'eicq-authorize)
-    (define-key map [i] 'eicq-query-info)
-    (define-key map [I] 'eicq-query-info)
-    (define-key map [f] 'world-find)
-    (define-key map [V] nil)
-    (define-key map [V c] 'eicq-buddy-view-connected)
-    (define-key map [V v] 'eicq-buddy-view-active)
-    (define-key map [V a] 'eicq-buddy-view-all)
-    (define-key map [?1] 'eicq-buddy-show-buffer)
-    (define-key map [?2] 'eicq-log-show-buffer)
-    (define-key map [?4] 'eicq-network-show-buffer)
-    map)
-  "Keyboard map common for `eicq-log-mode-map' and `eicq-buddy-mode-map'.")
-
-(defvar eicq-main-menu
-  '("Eicq"
-    ["Show Window" eicq-show-window t]
-    ["Hide Window" eicq-hide-window t]
-    ["Register New UIN" eicq-register-new-user t]
-    ["Change Password" eicq-change-password t]
-    ["Login" eicq-login t]
-    ["Logout" eicq-logout t]
-    ["Disconnect" eicq-disconnect t]
-    "---"
-    ["Select" eicq-group-select-aliases t]
-    ["Send Message" eicq-send-message t]
-    ["Send URL" eicq-send-url t]
-    ["Authorize" eicq-authorize t]
-    ["Change Status" eicq-change-status t]
-    ["Search" eicq-search t]
-    ["Update Meta Info" eicq-update-meta-info t]
-    "---"
-    ["alias -> uin" eicq-alias-uin t]
-    ["uin -> alias" eicq-uin-alias t]
-    ["Redo Packet" eicq-redo-hex t]
-    ["Resend Contact List" eicq-send-contact-list t]
-    ["Buddy Buffer" eicq-buddy-show-buffer t]
-    ["Log Buffer" eicq-log-show-buffer t]
-    ["Network Buffer" eicq-network-show-buffer t]
-    "---"
-    ["Email Author" eicq-email-author t]
-    ["Submit Bug Report" (eicq-report-bug eicq-blurb) t]
-    ["Customize" eicq-customize t])
-  "Menu for both `eicq-log-mode' and `eicq-buddy-mode'.")
-
-(easy-menu-define
- eicq-main-easymenu nil "Eicq Main" eicq-main-menu)
 
 (defvar eicq-frame nil
   "The frame where Eicq is displayed.")
 
 (defvar eicq-wharf-frame)
-
-(defvar eicq-log-buffer nil
-  "Buffer for log.")
 
 (defun eicq-disconnect ()
   "Log out of ICQ and close all Eicq buffers."
@@ -1327,11 +1101,6 @@ See `eicq-network-filter'."
 (defvar eicq-current-seq-num 1
   "Current sequence number in packet.")
 
-(defvar eicq-user-bin nil
-  "User alias in binary string.
-The mere purpose is to speed up operations.
-Updated by `eicq-world-update'.")
-
 (defun eicq-pack (command &rest parameters)
   "Pack a ICQ protocol version 5 packet.
 COMMAND is a hex string.
@@ -1350,28 +1119,59 @@ Use `eicq-send' to send the string."
               (apply 'concat parameters)
             "\x00\x00\x00\x00")))       ; must have at least 4 bytes
 
-(defun eicq-pack-login ()
-  "Pack login packet 03e8."
+; (defun eicq-pack-login ()
+;   "Pack login packet 03e8."
+;   (let* ((password eicq-encrypted-password)
+;          (password-len (eicq-int-bin (1+ (length password))))
+;          (status (eicq-status-bin eicq-user-initial-status)))
+;     (eicq-pack
+;      "\xe8\x03"
+;      ;; "\x5f\x71\x69\x37"                      ; time
+;      "\x00\x00\x00\x00"                 ; time
+;      "\x00\x00\x00\x00"                 ; port (auto-detect)
+;      password-len
+;      password "\x00"
+;      "\x72\x00\x04\x00"                 ; x1
+;      "\x00\x00\x00\x00"                 ; ip (auto-detect)
+;      "\x06"                             ; x2 _d95_
+;      status                             ; initial status
+;      ;; FIXME invisible has 2 bytes while others only one
+;      ;; must be \x00 so that initial status works
+;      "\x00\x00\x00\x00"                 ; x3 _d95_
+;      "\x02\x00"                         ; seq num, WHY 2?
+;      "\x00\x00\x00\x00"                 ; x4
+;      "\x04\x00\x72\x00")))
+
+(defconst eicq-icq-client-id-string
+  "ICQ Inc. - Product of ICQ (TM).2002a.5.37.1.3728.85"
+  "A string to identify ourselves as a nice well behaved ICQ client.")
+
+;;;FIXME: Don't hardcode 'language' and 'country' here.
+(defun eicq-pack-login-a ()
+  "Pack stage 1 of the 2 stage login process."
   (let* ((password eicq-encrypted-password)
-         (password-len (eicq-int-bin (1+ (length password))))
-         (status (eicq-status-bin eicq-user-initial-status)))
+	 (uin (eicq-uin-bin (car (cdr (eicq-world-info eicq-user-alias)))))
+	 (language "en")
+	 (country "au"))
     (eicq-pack
-     "\xe8\x03"
-     ;; "\x5f\x71\x69\x37"                      ; time
-     "\x00\x00\x00\x00"                 ; time
-     "\x00\x00\x00\x00"                 ; port (auto-detect)
-     password-len
-     password "\x00"
-     "\x72\x00\x04\x00"                 ; x1
-     "\x00\x00\x00\x00"                 ; ip (auto-detect)
-     "\x06"                             ; x2 _d95_
-     status                             ; initial status
-     ;; FIXME invisible has 2 bytes while others only one
-     ;; must be \x00 so that initial status works
-     "\x00\x00\x00\x00"                 ; x3 _d95_
-     "\x02\x00"                         ; seq num, WHY 2?
-     "\x00\x00\x00\x00"                 ; x4
-     "\x04\x00\x72\x00")))
+     "\x00\x00\x00\x01"
+     "\x00\x01" uin
+     "\x00\x02" password
+     "\x00\x03" eicq-icq-client-id-string
+     "\x00\x16\x00\x02\x01\x0a"
+     "\x00\x17\x00\x02\x00\x05"
+     "\x00\x18\x00\x02\x00\x25"
+     "\x00\x19\x00\x02\x00\x01"
+     "\x00\x1a\x00\x02\x0e\x90"
+     "\x00\x14\x00\x04\x00\x00\x00\x55"
+     "\x00\x0f" language
+     "\x00\x0e" country)))
+
+(defun eicq-pack-login-b ()
+  "Pack stage 2 of the login process."
+  ;;todo
+  )
+     
 
 (defun eicq-pack-keep-alive ()
   "Pack keep alive packet 042e."
@@ -1387,11 +1187,6 @@ Use `eicq-send' to send the string."
 (defun eicq-pack-delete-offline-messages ()
   "Pack delete offline message packet 0442."
   (eicq-pack "\x42\x04"))
-
-(defvar eicq-all-uin nil
-  "All uin in `eicq-world'.
-The mere purpose is to speed up operations.
-Updated by `eicq-world-update'.")
 
 (defun eicq-pack-contact-list ()
   "Pack contact list packet 0406."
@@ -2028,11 +1823,6 @@ Called by `eicq-do-message-heler'."
   "Handle server command 01c2 in PACKET."
   (run-hooks 'eicq-system-message-hook))
 
-(defvar eicq-add-user-p nil)
-(defvar eicq-new-buddy nil)
-(defvar eicq-new-uin nil)
-(defvar fix-nick)
-
 (defun eicq-do-info (packet)
   "Handle server command 0118 in PACKET.
 Server response to `eicq-pack-info-request'."
@@ -2106,12 +1896,6 @@ Server response to `eicq-pack-info-request'."
 Authorization: %s"
 	 uin alias nick-name first-name last-name email
 	 (if (= authorization 0) "Needed" "Not Needed")))))))
-
-(defun eicq-add-user (uin)
-  (interactive "sUIN: ")
-  (setq eicq-new-uin uin)
-  (setq eicq-add-user-p t)
-  (eicq-search-by-uin uin))
 
 
 (defvar country-status)
@@ -2483,259 +2267,6 @@ Language-3: %s"
   "Handle server command 03de subcommand 00aa in DATA."
   (eicq-log-info "meta user password change succeeded"))
 
-;;; Code - world:
-
-;; Currently eicq supports only external resource file method of storing
-;; buddy info (uin, alias, and properties). Certainly it can be extended
-;; but keep all the interface variables and functions in this section. See
-;; section "world by rc"
-
-(defvar eicq-world nil
-  "List of alias, uin, and plist.")
-
-(defvar eicq-all-aliases nil
-  "All aliases in `eicq-world'.
-The mere purpose is to speed up operations.
-Updated by `eicq-world-update'.")
-
-(defun eicq-world-getf (alias tag)
-  "For ALIAS get property of TAG.
-If TAG is 'all, return the plist."
-  (let ((plist (cddr (assoc alias eicq-world))))
-    (if (eq tag 'all)
-        plist
-      (getf plist tag))))
-
-(defun eicq-world-putf (alias tag value)
-  "For ALIAS put property of TAG with VALUE."
-  (let* ((buddy (assoc alias eicq-world))
-         (plist (cddr buddy)))
-    (if buddy (setcdr (cdr buddy) (putf plist tag value)))))
-
-(defun eicq-alias-uin (alias)
-  "Return an uin from an ALIAS in `eicq-world'.
-Return uin if ALIAS is already an uin.
-Return 0 if no corresponding uin or invalid uin.
-If called interactively, display and push uin into `kill-ring'."
-  (interactive (eicq-completing-aliases "uin from alias: " 'single))
-  (let ((uin (second (assoc alias eicq-world))))
-    (setq uin
-          (cond
-           ((eicq-valid-uin-p alias) alias)
-           ((eicq-valid-uin-p uin) uin)
-           (t "0")))
-    (when (interactive-p)
-      (message uin)
-      (kill-new uin))
-    uin))
-
-(defun eicq-uin-alias (uin)
-  "Return an alias from an UIN in `eicq-world'.
-Return UIN if no corresponding ALIAS.
-If called interactively, display and push alias into `kill-ring'."
-  (interactive (list (read-string "alias from uin: ")))
-  (let ((alias (or (first (find uin eicq-world :key 'second :test 'string=))
-                   ;; not found, return uin
-                   uin)))
-    (when (interactive-p)
-      (message alias)
-      (kill-new alias))
-    alias))
-
-;;; Code - world by rc:
-
-(defvar eicq-world-rc-regexp
-  "^:icq[ \t]+\\([0-9]+\\)[ \t]+\\([^:]+?\\)[ \t]?\\( :.*\\)*$"
-  "*Regular expression for rc file.
-Format: :icq uin alias group
-Group is prefixed by a colon :.  Anything between uin and group including
-white spaces is alias.  For example,
-
-:icq 409533 fire :linux :eicq
-:icq 123456 the hatter :unreal")
-
-(defvar eicq-alias-map
-  (let ((map (make-sparse-keymap 'eicq-alias-map)))
-    (define-key map [button2] 'eicq-send-message-via-mouse)
-    map)
-  "Keymap for alias extent.")
-
-(defun eicq-add-new-user-to-buddy-buffer ()
-  "Push the nick name from `eicq-add-user' into the buddy buffer.
-Sort of a cut-down version or `eicq-world-update'"
-  (add-to-list (symbol-value 'eicq-buddy-view) eicq-new-buddy)
-  (set-extent-properties
-   (make-extent 0 (length eicq-new-buddy) eicq-new-buddy)
-   `(highlight t duplicable t start-open t keymap ,eicq-alias-map))
-  (save-excursion
-    (set-buffer (find-file-noselect eicq-world-rc-filename))
-    (goto-char (point-max))
-    (search-backward-regexp eicq-world-rc-regexp nil t)
-    (let* ((buddy (list eicq-new-buddy eicq-new-uin 'rc-index (point))))
-      (push buddy eicq-world)))
-  (setq eicq-all-aliases (mapcar 'first eicq-world))
-  (setq eicq-all-uin (mapcar 'second eicq-world))
-  (eicq-buddy-show-buffer 'new 'no-select)
-  (eicq-send
-   (eicq-pack "\x3c\x05"
-	      (eicq-uin-bin (car eicq-all-uin))))
-  (setq eicq-add-user-p nil)
-  (setq eicq-new-buddy nil)
-  (setq eicq-new-uin nil))
-
-(defun eicq-world-update ()
-  "Read `eicq-world-rc-filename' and update various user variables.
-Need to call this whenever RC is modified and to be updated.
-RC file is not closed if it is the buffer of current window or it is modified."
-  (interactive)
-  (save-excursion
-    (let (no-killing-at-last)
-      (setq eicq-world nil)
-      (set-buffer (find-file-noselect eicq-world-rc-filename))
-      ;; don't kill if rc file is buffer in current window
-      (setq no-killing-at-last
-            (or (buffer-modified-p)
-                (eq (window-buffer) (current-buffer))))
-      (goto-char (point-min))
-      (while (search-forward-regexp eicq-world-rc-regexp nil t)
-        (let* ((uin (match-string 1))
-               (alias (match-string 2))
-               (group (match-string 3))
-               buddy)
-
-          ;; idea from Erik Arneson <erik@starseed.com>
-          (set-extent-properties
-           ;; We may consider moving to eicq-uin-alias or somewhere else, if
-           ;; we don't want to waste enourmous unused extents.
-           (make-extent 0 (length alias) alias)
-           `(highlight t duplicable t start-open t keymap ,eicq-alias-map))
-
-          (setq buddy (list alias uin 'rc-index (point)))
-
-          ;; group stuff not used yet
-          (if group
-              (setq buddy
-                    (append buddy (read (format "(group (%s))" group)))))
-          (push buddy eicq-world)))
-      (unless no-killing-at-last (kill-buffer (current-buffer)))))
-
-  (setq eicq-all-aliases (mapcar 'first eicq-world))
-  (setq eicq-all-uin (mapcar 'second eicq-world))
-  (setq eicq-user-bin (eicq-alias-bin eicq-user-alias)))
-
-(defun eicq-world-info (alias)
-  "Return local info of buddy ALIAS."
-  ;; TODO
-  (assoc alias eicq-world))
-
-;; world mode
-
-(defun world-mode ()
-  "eicq resource file mode.
-Quick hack for font-lock. Each record is separated by \"==== \" at the
-beginning of the line."
-  (interactive)
-  (kill-all-local-variables)
-  (setq mode-name "world")
-  (setq major-mode 'world-mode)
-  (setq fill-column 100)
-  (auto-fill-mode 1)
-  ;; hiding details for privacy
-  (outline-minor-mode)
-  (set (make-local-variable 'outline-regexp)
-       "==== ")
-
-  ;; highlight this month and next month
-  ;; format example: "^Aug 08, 1979$"
-  (let* ((this-month (string-to-number (format-time-string "%m")))
-         (this-month-name (aref eicq-monthnames this-month))
-         (next-month-name (aref eicq-monthnames (1+ this-month)))
-         (month-regexp (format "^%s.*\\|^%s.*"
-                               this-month-name next-month-name)))
-    (setq font-lock-keywords
-          ;; highlight separator
-          `(("^==== " (0 'font-lock-warning-face t))
-            ;; highlight date
-            (,month-regexp (0 'highlight t))
-            ;; highlight keyword prefixed with :
-            (":\\(\\w\\|-\\)+" 0 font-lock-reference-face t))))
-  (font-lock-mode 1))
-
-(defun world-sort ()
-  (interactive)
-  (beginning-of-buffer)
-  (sort-subr nil 'world-next-friend 'world-end-friend))
-
-(defun world-next-friend ()
-  (interactive)
-  (let ((result (search-forward "====" nil t)))
-    ;; go back before ====
-    (if result (backward-char 4)
-      ;; required by sort-subr
-      (end-of-buffer))))
-
-(defun world-end-friend ()
-  (interactive)
-  ;; skip current friend
-  (forward-char 1)
-  (let ((result (search-forward "====" nil t)))
-    ;; go back before ====
-    (if result (backward-char 5)
-      (end-of-buffer))))
-
-(defun world-find (alias)
-  "Goto a friend record of ALIAS in `eicq-world-rc-filename'.
-Prefix argument means do not use (load) eicq completing alias feature."
-  (interactive
-   (if current-prefix-arg
-       (list (read-string "find: "))
-     (progn
-       (require 'eicq)
-       (eicq-completing-aliases "find: " 'single))))
-  (find-file eicq-world-rc-filename)
-  (goto-char (point-min))
-  (re-search-forward
-   (concat "^:icq.*?"
-           (regexp-quote alias)
-           "\\b.*$")))
-
-;;; Code - group:
-
-(defun eicq-group-put (group name)
-  "Put something into GROUP.
-NAME can be either an alias or another group name."
-  (let ((list (assoc group eicq-world)))
-    (cond
-     (list
-      (setcdr list (list (pushnew name (cadr list) :test 'equal))))
-     (t
-      (push (list group (list name)) eicq-world)))))
-
-(defun eicq-group-get (group)
-  "Get members from GROUP."
-  (cadr (assoc group eicq-world)))
-
-(defun eicq-group-get-all-aliases (group)
-  "Recursively get all aliases from GROUP."
-  (loop for x in (eicq-group-get group)
-    as expanded-x = (eicq-group-get x)
-    if (atom expanded-x) collect x
-    else append (eicq-group-get-all-aliases x)))
-
-(defun eicq-group-select-aliases (state &rest aliases)
-  "Select aliases and update buddy buffer.
-Nil STATE means deselect, 'toggle means invert current state, and other
-non-nil means select.
-
-See `eicq-process-alias-input'."
-  (interactive '(select))
-  (eicq-process-alias-input 'aliases)
-  (loop for x in aliases
-    do (if (eq state 'toggle)
-             (setq state (not (eicq-world-getf x 'selected))))
-         (eicq-world-putf x 'selected state)
-         (eicq-buddy-update-face x)))
-
 ;;; Code - alias and uin:
 
 (defun eicq-bin-alias (bin &optional from)
@@ -2898,70 +2429,6 @@ Zero-Padded to make it 4 byte-long."
   "Return the name of status from its the binary string BIN."
   (cadr (assoc bin eicq-statuses)))
 
-(defface eicq-face-online
-  '((((background dark))
-     (:foreground "green"))
-    (((background light))
-     (:foreground "green")))
-  "Face for ONLINE status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-away
-  '((((background dark))
-     (:foreground "red"))
-    (((background light))
-     (:foreground "red")))
-  "Face for AWAY status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-occ
-  '((((background dark))
-     (:foreground "orange"))
-    (((background light))
-     (:foreground "orange")))
-  "Face for OCCUPIED status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-dnd
-  '((((background dark))
-     (:foreground "lightblue"))
-    (((background light))
-     (:foreground "lightblue")))
-  "Face for DO NOT DISTURB status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-ffc
-  '((((background dark))
-     (:foreground "yellow"))
-    (((background light))
-     (:foreground "yellow")))
-  "Face for FREE FOR CHAT status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-na
-  '((((background dark))
-     (:foreground "pink"))
-    (((background light))
-     (:foreground "pink")))
-  "Face for NOT AVAILABLE status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-offline
-  '((((background dark))
-     (:foreground "grey"))
-    (((background light))
-     (:foreground "grey")))
-  "Face for OFFLINE status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-selected
-  '((((background dark))
-     (:foreground "darkblue" :background "yellow"))
-    (((background light))
-     (:foreground "darkblue" :background "yellow")))
-  "Face for OFFLINE status."
-  :group 'eicq-buddy)
-
 ;;; Code - system main:
 
 (defvar eicq-blurb 
@@ -2988,7 +2455,7 @@ Make connection to server and network if necessary."
     (eicq-connect)
     (when (eicq-connected-p)
       (message "Logging on the ICQ server...")
-      (eicq-send (eicq-pack-login)))))
+      (eicq-send (eicq-pack-login-a)))))
 
 (autoload 'eicq-wharf-change-messages "eicq-wharf")
 
@@ -3143,9 +2610,6 @@ See `eicq-process-alias-input'."
 	do (eicq-send-message-helper
 	    ;; encoding outgoing but not that to be insert in log buffer
 	    (eicq-encode-string x) aliases 'normal x)))))
-
-(defvar eicq-buddy-buffer nil
-  "Buffer for contact list.")
 
 (defun eicq-send-message-via-mouse (event)
   ;; Erik Arneson <erik@starseed.com> (from VM)
@@ -3352,322 +2816,6 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
 
 ;; message history buffer
 
-(defvar eicq-log-menu
-  '("Eicq-log"
-    ["Select Around" eicq-select-alias-around t]
-    ["Send Message Around" eicq-send-message-alias-around t]
-    ["Send URL Around" eicq-send-url-alias-around t]
-    ["Authorize Around" eicq-authorize-alias-around t]
-    ["Forward Message" eicq-forward-message-around t]
-    ["Query Around" eicq-query-info-alias-around t]
-    "---"
-    ["New Log File" eicq-log-new-file t]
-    ["Contract Log" eicq-log-contract t]
-    ["Expand Log" eicq-log-expand t]
-    ["Previous Log" eicq-log-previous t]
-    ["Next Log" eicq-log-next t]
-    "---"
-    ["Mark Read" eicq-log-mark-read t]
-    ["Mark Unread" eicq-log-mark-unread t])
-  "Menu for `eicq-log-mode'.")
-
-(easy-menu-define
- eicq-buddy-easymenu nil "Eicq Buddy" eicq-log-menu)
-
-(defvar eicq-log-outline-regexp "^...:.. "
-  "Regexp for log header.
-See `outline-regexp'.")
-
-(defun eicq-switch-to-buddy-buffer ()
-  "Switches from the log buffer to the buddy buffer.
-Needed so we can by-pass the status buffer."
-  (interactive)
-  (other-window 2))
-
-(defvar eicq-log-mode-map
-  (let ((map (make-sparse-keymap 'eicq-log-mode-map)))
-    (set-keymap-parents map (list eicq-main-map))
-    (define-key map [delete] 'eicq-log-contract)
-    (define-key map [insert] 'eicq-log-expand)
-    (define-key map [(control up)] 'eicq-log-previous)
-    (define-key map [(control down)] 'eicq-log-next)
-    (define-key map [v] 'eicq-log-mark-unread)
-    (define-key map [c] 'eicq-log-mark-read)
-    (define-key map [W] 'eicq-alias-around)
-    (define-key map [s] 'eicq-select-alias-around)
-    (define-key map [m] 'eicq-send-message-alias-around)
-    (define-key map [u] 'eicq-send-url-alias-around)
-    (define-key map [a] 'eicq-authorize-alias-around)
-    (define-key map [i] 'eicq-query-info-alias-around)
-    (define-key map [f] 'eicq-forward-message-around)
-    (define-key map [n] 'eicq-log-next-unread)
-    (define-key map [N] 'eicq-log-next)
-    (define-key map [o] 'eicq-switch-to-buddy-buffer)
-    (define-key map [p] 'eicq-log-previous-unread)
-    (define-key map [P] 'eicq-log-previous)
-    map)
-  "Keymap for `eicq-log-mode'.")
-
-(defvar eicq-buddy-menu
-  '("Eicq-Buddy"
-    ["Select Here" eicq-select-alias-here t]
-    ["Select By Status" eicq-buddy-select-all-in-view-by-status t]
-    ["Select By Regexp" eicq-buddy-select-all-in-view-by-regexp t]
-    ["Send Message Here" eicq-send-message-alias-here t]
-    ["Send URL Here" eicq-send-url-alias-here t]
-    ["Authorize Here" eicq-authorize-alias-here t]
-    ["Query Info Here" eicq-query-info-alias-here t]
-    "---"
-    ["View Connected" eicq-buddy-view-connected t]
-    ["View Active" eicq-buddy-view-active t]
-    ["View All" eicq-buddy-view-all t])
-  "Menu for `eicq-buddy-mode'.")
-
-(defun eicq-log-mode ()
-  "Major mode for logging messages in eicq.
-Commands: \\{eicq-log-mode-map}
-
-Turning on `eicq-log-mode' runs the hook `eicq-log-mode-hook'."
-  (interactive)
-  (kill-all-local-variables)
-  (use-local-map eicq-log-mode-map)
-  (setq mode-name "eicq-log")
-  (setq major-mode 'eicq-log-mode)
-  ;; put easy-menu-add after set mode-name
-  (easy-menu-add eicq-main-easymenu)
-  (easy-menu-add eicq-buddy-menu)
-  (easy-menu-add eicq-log-menu)
-  (setq fill-column eicq-log-fill-column)
-
-  ;; HACK no menubar from outline mode
-  (let ((features (remove 'menubar features)))
-    (outline-minor-mode))
-
-  (set (make-local-variable 'outline-regexp)
-       eicq-log-outline-regexp)         ; any better?
-
-  (setq modeline-format
-        (list "[" 'eicq-user-alias
-              "] *** " 'eicq-user-status))
-
-  (run-hooks 'eicq-log-mode-hook))
-
-(defun eicq-log-show-buffer (&optional new no-select)
-  "Switch to `eicq-log-buffer'.
-Create buffer with log file if buffer does not exists already.
-Non-nil NEW means rotate and create a new log file.
-Non-nil NO-SELECT means don't select log window.
-See `eicq-log-filename'."
-  (interactive)
-  (when new
-    ;; save and close current log first if any
-    (setq eicq-log-buffer
-          (find-buffer-visiting eicq-log-filename))
-
-    (if eicq-log-buffer
-        (with-current-buffer eicq-log-buffer
-          (save-buffer)
-          (kill-buffer nil)))
-
-    ;; rename old log in disk
-    (if (file-exists-p eicq-log-filename)
-        (rename-file
-         eicq-log-filename
-         (concat eicq-log-filename
-                 ;; in case you do something stupid with it
-                 (format-time-string "-%Y-%b%d-%H%M-%S")))))
-
-  (unless (buffer-live-p eicq-log-buffer)
-    (setq eicq-log-buffer (find-file-noselect eicq-log-filename))
-    (with-current-buffer eicq-log-buffer
-      (eicq-log-mode)
-      (if (zerop (buffer-size))
-          (insert "=======================================\n"
-		  "Welcome to Eicq - The XEmacs ICQ Client\n\n"
-		  "If you experience problems, please use:\n"
-		  "  \'M-x eicq-report-bug RET\'\n"
-		  "=======================================\n\n"))))
-  (unless no-select
-    (switch-to-buffer eicq-log-buffer)))
-
-(defun eicq-log-new-file ()
-  "Rotate and create a new log file."
-  (interactive)
-  (eicq-log-show-buffer 'new))
-
-(defconst eicq-log-entry-re "^[SMTWRFA][0-9][0-9]:[0-9][0-9]"
-  "Regular expression matching the beginning of a log entry.")
-
-(defun eicq-log (id message option mark-unread)
-  "Log message under ID.
-Put MESSAGE at the end of log buffer if OPTION is non-nil.
-Mark MESSAGE unread if MARK-UNREAD is non-nil"
-  (if (and option (buffer-live-p eicq-log-buffer))
-      (with-current-buffer eicq-log-buffer
-        (save-excursion
-          (let ((start-point (if (eq option 'tail)
-                                 (point-max) (point-min)))
-                (weekday ["S" "M" "T" "W" "R" "F" "A"])
-                ;; to fill messages correctly
-                (paragraph-start ""))
-            (goto-char start-point)
-            (insert
-             (aref weekday (string-to-number (format-time-string "%w")))
-             (format-time-string "%R ")
-             ;; use concat instead of format for extent
-             (concat "[" id "] " message "\n\n"))
-            (fill-region start-point (point))
-            (goto-char start-point)
-	    (if mark-unread
-		(eicq-log-mark-unread)
-	      (eicq-log-mark-read))))
-	(if eicq-log-buffer-position-flag
-	    (if (eq eicq-log-buffer-position-flag 'tail)
-		(progn
-		  (goto-char (point-max))
-		  (re-search-backward eicq-log-entry-re))
-	      (progn 
-		(goto-char (point-min))
-		(re-search-forward eicq-log-entry-re)))))))
-
-(defun eicq-log-info (&rest messages)
-  "See `eicq-log-info-flag'.
-MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!info" (apply 'format messages) eicq-log-info-flag eicq-log-info-mark))
-
-(defun eicq-log-buddy-status (alias &rest messages)
-  "See `eicq-log-buddy-status-flag'.
-ALIAS is an id to be logged under.
-MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log alias 
-	    (apply 'format messages) 
-	    eicq-log-buddy-status-flag eicq-log-buddy-status-mark))
-
-(defun eicq-log-buddy-message (alias &rest messages)
-  "See `eicq-log-buddy-message-flag'.
-ALIAS is an id to be logged under.
-MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log alias 
-	    (apply 'format messages) 
-	    eicq-log-buddy-message-flag eicq-log-buddy-message-mark)
-  (save-excursion
-    (set-buffer eicq-log-buffer)
-    (if eicq-smiley
-        (smiley-buffer))
-    (goto-address)))
-
-(defvar eicq-url-map
-  (let ((map (make-sparse-keymap 'eicq-url-map)))
-    (define-key map [button2] 'browse-url-at-mouse)
-    (define-key map [B] 'browse-url-at-point)
-    (define-key map [return] 'browse-url-at-point)
-    map)
-  "Keymap for URL extent.")
-
-(defun eicq-log-buddy-url (alias message url)
-  "See `eicq-log-buddy-message-flag'.
-ALIAS is an id MESSAGE to be logged under.
-URL will be highlighted."
-  ;; idea from Erik Arneson <erik@starseed.com>
-  (set-extent-properties
-   (make-extent 0 (length url) url)
-   `(highlight t duplicable t keymap ,eicq-url-map))
-  (eicq-log alias (concat message "\nURL: " url)
-            eicq-log-buddy-message-flag eicq-log-buddy-message-mark))
-
-(defun eicq-log-outgoing (alias &rest messages)
-  "See `eicq-log-outgoing-flag'.
-ALIAS is an id to be logged under.
-MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log alias 
-	    (apply 'format messages) eicq-log-outgoing-flag eicq-log-outgoing-mark))
-
-(defun eicq-log-error (&rest messages)
-  "See `eicq-log-error-flag'.
-MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!error" 
-	    (apply 'format messages) eicq-log-error-flag eicq-log-error-mark))
-
-(defun eicq-log-debug (&rest messages)
-  "See `eicq-log-debug-flag'.
-MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!debug" 
-	    (apply 'format messages) eicq-log-debug-flag eicq-log-debug-mark))
-
-(defun eicq-log-system (&rest messages)
-    "See `eicq-log-system-flag'.
-MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log "!system" 
-	    (apply 'format messages) eicq-log-system-flag eicq-log-system-mark))
-
-(defface eicq-face-log-unread
-  '((((background dark))
-     (:foreground "red"))
-    (((background light))
-     (:foreground "red")))
-  "Face for unread log messages."
-  :group 'eicq-log)
-
-(defface eicq-face-log-read
-  '((((background dark))
-     (:foreground "turquoise"))
-    (((background light))
-     (:foreground "turquoise")))
-  "Face for read log messages."
-  :group 'eicq-log)
-
-(defvar eicq-log-mark-alist
-  '((unread . eicq-face-log-unread)
-    (read . eicq-face-log-read))
-  "Alist of log message marks and their colors.")
-
-(defun eicq-log-mark (&optional mark)
-  "Mark log message around point using MARK.
-Possible MARK: 'read, 'unread, 'toggle.
-Nil MARK means 'read.
-See `eicq-face-log-unread' and `eicq-face-log-read'."
-  (save-excursion
-    ;; so that we can mark current line even at bol
-    (end-of-line)
-    (let ((len (length eicq-log-outline-regexp))
-          (p (search-backward-regexp eicq-log-outline-regexp nil t))
-          (face (cdr (assoc mark eicq-log-mark-alist))))
-      (if p (add-text-properties
-             p (+ len p -2)
-             (list 'face face 'start-open t))))))
-
-(defun eicq-log-mark-region (start end &optional mark)
-  "Mark all log messages in the region.
-MARK is any mark in `eicq-log-mark'."
-  (interactive "r")
-  (save-excursion
-    (goto-char start)
-    ;; Due to bad design of outline.el, we use condition-case to guard
-    ;; against error when advancing at the end of buffer.
-    (condition-case nil
-        (while (<= (point) end)
-          (eicq-log-mark mark)
-          (eicq-log-next 1))
-      (error nil))))
-
-(defun eicq-log-mark-unread (&optional mark-region)
-  "Mark log message around point as unread.
-Non-nil MARK-REGION or prefix argument means marks all log in the region."
-  (interactive "P")
-  (if mark-region
-      (eicq-log-mark-region (region-beginning) (region-end) 'unread)
-    (eicq-log-mark 'unread)))
-
-(defun eicq-log-mark-read (&optional mark-region)
-  "Mark log message around point as read.
-Non-nil MARK-REGION or prefix argument means marks all log in the region."
-  (interactive "P")
-  (if mark-region
-      (eicq-log-mark-region (region-beginning) (region-end) 'read)
-    (eicq-log-mark 'read))
-  (if (interactive-p)
-      (run-hooks 'eicq-read-message-hook)))
-
 (defun eicq-alias-around ()
   "Return an alias/uin on current line or lines before.
 If called interactively, display and push alias into `kill-ring'."
@@ -3684,22 +2832,6 @@ If called interactively, display and push alias into `kill-ring'."
           (kill-new alias))
         alias)
        (t (error "No valid alias/uin found"))))))
-
-(defun eicq-log-around ()
-  "Return the log message around.
-If called interactively, display and push log into `kill-ring'."
-  (interactive)
-  (save-excursion
-    (let ((log (buffer-substring
-                (progn (outline-back-to-heading)
-                       (search-forward "] " nil t)
-                       (point))
-                (progn (eicq-log-next 1)
-                       (point)))))
-      (when (interactive-p)
-        (message log)
-        (kill-new log))
-      log)))
 
 (defun eicq-forward-message-around (&optional no-header)
   "Forward message around
@@ -3748,125 +2880,9 @@ See `eicq-process-alias-input'."
   (interactive)
   (eicq-query-info (eicq-alias-around)))
 
-(defalias 'eicq-log-contract 'hide-subtree)
-
-(defalias 'eicq-log-expand 'show-subtree)
-
-(defalias 'eicq-log-previous 'outline-backward-same-level)
-
-(defalias 'eicq-log-next 'outline-forward-same-level)
-
-(defun eicq-log-next-unread ()
-  "Moves point to the next unread message.  
-Does nothing if there are no unread messages after point."
-  (interactive)
-  (let ((here (point)))
-    (goto-char 
-     (catch 'where
-       (progn 
-	 (while (not (eq here (point-max))) ; mildly bogus target
-	   (let ((next (next-single-property-change here 'face)))
-	     (unless next
-	       (throw 'where (point)))
-	     (if (eq (get-text-property next 'face)
-		     (cdr (assoc 'unread eicq-log-mark-alist)))
-		 (throw 'where next)
-	       (setq here next)))))))))
-
-(defun eicq-log-previous-unread ()
-  "Moves point to the previous unread message.  
-Does nothing if there are no unread messages after point."
-  (interactive)
-  (let ((here (point)))
-    (goto-char 
-     (catch 'where
-       (progn 
-	 (while (not (eq here (point-max))) ; mildly bogus target
-	   (let ((prev (previous-single-property-change here 'face)))
-	     (unless prev
-	       (throw 'where (point)))
-	     (if (eq (get-text-property prev 'face)
-		     (cdr (assoc 'unread eicq-log-mark-alist)))
-		 (throw 'where prev)
-	       (setq here prev)))))))))
-
 ;;; Code - buddy:
 
 ;; contact list (list of aliases) buffer
-
-(easy-menu-define
- eicq-log-easymenu nil "Eicq Log" eicq-buddy-menu)
-
-(defadvice display-buffer
-  (after eicq-buddy-avoid-window-select last activate)
-  "Avoid setting buffer to small vertical window `eicq-buddy-buffer'.
-When switching buffer in buddy window, other window in the frame is
-used instead of buddy window, unless buddy window is the only window
-in the frame.
-
-To set buffer in buddy window explicitly, make buddy window the only window
-in the frame by `one-window'."
-  (unless (= (frame-width)
-             (window-width (get-buffer-window buffer)))
-    (delete-other-windows (get-buffer-window buffer))))
-
-(defvar eicq-buddy-mode-map
-  (let ((map (make-sparse-keymap 'eicq-buddy-mode-map)))
-    (set-keymap-parents map (list eicq-main-map))
-    (define-key map [W] 'eicq-alias-here)
-    (define-key map [s] 'eicq-select-alias-here)
-    (define-key map [m] 'eicq-send-message-alias-here)
-    (define-key map [u] 'eicq-send-url-alias-here)
-    (define-key map [a] 'eicq-authorize-alias-here)
-    (define-key map [i] 'eicq-query-info-alias-here)
-    (define-key map [n] 'next-line)
-    (define-key map [o] 'other-window)
-    (define-key map [p] 'previous-line)
-    map)
-  "Keymap for `eicq-buddy-mode'.")
-
-(defun eicq-buddy-mode ()
-  "Major mode for contact list in eicq.
-Commands: \\{eicq-buddy-mode-map}
-
-Turning on `eicq-buddy-mode' runs the hook `eicq-buddy-mode-hook'."
-  (interactive)
-  (kill-all-local-variables)
-  (use-local-map eicq-buddy-mode-map)
-  (setq mode-name "eicq-buddy")
-  (setq major-mode 'eicq-buddy-mode)
-  ;; put easy-menu-add after set mode-name
-  (easy-menu-add eicq-main-easymenu)
-  (easy-menu-add eicq-buddy-menu)
-  (easy-menu-add eicq-log-menu)
-  (setq modeline-format "%b")
-
-  (run-hooks 'eicq-buddy-mode-hook))
-
-(defun eicq-buddy-view-set (&optional symbol value)
-  "Set `eicq-buddy-view'."
-  (set-default symbol value)
-  (eicq-buddy-show-buffer 'new 'no-select))
-
-(defun eicq-buddy-show-buffer (&optional new no-select)
-  "Switch to `eicq-buddy-buffer'.
-Create buffer if buffer does not exists already or
-NEW is non-nil.
-Don't select buddy window if NO-SELECT is non-nil.
-See `eicq-buddy-view' and `eicq-buddy-status-color-hint-flag'."
-  (interactive)
-  (when (or (not (buffer-live-p eicq-buddy-buffer))
-            new)
-    (setq eicq-buddy-buffer (get-buffer-create "*eicq buddy*"))
-    (set-buffer eicq-buddy-buffer)
-    (erase-buffer)
-    (loop for alias in (symbol-value eicq-buddy-view)
-      as status = (eicq-world-getf alias 'status)
-      as face = (eicq-status-face status)
-      do (insert-face (concat alias "\n") face))
-    (eicq-buddy-mode))
-  (unless no-select
-    (switch-to-buffer eicq-buddy-buffer)))
 
 (defun eicq-status-show-buffer (&optional new no-select)
   "Switch to `eicq-status-buffer'.
@@ -3937,133 +2953,6 @@ Don't select status window if NO-SELECT is non-nil."
     (setq modeline-format "%b")
     (unless no-select
       (switch-to-buffer eicq-status-buffer))))
-
-(defun eicq-buddy-view-all ()
-  "Display all aliases in `eicq-world'.
-See `eicq-buddy-view'."
-  (interactive)
-  (eicq-buddy-view-set 'eicq-buddy-view 'eicq-all-aliases))
-
-(defun eicq-buddy-view-connected ()
-  "Display all connected aliases.
-See `eicq-buddy-view' and `eicq-connected-aliases'."
-  (interactive)
-  (eicq-buddy-view-set 'eicq-buddy-view 'eicq-connected-aliases))
-
-(defun eicq-buddy-view-active ()
-  "Display all active aliases.
-See `eicq-buddy-view' and `eicq-active-aliases'."
-  (interactive)
-  (eicq-buddy-view-set 'eicq-buddy-view 'eicq-active-aliases))
-
-(defun eicq-buddy-update-status (alias status)
-  "Update ALIAS with new STATUS."
-  ;; update alias variables
-  (unless (member status (mapcar 'second eicq-statuses))
-    (push (cons 'unknown-status eicq-recent-packet)
-          eicq-error-packets)
-    (eicq-log-error "Unknown status: %s" status)
-    (setq status "online"))             ; assumed online
-
-  (unless (equal status (eicq-world-getf alias 'status))
-    (eicq-log-buddy-status alias "*** %s" status)
-    (eicq-world-putf alias 'status status)
-    (if (string= status "offline")
-	(if (member alias eicq-connected-aliases)
-	    (setq eicq-connected-aliases
-		  (delete alias eicq-connected-aliases))
-	  (eicq-log-buddy-status alias "*** has been invisible"))
-      ;; if not offline
-      (add-to-list 'eicq-connected-aliases alias))
-
-    ;; update buffer
-
-    ;; view != all + offline -> delete
-    ;; view = all + offline -> offline-face
-    (if (and (string= status "offline")
-	     (not (eq eicq-buddy-view 'eicq-all-aliases)))
-	(eicq-buddy-update-face alias 'delete)
-      (if (or (member alias (symbol-value eicq-buddy-view))
-	      (string= status "offline"))
-	  (eicq-buddy-update-face alias)))))
-
-(defun eicq-buddy-update-face (alias &optional delete)
-  "Update face of ALIAS.
-Non-nil DELETE means delete alias from buffer."
-  (save-excursion
-    (when (buffer-live-p eicq-buddy-buffer)
-      (set-buffer eicq-buddy-buffer)
-      (goto-char (point-min))
-
-      (if (search-forward-regexp
-           ;; use "^" alias "$" so searching "foo" will not get "foobar"
-           (concat "^"
-                   ;; to allow funny characters in alias
-                   (regexp-quote alias)
-                   "$")
-           nil t)
-          ;; old alias
-          (if delete
-              (delete-region
-               (point-at-bol)
-               ;; take care of last line
-               (min (1+ (point-at-eol)) (point-max))))
-        ;; new alias
-        (unless delete
-          (insert alias "\n")
-          (forward-line -1)))
-
-      (unless delete
-        (put-text-property
-         ;; from the end of last line to the beginning of next line instead
-         ;; of just bol and eol of current line, to make sure covering
-         ;; highlight by selected; start-open and end-open do not seem to fix
-         (max (1- (point-at-bol)) (point-min))
-         ;; take care of last line
-         (min (1+ (point-at-eol)) (point-max))
-         'face (eicq-status-face (eicq-world-getf alias 'status)))
-
-        (when (eicq-world-getf alias 'selected)
-          ;; highlight first char
-          (put-text-property
-           (+ 0 (point-at-bol)) (+ 1 (point-at-bol))
-           'face 'eicq-face-selected))))))
-
-(defun eicq-buddy-select-all-in-view (state &optional predicate)
-  "Select all aliases in current view.
-See `eicq-group-select-aliases' for STATE.
-PREDICATE accepts an alias as an argument and limits the application.
-Current view is `eicq-buddy-view'."
-  (loop for x in (symbol-value eicq-buddy-view)
-    if (or (null predicate)
-           (funcall predicate x))
-    do (eicq-group-select-aliases state x)))
-
-(defun eicq-buddy-select-all-in-view-by-status (status)
-  "Toggle selections of all aliases with STATUS in current view."
-  (interactive
-   (list (eicq-completing-read "status: " eicq-valid-statuses)))
-  (eicq-buddy-select-all-in-view
-   'toggle
-   (lambda (x)
-     (equal (eicq-world-getf x 'status) status))))
-
-(defun eicq-buddy-select-all-in-view-by-regexp (regexp)
-  "Toggle selections of all aliases matching REGEXP in current view."
-  ;; checked my screenshots? know why i use a symbol prefix now?
-  (interactive "sregexp: ")
-  (eicq-buddy-select-all-in-view
-   'toggle
-   (lambda (x)
-     (string-match regexp x))))
-
-(defun eicq-buddy-selected-in-view ()
-  "Return a list of all selected aliases in current view.
-Selected means an alias has non-nil 'selected property.
-Current view is `eicq-buddy-view'."
-  (loop for x in (symbol-value eicq-buddy-view)
-    if (eicq-world-getf x 'selected)
-    collect x))
 
 (defun eicq-alias-here ()
   "Return an alias/uin on current line.
@@ -4148,16 +3037,6 @@ See `eicq-buddy-select-all-in-view'."
   (eicq-query-info (eicq-alias-here)))
 
 ;;; Code - keymap:
-
-(defun eicq-global-map-set (&optional symbol value)
-  "Set `eicq-global-key-prefix'.
-WARNING: Bindings with old prefix is not deleted.  Fixable?"
-  (define-key global-map value eicq-main-map))
-
-(defcustom eicq-global-key-prefix [(meta \`)]
-  "*Prefix for all key macros in global."
-  :group 'eicq-option
-  :set 'eicq-global-map-set)
 
 ;;; Code - footer:
 
