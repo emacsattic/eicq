@@ -17,8 +17,8 @@
 # the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-VERSION = 1.02
-AUTHOR_VERSION = 0.2.7
+VERSION = 1.03
+AUTHOR_VERSION = 0.2.8
 MAINTAINER = Steve Youngs <youngs@xemacs.org>
 PACKAGE = eicq
 PKG_TYPE = regular

@@ -25,9 +25,9 @@
 
 
 ;; Created: Aug 08, 1998
-;; Updated: Aug 16, 2000
+;; Updated: Jan 25, 2001
 
-;; Version: 0.2.7
+;; Version: 0.2.8
 ;; Homepage: http://users.ozlinx.com.au/~youngs_s/eicq/
 ;; Keywords: comm ICQ
 
@@ -55,7 +55,7 @@
   (require 'reporter)
   (require 'outline))
 
-(defconst eicq-version "0.2.7"
+(defconst eicq-version "0.2.8"
   "Version of eicq you are currently using.")
 
 (defgroup eicq nil
@@ -3490,8 +3490,7 @@ See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
   :type '(choice (item eicq-all-aliases)
                  (item eicq-connected-aliases)
                  (item eicq-active-aliases))
-  :initialize 'custom-initialize-default
-  :set 'eicq-buddy-view-set)
+  :initialize 'custom-initialize-default)
 
 (defun eicq-buddy-view-set (&optional symbol value)
   "Set `eicq-buddy-view'."
