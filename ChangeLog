@@ -1,3 +1,18 @@
+2001-03-12  Jack Twilley  <jmt@tbe.net>
+
+	* eicq.el (eicq-user-auto-away-p): New variable.
+	(eicq-auto-away-timeout-set): Use new variable, change docstring.
+	Reordered away tests.   
+	(eicq-send-message-helper): Use new variable.
+	(eicq-change-status): Use new variable.
+	(eicq-log-*-mark): New variables.
+	(eicq-log-*): Use new variables.
+	(eicq-log-buffer-position-flag): New variable.
+	(eicq-log-entry-re): New variable.
+	(eicq-log): Use new variables, change docstring.
+	(eicq-buddy-update-status): Only display status packet if status
+	has changed.
+
 2001-03-09  Steve Youngs  <youngs@xemacs.org>
 
 	* Version 0.2.11 released.
