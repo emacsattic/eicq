@@ -1,3 +1,20 @@
+2001-08-11  Steve Youngs  <youngs@xemacs.org>
+
+	* README: Change URLs to eicq.sf.net.
+	* TODO: Ditto.
+	* eicq-convert.el: Ditto.
+	* eicq.el: Ditto.
+	* icq2tcp.c: Ditto.
+
+2001-08-10  Erik Arneson  <erik@aarg.net>
+
+	* eicq.el (eicq-local-bridge-p): New customize option.  When
+	non-nil, Eicq will try to use a remote bridge.  This should be
+	safer than trying to second guess ourselves by looking at various
+	variables.
+	(eicq-connect): Second try.  This seems to work for both remote
+	and local bridges very nicely.
+
 2001-08-10  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-connect): Revert Erik's patch.
@@ -9,6 +26,18 @@
 	(eicq-auto-reply-occ): Ditto.
 	(eicq-auto-reply-dnd): Ditto.
 	(eicq-auto-reply-na): Ditto.
+
+2001-08-09  Erik Arneson  <erik@aarg.net>
+
+	* eicq.el (eicq-frame): New variable.  Keep track of EICQ's frame.
+	(eicq-show-window): Will now make sure that EICQ is redisplayed in
+	its preferred frame.
+	(eicq-disconnect): Reset the eicq-frame variable on disconnect,
+	when all of the buffers are killed and stuff.  If
+	`eicq-start-in-new-frame' is non-NIL, it will delete the frame
+	that Eicq created during eicq-show-window.
+	(eicq-start-in-new-frame): New customize option.  If non-NIL, Eicq
+	will start in its own frame.
 
 2001-08-09  Steve Youngs  <youngs@xemacs.org>
 

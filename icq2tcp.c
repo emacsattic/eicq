@@ -24,7 +24,7 @@
  *     License: GPL
  *     Created: Jul 16, 2001
  *     Version: 0.2.0
- *       Where: http://eicq.sourceforge.net/
+ *       Where: http://eicq.sf.net/
  *    Keywords: udp, tcp, network, bridge, icq, emacs
  * 
  *  Description:
@@ -290,9 +290,9 @@ main(argc, argv)
     fd_set rfds;
     dword len;
     
-    printf("ICQ <-> TCP bridge v0.1.0\n\
+    printf("ICQ <-> TCP bridge v0.2.0\n\
 \n\
-http://eicq.sourceforge.net/\n\n");
+http://eicq.sf.net/\n\n");
   
     if (argc != 4) {
         printf("Invalid number of parameters.\n\

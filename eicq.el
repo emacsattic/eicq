@@ -7,9 +7,9 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-10 14:38:00 (steve)>
-;; Version: 0.2.15pre5
-;; Homepage: http://eicq.sourceforge.net/
+;; Last-Modified: <2001-8-11 01:19:19 (steve)>
+;; Version: 0.2.15pre6
+;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
 ;; Eicq is free software; you can redistribute it and/or modify it
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.15pre5"
+(defconst eicq-version "0.2.15pre6"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -197,7 +197,7 @@ Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-homepage 
-  "http://eicq.sourceforge.net/"
+  "http://eicq.sf.net/"
   "*User homepage stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
@@ -325,7 +325,7 @@ Run `eicq-update-meta-info' after modifying this variable."
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
-(defcustom eicq-user-meta-work-homepage "http://eicq.sourceforge.net/"
+(defcustom eicq-user-meta-work-homepage "http://eicq.sf.net/"
   "*User work homepage stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
@@ -409,6 +409,12 @@ See `eicq-connect'."
   "*Port of `eicq-bridge'.
 See `eicq-connect'."
   :group 'eicq-option)
+
+(defcustom eicq-local-bridge-p t
+  "If non-NIL, Eicq will look for a bridge running on a remote host defined
+by `eicq-bridge-hostname' and `eicq-bridge-port'."
+  :group 'eicq-option
+  :type 'boolean)
 
 (defcustom eicq-server-hostname "icq1.mirabilis.com"
   "*Hostname or IP address of Mirabilis ICQ server."
@@ -626,6 +632,11 @@ See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
                  (item eicq-connected-aliases)
                  (item eicq-active-aliases))
   :initialize 'custom-initialize-default)
+
+(defcustom eicq-start-in-new-frame nil
+  "*If non-NIL, Eicq will start in its own frame."
+  :group 'eicq-option
+  :type 'boolean)
 
 (defvar eicq-user-status "offline"
   "Current user status.")
@@ -848,7 +859,7 @@ Same as `completing-read' but accepts strings as well as obarray."
 (defun eicq-browse-homepage ()
   "Browse eicq homepage for news and files."
   (interactive)
-  (browse-url "http://eicq.sourceforge.net/"))
+  (browse-url "http://eicq.sf.net/"))
 
 (defun eicq-encode-string (string)
   "Return a encoded string from STRING with DOS stuff added.
@@ -1171,7 +1182,8 @@ this may allow central bridge servers in future."
 
   (unless (or (and (processp eicq-bridge) ; running already
                    (eq (process-status eicq-network) 'run))
-              eicq-bridge-port)         ; remote bridge
+              (not eicq-local-bridge-p)   ; remote bridge
+              eicq-bridge-port)           ; remote bridge
     (setq eicq-bridge-hostname "127.0.0.1")
     (setq eicq-bridge-port (+ 4000 (random 1000)))
     (eicq-log-system
@@ -1196,8 +1208,8 @@ this may allow central bridge servers in future."
     ;; wait for `icq2tcp' to setup sockets
     (sleep-for 2))
 
-
-  (unless (eicq-connected-p)
+  (unless (and eicq-local-bridge-p
+               (eicq-connected-p))
     (eicq-log-system
      "Trying to connect to the bridge %s at port %s..."
      eicq-bridge-hostname eicq-bridge-port)
@@ -1205,15 +1217,20 @@ this may allow central bridge servers in future."
           (condition-case nil
               (open-network-stream
                "eicq network" nil eicq-bridge-hostname eicq-bridge-port)
-            (file-error nil))))         ; eicq-network = nil if fails
+            (file-error nil))))          ; eicq-network = nil if fails
 
   (cond
-   ((eicq-connected-p)
+   ((and (eicq-connected-p)
+         eicq-local-bridge-p)
     (set-process-sentinel eicq-bridge 'eicq-bridge-kill)
     (set-process-sentinel eicq-network 'eicq-network-kill)
     (set-process-filter eicq-network 'eicq-network-filter)
     (with-current-buffer eicq-bridge-buffer
       (eicq-bridge-mode)))
+   ((and (eicq-connected-p)
+         (not eicq-local-bridge-p))
+    (set-process-sentinel eicq-network 'eicq-network-kill)
+    (set-process-filter eicq-network 'eicq-network-filter))
    (t
     (eicq-log-system "....connection failed"))))
 
@@ -1319,6 +1336,9 @@ PROCESS and CHANGE is for `set-process-sentinel'."
   (if (string= eicq-bridge-hostname "127.0.0.1")
       (setq eicq-bridge-port nil)))
 
+(defvar eicq-frame nil
+  "The frame where EICQ is displayed.")
+
 (defun eicq-disconnect ()
   "Log out of ICQ and close all Eicq buffers."
   (interactive)
@@ -1330,7 +1350,10 @@ PROCESS and CHANGE is for `set-process-sentinel'."
 		      eicq-status-buffer
 		      eicq-bridge-buffer)
     do (kill-buffer (symbol-value each)))
-  (delete-other-windows))
+  (delete-other-windows)
+  (if eicq-start-in-new-frame
+      (delete-frame eicq-frame))
+  (setq eicq-frame nil))
 
 (defun eicq-connected-p ()
   "Return non-nil if the network is ready for sending string."
@@ -3273,6 +3296,12 @@ ALIAS is an alias/uin."
 Make them if not yet done.
 See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (interactive)
+  (unless (framep eicq-frame)
+    (setq eicq-frame
+          (if eicq-start-in-new-frame
+              (new-frame)
+            (selected-frame))))
+  (select-frame eicq-frame)
   (eicq-buddy-show-buffer)
   (eicq-status-show-buffer)
   (eicq-log-show-buffer)

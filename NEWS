@@ -2,9 +2,18 @@
 
 * 0.2.14 to 0.2.15
 
-- Cygwin builds (Thorsten Bonow <thorsten.bonow@post.rwth-aachen.de>)
+- Cygwin builds (Thorsten Bonow)
 	- Add cygwin related comments to Makefile, INSTALL,
 	  eicq-user-install.sh 
+- New file 'eicq-convert.el' (Erik Arneson)
+	Convert Licq and Micq contact lists to Eicq 'world' format.
+- Makefile improvements (Erik Arneson).
+- icq2tcp.c (Erik Arneson)
+	Ported from the C++ icq2tcp.cc to ANSI C
+- Better handling of remote bridges (Erik Arneson).
+- Optionally start Eicq in its own frame (Erik Arneson).
+- Implement auto-response messages (Me).
+- Update URLs to reflect SourceForge's new domain 'sf.net'(Me).
 
 
 * 0.2.13 to 0.2.14
