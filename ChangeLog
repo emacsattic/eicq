@@ -1,3 +1,13 @@
+2001-08-07  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq-convert.el: require 'eicq.
+	(eicq-import-from-licq): Use 'eicq-world-rc-filename' in case 
+	the user has their world file in a different place from the default.
+	Remove 'buf' variable, it's not used. Did somebody get a little 
+	carried away? :-)
+
+	* Makefile (SOURCES): Add eicq-convert.el
+
 2001-08-06  Erik Arneson  <erik@aarg.net>
 
 	* eicq-convert.el: New File.

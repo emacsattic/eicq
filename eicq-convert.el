@@ -26,10 +26,13 @@
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
+
+(require 'eicq)
+
 (defun eicq-import-from-licq ()
   "Import your contact list from LICQ.  It doesn't import ignored UIDs."
   (interactive)
-  (let (uin udat buf user-alist ignored)
+  (let (uin udat user-alist ignored)
     (setq user-alist
           (loop for file in (directory-files
                              (expand-file-name "~/.licq/users/") t nil nil t)
@@ -53,7 +56,7 @@
                  (kill-buffer (current-buffer)))
             when (not ignored)
             collect udat))
-    (set-buffer (find-file-noselect (expand-file-name "~/.eicq/world")))
+    (set-buffer (find-file-noselect (expand-file-name eicq-world-rc-filename)))
     (goto-char (point-max))
     (insert "\n\nThe following entries were imported from your LICQ configuration.\n\n")
     (loop for udat in user-alist
