@@ -1,3 +1,9 @@
+2001-03-15  Jack Twilley  <jmt@tbe.net>
+
+	* eicq.el (eicq-user-auto-away-set):
+	Replaced timer with two timers, one each for auto-away and
+	auto-na. 
+
 2001-03-12  Jack Twilley  <jmt@tbe.net>
 
 	* eicq.el (eicq-user-auto-away-p): New variable.
