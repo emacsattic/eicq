@@ -160,7 +160,7 @@ clean::
 		auto-autoloads.el* custom-load.el*
 
 distclean: clean
-	rm -f core* *~
+	rm -f core* *~ TAGS
 
 # Developer targets
 tags: TAGS

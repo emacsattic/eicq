@@ -1,3 +1,7 @@
+2003-10-17  Steve Youngs  <sryoungs@bigpond.net.au>
+
+	* Makefile (distclean): Delete the TAGS file too.
+
 2003-10-15  Steve Youngs  <sryoungs@bigpond.net.au>
 
 	* Makefile (EMACS): Removed, this is XEmacs not Emacs.
