@@ -1,3 +1,7 @@
+2001-09-07  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-do-kicked-out): Attempt auto-reconnect.
+
 2001-09-02  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq-report.el: Require 'message. 

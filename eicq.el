@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-2 15:57:59 (steve)>
-;; Version: 0.2.16pre3
+;; Last-Modified: <2001-9-7 18:37:21 (steve)>
+;; Version: 0.2.16pre4
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.16pre3"
+(defconst eicq-version "0.2.16pre4"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -1952,7 +1952,10 @@ Remove acknowledged packets from `eicq-outgoing-queue'."
 (defun eicq-do-kicked-out (packet)
   "Handle server command 0028 or 00f0 in PACKET."
   (eicq-log-error "You are kicked out of ICQ server")
-  (eicq-logout 'kill))
+  (eicq-logout 'kill)
+  (sit-for 2)
+  (eicq-log-system "Attempting auto-reconnect...")
+  (eicq-login))
 
 (defun eicq-do-already-logged-in (packet)
   "Handle server command 00fa PACKET."
