@@ -1,0 +1,52 @@
+These installation instructions only apply if you have 
+downloaded the tarball from the eicq homepage.
+
+===========================================================
+As of the latest version, I develop and test eicq _only_ on
+my system, XEmacs 21.1.x in GNU/Linux. I use some XEmacs 20
+specific codes and thus eicq will not run in other versions
+of Emacs without modifications. Feel free to test and port
+it in other platforms, and send me the patch.
+===========================================================
+
+The easiest and most painless way to install eicq is with the
+XEmacs package system.
+
+	1 - *DON'T* unpack eicq-1.00-pkg.tar.gz
+	2 - fire up Xemacs
+	3 - M-x package-get-update-base
+	    at that prompt put...
+		/path/to/unpacked/eicq/here/package-index
+	4 - M-x pui-list-packages
+	5 - put point on the eicq line and hit RET
+	6 - x (to install package)
+	7 - answer yes to the question "do you want to install..."
+
+Hold it, you're not finished yet...
+
+Add the following to your ~/.emacs
+---------- cut ----------
+
+(require 'eicq)
+(requier 'eicq-toolbar)
+(setq eicq-user-alias "me")
+(eicq-world-update)
+
+---------- cut ----------
+
+Now kill XEmacs (yes you have to kill and re-start it otherwise
+the newly installed packages won't be recognised)
+
+As the user that will be using eicq, run...
+
+/usr/local/lib/xemacs/xemacs-packages/lib-src/eicq-user-install.sh
+
+That will set up the needed stuff in your home directory.
+
+Ok, now you're done.
+
+Fire up XEmacs, run M-x eicq-login and M-x eicq-show-window. 
+There you go! Use XEmacs eicq menu to send messages,
+authorize, customize... For new XEmacs users, you can press
+C-h t for a tutorial on Emacs. Don't hesitate to message me
+a success report or mail me your screenshots!

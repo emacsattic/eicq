@@ -1,0 +1,228 @@
+2000-07-18  Steve Youngs  <youngs_s@ozlinx.com.au>
+
+	* eicq.texi: new file
+
+	* INSTALL: total re-write for XEmacs packages
+
+	* package-info.in: new file
+
+	* eicq-toolbar.el: updated license
+
+	* eicq.el: updated license
+
+	* Makefile: total re-write for XEmacs packages
+
+2000-06-26  Steve Youngs  <youngs_s@ozlinx.com.au>
+
+	* README: moved install stuff to INSTALL
+
+	* INSTALL: new file
+
+	* world: my UIN was wrong :-(  fixed
+
+2000-06-07  Steve Youngs  <youngs_s@ozlinx.com.au>
+
+	* version 0.2.4 released
+
+	* README: updated install instructions
+
+2000-06-06  Steve Youngs  <youngs_s@ozlinx.com.au>
+
+	* eicq.el (eicq-buddy-mode-hook): add-hook 
+	eicq-install-buddy-toolbar
+	(eicq-log-mode-hook): add-hook eicq-install-log-toolbar
+	(eicq-email-author): change address
+
+	* Makefile: updated for a more "system-wide" install
+
+	* eicq-user-install.sh: New file
+
+	* eicq-toolbar.el: New file
+
+2000-06-05  Steve Youngs  <youngs_s@ozlinx.com.au>
+
+	* eicq.el (eicq-do-message-helper): added new sounds
+	(eicq-do-message-helper): pager now decodes message
+	(eicq-auth-sound): New variable
+	(eicq-emailx-sound): New variable
+	(eicq-pager-sound): New variable
+	(eicq-global-map-set): new key bindings added to eicq-buddy-map 
+	and eicq-log-map 
+
+2000-06-01  Steve Youngs  <youngs_s@ozlinx.com.au>
+
+	* eicq.el (eicq-main-menu): "Update Meta Info" pointed to
+	the wrong place.  Now points to eicq-update-meta-info
+
+2000-05-30  Steve Youngs  <youngs_s@ozlinx.com.au>
+
+	* version 0.2.3 released
+
+2000-05-13  Steve Youngs  <youngs_s@ozlinx.com.au>
+
+	* eicq.el
+	(eicq-sound): New customization group
+	(eicq-sound-directory): New variable
+	(eicq-message-sound): New variable
+	(eicq-chat-sound): New variable
+	(eicq-url-sound): New variable
+	(eicq-buddy-sound): New variable
+
+1999-08-12  Stephen Tse  <stephent@sfu.ca>
+
+	* version 0.2.2 released
+
+	* eicq.el
+	(eicq-world-update): extent for alias (from Erik)
+	(eicq-log-buddy-url): new function, extent for url (from Erik)	
+	(eicq-url-map): new variable
+	(eicq-alias-map): new variable
+	(eicq-send-message-via-mouse): new function
+	(eicq-send-message-alias-here-via-mouse): removed
+	(world-mode): new mode and world-* helper
+	(world-find): new function
+	(world-sort): new function
+	(eicq-change-user): new function
+	(eicq-buddy-view-connected): update eicq-buddy-view
+	(eicq-status-bin): zero-padded
+	(eicq-bridge-buffer): store buffer id instead of name
+	(eicq-hide-window): new function
+	(eicq-email-author): carbon-copy to mailing list
+
+	* world: add sample records	
+
+1999-07-10  Stephen Tse  <stephent@sfu.ca>
+
+	* version 0.2.1 released.
+
+	* eicq.el
+ 	(eicq-do-kicked-out): remove relogin
+	(eicq-log-around): fixed to include first line
+	(eicq-do-message-helper): display authorization message
+	(eicq-bridge-mode): fixed kill-buffer-query-functions
+
+1999-06-29  Stephen Tse  <stephent@sfu.ca>
+
+	* version 0.2.0 released.
+	- ICQ version 5 protocol
+	- outgoing delay queue and resent queue
+	- meta user info query and update
+
+	* eicq.el
+	(eicq-log-mark-*): mark all log in a region
+	(eicq-keep-alive-stop): use start-itimer
+	(eicq-pack-contact-list): use smaller packet
+	(eicq-do-message-helper): receive contact list transfer
+	(eicq-register-new-user): new function
+	(eicq-do-info-ext): fixed age bug
+	(eicq-world-update): RC file not closed if current or modified
+	(eicq-auto-away-timeout-set): added auto-na
+	(eicq-bin-alias): optional from
+	(eicq-alias-around): cleaned up
+	(eicq-log-around): new function
+	(eicq-send-message): encode only outgoing part
+	(eicq-forward-message-around): new function
+	(eicq-change-status): allow only valid statues
+	(eicq-logout): clear buddy buffer when offline
+	(eicq-change-status): change only if different
+	(eicq-valid-packet-p): integrated into eicq-do
+	(eicq-ack-alist): removed
+	(eicq-ack): integrated into eicq-do
+	(eicq-pack-login): fixed initial status
+	(eicq-relogin): fixed relogin initial status
+	(eicq-query-info): skip nil local info
+	
+	- more debugging and profiling counters
+	eicq-dropped-packet-counter
+	eicq-resend-packet-counter
+	eicq-auto-relogin-counter
+
+	* README: split into readme.developer
+	* README.developer: new
+	* udp2tcp.cc: protocol version 5
+
+1999-06-16  Stephen Tse  <stephent@sfu.ca>
+
+	* version 0.1.3 released.
+
+	* eicq.el
+	(eicq-spliter): new function
+	(eicq-send-message): send long messages
+	(eicq-do-info): fixed authorization check
+	(eicq-pack-update-info): new function
+	(eicq-do-search-end): new function
+	(eicq-auto-na-timeout-set): new function
+	(eicq-current-seq-num): follow micq, start from 0 instead of 1
+	(eicq-do-kicked-out): graceful relogin
+	(eicq-login): login only when offline
+	(eicq-buddy-getf): new function
+	(eicq-buddy-putf): new function
+	(eicq-int-byte): new function
+	(eicq-network-separator): eicq-trimmed-packet
+	(eicq-pack-contact-list): fixed random uin
+	(eicq-network-filter): fixed bug in checking validity of packets
+	(eicq-do-message-hook): new variable
+	(eicq-do-status-update-hook): new variable
+	(eicq-hex-bin): downcase uppercase
+	(eicq-process-alias-input): new function
+
+	: select
+	(eicq-group-select-aliases)
+	(eicq-select-alias-around)
+	(eicq-buddy-select-all-in-view)
+	(eicq-buddy-select-all-in-view-by-status)
+	(eicq-buddy-select-all-in-view-by-regexp)
+	(eicq-buddy-selected-in-view)
+	(eicq-select-alias-here)
+
+	: use length prefix instead of delimiting magic string
+	- (eicq-redo-hex)
+	- (eicq-network-filter)
+	- (eicq-network-separator)
+	- (eicq-send)
+	- (eicq-magic-string)
+
+	* README
+	: updated for new resource file
+	: fixed wrong assumption about eicq-pack-contact-list
+
+	* udp2tcp.cc (debug_socket):
+	: use length prefix instead of delimiting magic string
+	: remove usleep	
+
+1999-06-01  Stephen Tse  <stephent@sfu.ca>
+	
+	* version 0.1.2 released.
+
+	* eicq.el:
+	- add `encode/decode-coding-string'
+
+1999-05-22  Stephen Tse  <stephent@sfu.ca>
+
+	* eicq.el: 
+	(eicq-send-contact-list): make interactive
+	(eicq-main-menu): add "Resend contact list"
+
+1999-05-18  Stephen Tse  <stephent@sfu.ca>
+
+	* Makefile: brand new from Erik Arneson <erik@mind.net>	
+
+	* README:
+	- change installation steps for new Makefile
+	- mention mailing list and `eicq-log-new-file' in tips
+
+	* eicq.el: merge patches from Erik Arneson <erik@mind.net>
+	- add confirmation for sending blank message/url
+	- `eicq-send-message-alias-here-via-mouse'
+	- `browse-url-at-point' and other key bindings
+
+	* eicq.el (eicq-message-types): one byte instead of two
+
+1999-05-12  Stephen Tse  <stephent@sfu.ca>
+
+	* version 0.1.1 released.
+
+1999-05-12  Stephen Tse  <stephent@sfu.ca>
+
+	* version 0.1 released.
+	
