@@ -29,6 +29,8 @@
 ;;            A toolbar for eicq
 
 ;; Set some variables for the icon directory and files
+(eval-when-compile
+  (require 'eicq))
 
 (defvar eicq-icon-directory 
   "/usr/local/lib/xemacs/xemacs-packages/etc/eicq/"

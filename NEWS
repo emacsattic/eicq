@@ -1,5 +1,14 @@
 -*- outline -*-
 
+* from 0.2.8 to 0.2.9
+
+** New function 'eicq-report-bug'
+** 'eicq-email-author' uses Gnus if available.
+
+* from 0.2.5 to 0.2.8
+
+** Mainly just doc fixes.
+
 * from 0.2.4 to 0.2.5
 
 ** entered into the mainstream XEmacs packages

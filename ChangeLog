@@ -1,3 +1,17 @@
+2001-03-02  Steve Youngs  <youngs@xemacs.org>
+
+	* INSTALL: Update.
+
+	* NEWS: Ditto.
+
+	* TODO: Ditto.
+
+	* Makefile (ELCS): Add eicq-report.elc.
+	(include ../../XEmacs.rules): Move to below other variables so
+	everything gets installed properly.
+
+	* eicq-toolbar.el: Add require 'eicq.
+
 2001-03-01  Steve Youngs  <youngs@xemacs.org>
 
 	* Makefile (REQUIRES): Add eicq, gnus.

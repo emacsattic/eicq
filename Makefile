@@ -25,7 +25,7 @@ PKG_TYPE = regular
 REQUIRES = xemacs-base mail-lib eicq gnus
 CATEGORY = comm
 
-ELCS = eicq.elc eicq-toolbar.elc
+ELCS = eicq.elc eicq-toolbar.elc eicq-report.elc
 
 DATA_FILES = $(wildcard etc/*.xpm) etc/world
 DATA_DEST = $(PACKAGE)
@@ -38,7 +38,6 @@ CC = g++
 CFLAGS = -O2 -Wall -static
 STRIP = /usr/bin/strip
 
-include ../../XEmacs.rules
 
 BIN_BASE = udp2tcp
 ifeq ($(XEMACS_NATIVE_NT),t)
@@ -55,6 +54,8 @@ EXTRA_SOURCES = README NEWS INSTALL TODO $(BIN_BASE).cc
 EXTRA_OBJS = $(BIN)
 
 GENERATED += custom-load.elc
+
+include ../../XEmacs.rules
 
 all:: $(BIN) $(ELCS) auto-autoloads.elc custom-load.elc $(INFO_FILES)
 

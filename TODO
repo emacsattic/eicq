@@ -1,13 +1,13 @@
 -*- outline -*-
 
-* Last Updated: Aug 12, 2000
+* Last Updated: Mar 2, 2001
 
 Here's a list of things I may or may not get around to putting
-into eicq.
+into Eicq.
 
 This list is not in order of importance or any kind of order at all.
 And just because something is on the list doesn't mean that it will
-become part of eicq.
+become part of Eicq.
 
 Feel free to do any of these things and send me a patch
 <youngs@xemacs.org>
@@ -22,9 +22,9 @@ Feel free to do any of these things and send me a patch
 
 ** figure out why sometime being kicked out after long inactivity
 
-** builtin udp support in emacs
+** builtin udp support in XEmacs
 
-	write udp2tcp as an 'emodule'
+	Implement Eicq totally in Lisp.
 
 ** complete country codes
 
@@ -69,4 +69,8 @@ Feel free to do any of these things and send me a patch
 
 ** port udp2tcp to other platforms
 
-	maybe not necessary if written as a module??
+	not necessary once Eicq is totally Lisp.
+
+** eicq-report-bug
+
+	Use Gnus if available (partially implemented already)
