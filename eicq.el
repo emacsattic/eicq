@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-16 17:07:44 (steve)>
-;; Version: 0.2.17pre1
+;; Last-Modified: <2001-9-19 00:19:56 (steve)>
+;; Version: 0.2.17pre2
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.17pre1"
+(defconst eicq-version "0.2.17pre2"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -3089,6 +3089,8 @@ Make connection to server and network if necessary."
       (message "Logging on the ICQ server...")
       (eicq-send (eicq-pack-login)))))
 
+(autoload 'eicq-wharf-change-messages "eicq-wharf")
+
 (defun eicq-logout (&optional kill)
   "Logout ICQ server.
 Remain connected to network and server.
@@ -3102,7 +3104,11 @@ useful for emergency logout when being kicked out by server."
   (eicq-buddy-show-buffer 'new 'no-select)
   (eicq-change-status "offline" 'no-network)
   (eicq-keep-alive-stop)
-  (eicq-send-queue-stop))
+  (eicq-send-queue-stop)
+  (eicq-world-update)
+  (eicq-send-contact-list)
+  (eicq-wharf-change-messages "New" -9999)
+  (eicq-wharf-change-messages "Sys" -9999))
 
 (defvar eicq-contact-list-packets nil
   "Lists of remaining contact list packets to be sent.

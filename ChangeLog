@@ -1,3 +1,13 @@
+2001-09-19  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-logout): Reset counters in EicqWharf to zero.
+
+2001-09-17  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-logout): Do a 'eicq-world-update' and
+	'eicq-send-contact-list' to reset the buddy buffer to it's
+	"pre-logged-in-state". 
+
 2001-09-16  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-show-window): Emergency fix - I left out a
