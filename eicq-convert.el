@@ -6,7 +6,7 @@
 ;; OriginalAuthor: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 06, 2001
-;; Last-Modified: <2001-8-6 15:57:29 (erik)>
+;; Last-Modified: <2001-8-7 15:49:41 (steve)>
 ;; Version: 0.2.14
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
@@ -29,6 +29,7 @@
 
 (require 'eicq)
 
+;;;###autoload
 (defun eicq-import-from-licq ()
   "Import your contact list from LICQ.  It doesn't import ignored UIDs."
   (interactive)
@@ -58,12 +59,13 @@
             collect udat))
     (set-buffer (find-file-noselect (expand-file-name eicq-world-rc-filename)))
     (goto-char (point-max))
-    (insert "\n\nThe following entries were imported from your LICQ configuration.\n\n")
+    (insert "\n\n==== These entries were imported from your LICQ configuration.\n")
     (loop for udat in user-alist
       do (insert (format ":icq %s %s :licq\n" (car udat) (cdr udat))))
     (save-buffer (current-buffer))
     (kill-buffer (current-buffer))))
 
+;;;###autoload
 (defun eicq-import-from-micq ()
   "Import ICQ contact data from a .micqrc file."
   (interactive)
@@ -81,7 +83,7 @@
     (kill-buffer (current-buffer))
     (set-buffer (find-file-noselect (expand-file-name eicq-world-rc-filename)))
     (goto-char (point-max))
-    (insert "\n\nThe following information was imported from your MICQ configuration.\n\n")
+    (insert "\n\n==== These entries were imported from your MICQ configuration.\n")
     (if me
         (insert (format ":icq %s me\n\n" me)))
     (loop for unode in user-alist

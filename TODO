@@ -1,6 +1,6 @@
 -*- outline -*-
 
-* Last Updated: July 22, 2001
+* Last Updated: August 7, 2001
 
 Here's a list of things I may or may not get around to putting
 into Eicq.
@@ -14,29 +14,23 @@ Feel free to do any of these things and send a patch to
 
 * Todo list
 
-** figure out why sometime being kicked out after long inactivity
+** Figure out why sometime being kicked out after long inactivity.
 
-** builtin udp support in XEmacs
+** Builtin udp support in XEmacs.
 
 	Implement Eicq totally in Lisp.
 
-** complete country codes
+** Visible/invisible list.
 
-** set/retrieve away/occ message in server?
+** Direct TCP, file transfer/chat.
 
-** visible/invisible list
+** Send other special types of messages.
 
-** direct TCP, file transfer/chat
+** Pop-up/permanent window for entering long message.
 
-** invisibility probing (validate published ip?)
+** Multi-user login.
 
-** send other special types of messages
-
-** pop up/permanent window for entering long message
-
-** multi-user login
-
-	eicq can successfully login server using different accounts,
+	Eicq can successfully login server using different accounts,
 	and can then receive messages from both accounts.
 
 	However, after some brief attempts, eicq cannot send
@@ -45,26 +39,60 @@ Feel free to do any of these things and send a patch to
 	avoid spoofing. licq seems to be able to achieve that. Is
 	spoofing only allowed in TCP mode?
 
-** implement ack'ing in icq2tcp
+** Implement ack'ing in icq2tcp
 
-	sometimes loading gnus/w3 makes single-threaded emacs crawl
+	Sometimes loading gnus/w3 makes single-threaded XEmacs crawl
 	and get kicked out of icq server because of failures of
-	ack'ing packets
+	ack'ing packets.
 
-** cute glyph for different statuses
+** Cute glyph for different statuses.
 
-** eliza (doctor) minor mode, auto-chatting/messaging
+** Eliza (doctor) minor mode, auto-chatting/messaging.
 
-** store offline messages and send them when online
+	I think this would be awesome!!
 
-** security problem of `eicq-user-password' in emacs
+** Store offline messages and send them when online.
 
-** openssl support
+** Security problem of `eicq-user-password' in init file.
 
-** port icq2tcp to other platforms
+** Openssl support.
 
-	not necessary once Eicq is totally Lisp.
+** Port icq2tcp to other platforms
 
-** toolbar
+	So far we've got GNU/Linux, Cygwin, Solaris, FreeBSD & Alpha
+	Tru64 (although, I haven't got all the patches to those yet).
+
+** Toolbar
 	
-	move the help icon to the right hand edge of frame ala w3
+	Move the help icon to the right hand edge of frame ala w3.
+
+** Do something useful with the 'group' code.
+
+	Send message to multiple contacts etc etc.
+
+** Extend the 'world' code.
+
+	Interactively add to your contact list.
+	Perhaps some sort of bbdb automagic kind of thing???
+
+** Implement an 'oops' function.
+
+	When you accidently send a message to the wrong person you can
+	quickly do 'M-x eicq-oops', it'll prompt you for person who
+	should have gotten your message, send it to him/her and at the
+	same time send a "Oops sorry, that wasn't meant for you"
+	message to the wrong person.  Did you follow that?  If you
+	did, let me know, because I think I confused myself. :-/
+
+** Do something about duplicate packets received.
+	
+	Too often you get multiple copies of messages.  This isn't a
+	Eicq thang[tm], I've seen the same behaviour in other ICQ
+	clients.  I'd like this one to be the first to actually do
+	something about them.
+
+** Ignore that annoying spammer!
+	
+	There are definitely times when you'd rather not hear what
+	someone has to say. Mwuahahah!
+
