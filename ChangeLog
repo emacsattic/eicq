@@ -1,3 +1,9 @@
+2003-10-01  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq-v8proto.el (eicq::CLI_IDENT): Fix 'Invalid read syntax:
+	". in wrong context"' error.
+	(eicq::CLI_SETSTATUS): Ditto.
+
 2003-09-19  Steve Youngs  <youngs@xemacs.org>
 
 	* *: Update to BSD license.
