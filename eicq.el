@@ -3035,26 +3035,33 @@ Run this after changing any meta user info variables."
   "This variable is set when the auto-away timer expires, 
 and it is reset in eicq-send-message-helper and eicq-change-status.")
 
-(defun eicq-auto-away-timeout-set (&optional symbol value)
-  "Set timer for auto-away.  See 'eicq-auto-away-timeout'."
-  (delete-itimer "eicq auto-away")      ; delete previous
-  (start-itimer
-   "eicq auto-away"
-   (lambda ()
-     ;; auto na for second idle
-     (when (and eicq-user-auto-away-p 
-		(equal eicq-user-status "away"))
-       (eicq-log-system "Auto na.")
-       (eicq-change-status "na")
-       ;; eicq-change-status resets this flag
-       (setq eicq-user-auto-away-p t))
-     ;; auto away for first idle
-     (when (member eicq-user-status '("online" "fcc"))
-       (eicq-log-system "Auto away.")
-       (eicq-change-status "away")
-       (setq eicq-user-auto-away-p t))) 
-   value value
-   'is-idle))
+(defun eicq-auto-away-timeout-set (&optional symbol away-value)
+  "Set timers for auto-away and auto-na.  See 'eicq-auto-away-timeout'."
+  (let ((na-value (* away-value 2)))
+    (delete-itimer "eicq auto-away")	; delete previous
+    (start-itimer
+     "eicq auto-away"
+     (lambda ()
+       ;; auto away for first idle
+       (when (member eicq-user-status '("online" "fcc"))
+	 (eicq-log-system "Auto away.")
+	 (eicq-change-status "away")
+	 (setq eicq-user-auto-away-p t))) 
+     away-value away-value
+     'is-idle)
+    (delete-itimer "eicq auto-na")      ; delete previous
+    (start-itimer
+     "eicq auto-na"
+     (lambda ()
+       ;; auto na for second idle
+       (when (and eicq-user-auto-away-p 
+		  (equal eicq-user-status "away"))
+	 (eicq-log-system "Auto na.")
+	 (eicq-change-status "na")
+	 ;; eicq-change-status resets this flag
+	 (setq eicq-user-auto-away-p t)))
+     na-value na-value
+     'is-idle)))
 
 (defcustom eicq-auto-away-timeout 300
   "*Seconds of inactivity in Emacs before auto-away.
