@@ -1,3 +1,10 @@
+2001-09-13  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el: Autoload 'eicq-wharf-new-frame' to kill off a
+	byte-compile warning.
+	(eicq-idle-reply): Set 'eicq-auto-reply-p' so we
+	auto-online when we should.
+
 2001-09-11  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-auto-reply): Use a modified subset of

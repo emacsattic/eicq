@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-11 21:38:39 (steve)>
-;; Version: 0.2.16pre5
+;; Last-Modified: <2001-9-13 15:18:31 (steve)>
+;; Version: 0.2.16pre6
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.16pre5"
+(defconst eicq-version "0.2.16pre6"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -2131,8 +2131,8 @@ Called by `eicq-do-message-heler'."
 	(progn
 	  (add-to-list 'eicq-active-aliases alias)
 	  (eicq-send (eicq-pack-send-message alias message 'normal))
-	  (eicq-log-system "Automatic response sent (idle).")))))
-
+	  (eicq-log-system "Automatic response sent (idle)."))))
+  (setq eicq-auto-reply-p nil))
 
 (defun eicq-do-status-update (packet)
   "Handle server command 01a4 in PACKET."
@@ -3365,6 +3365,8 @@ ALIAS is an alias/uin."
   "Buffer for log.")
 
 (defvar eicq-wharf-frame-use-p)
+
+(autoload 'eicq-wharf-new-frame "eicq-wharf")
 
 ;;;###autoload
 (defun eicq-show-window ()
