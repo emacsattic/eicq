@@ -1,3 +1,9 @@
+2002-05-16  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-world-rc-regexp): Update regexp so we don't gobble
+	whitespace.
+	From Vladimir Alexiev <Vladimir@worklogic.com>.
+
 2002-05-12  Steve Youngs  <youngs@xemacs.org>
 
 	* icq2tcp.c: Add a "This file is part of" clause.

@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2002-05-12 09:44:25 (steve)>
+;; Last-Modified: <2002-05-16 15:58:02 (steve)>
 ;; Version: 0.5.0
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
@@ -2578,7 +2578,7 @@ If called interactively, display and push alias into `kill-ring'."
 ;;; Code - world by rc:
 
 (defvar eicq-world-rc-regexp
-  "^:icq[ \t]+\\([0-9]+\\)[ \t]+\\([^:]+?\\)\\( :.*\\)*$"
+  "^:icq[ \t]+\\([0-9]+\\)[ \t]+\\([^:]+?\\)[ \t]?\\( :.*\\)*$"
   "*Regular expression for rc file.
 Format: :icq uin alias group
 Group is prefixed by a colon :.  Anything between uin and group including
