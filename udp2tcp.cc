@@ -287,12 +287,12 @@ For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
     udp_local_addr.sin_family = AF_INET;
     udp_local_addr.sin_port = 0; // any port
     udp_local_addr.sin_addr.s_addr = INADDR_ANY;
-    bzero(&(udp_local_addr.sin_zero), 8);
+    memset(&(udp_local_addr.sin_zero), 0, 8);
 
     tcp_local_addr.sin_family = AF_INET;
     tcp_local_addr.sin_port = htons(tcp_local_port);
     tcp_local_addr.sin_addr.s_addr = INADDR_ANY;
-    bzero(&(tcp_local_addr.sin_zero), 8);
+    memset(&(tcp_local_addr.sin_zero), 0, 8);
 
     retval1 = bind(udp_sock, (struct sockaddr *)&udp_local_addr,
 		   sizeof(struct sockaddr));
@@ -316,7 +316,7 @@ For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
     udp_remote_addr.sin_family = AF_INET;
     udp_remote_addr.sin_port = htons(udp_remote_port);
     udp_remote_addr.sin_addr = *((struct in_addr *)udp_host->h_addr);
-    bzero(&(udp_remote_addr.sin_zero), 8);
+    memset(&(udp_remote_addr.sin_zero), 0, 8);
 
     retval1 = connect(udp_sock, (struct sockaddr *)&udp_remote_addr,
 		      sizeof(struct sockaddr));
@@ -332,7 +332,11 @@ For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
 
 
     printf("accepting....\n");
+#ifdef __CYGWIN__
+    int sin_size = sizeof(struct sockaddr_in);
+#else
     size_t sin_size = sizeof(struct sockaddr_in);
+#endif
     tcp_new_sock = accept(tcp_sock, (struct sockaddr *)&tcp_remote_addr,
 			  &sin_size);
 

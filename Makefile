@@ -38,23 +38,28 @@ CC = g++
 CFLAGS = -O2 -Wall -static
 STRIP = /usr/bin/strip
 
-BIN = udp2tcp
+include ../../XEmacs.rules
+
+BIN_BASE = udp2tcp
+ifeq ($(XEMACS_NATIVE_NT),t)
+BIN = $(BIN_BASE).exe
+else
+BIN = $(BIN_BASE)
+endif
 USERSH = eicq-user-install.sh
 
 LIBSRC_FILES = $(BIN) $(USERSH)
 
-EXTRA_SOURCES = README NEWS INSTALL TODO $(BIN).cc
+EXTRA_SOURCES = README NEWS INSTALL TODO $(BIN_BASE).cc
 
 EXTRA_OBJS = $(BIN)
-
-include ../../XEmacs.rules
 
 GENERATED += custom-load.elc
 
 all:: $(BIN) $(ELCS) auto-autoloads.elc custom-load.elc $(INFO_FILES)
 
-udp2tcp: $(BIN).cc
-	${CC} -o $(BIN) $(BIN).cc ${CFLAGS}
+$(BIN): $(BIN_BASE).cc
+	${CC} -o $(BIN) $(BIN_BASE).cc ${CFLAGS}
 	${STRIP} $(BIN)
 
 srckit: srckit-std

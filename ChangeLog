@@ -1,3 +1,33 @@
+2001-02-28  Ben Wing  <ben@xemacs.org>
+
+	* udp2tcp.cc (main): Conditionalize change to third arg to accept
+	on __CYGWIN__, so that all other systems keep size_t -- simply
+	changing the arg makes this not compile under Linux.
+	
+
+2001-02-24  Ben Wing  <ben@xemacs.org>
+
+	* Makefile (STRIP):
+	* Makefile (EXTRA_SOURCES):
+	* Makefile (EXTRA_OBJS):
+	Fix udp2tcp compilation to work under MS Windows.
+	
+	* udp2tcp.cc (main):
+	Emergency fixes so it compiles. (change bzero to memset; fix type
+	of third arg to accept)
+
+2001-03-01  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-main-menu): Capitalise entries.
+	(eicq-log-menu): Ditto.
+
+2001-02-21  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el: Update all doc strings.
+	(eicq-email-author): Move to eicq-report.el
+
+	* eicq-report.el: New file.
+
 2001-01-25  Steve Youngs  <youngs@xemacs.org>
 
 	* version 0.2.8 released - XEmacs package 1.03

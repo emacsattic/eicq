@@ -25,10 +25,10 @@
 
 
 ;; Created: Aug 08, 1998
-;; Updated: Jan 25, 2001
+;; Updated: Feb 17, 2001
 
 ;; Version: 0.2.8
-;; Homepage: http://users.ozlinx.com.au/~youngs_s/eicq/
+;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
 
 ;;; Commentary:
@@ -42,8 +42,7 @@
 ;;   eicq-customize
 ;;
 ;;
-;; See README which comes with this file or at
-;;  http://users.ozlinx.com.au/~youngs_s/eicq/README
+;; See README which comes with this file
 ;;
 ;; This project is done without the consent of Mirabilis.
 ;;
@@ -52,7 +51,7 @@
 
 (eval-when-compile
   (require 'browse-url)
-  (require 'reporter)
+  (require 'eicq-report)
   (require 'outline))
 
 (defconst eicq-version "0.2.8"
@@ -119,91 +118,96 @@ Nil means prompt for entering password every time you login."
 ;;; Code - user meta info:
 
 (defcustom eicq-user-meta-nickname "e-i-c-q"
-  "*User info stored in ICQ server.
+  "*Your nickname stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable.
 ICQ server refuses any string containing substring \"icq\"."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-firstname "XEmacs"
-  "*User info stored in ICQ server.
+  "*Your first name stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable.
 ICQ server refuses any string containing substring \"icq\"."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-lastname "Linux"
-  "*User info stored in ICQ server.
+  "*Your last name stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable.
 ICQ server refuses any string containing substring \"icq\"."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-primary-email "emacs@home.com"
-  "*User info stored in ICQ server.
+  "*Your primary email address stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable.
 ICQ server refuses any string containing substring \"icq\"."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-secondary-email "eicq@home.com"
-  "*User info stored in ICQ server.
+  "*Your secondary email address stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-old-email "eicq@home.com"
-  "*User info stored in ICQ server.
+  "*Your old email address stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-city nil
-  "*User info stored in ICQ server.
+  "*Your city stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-state nil
-  "*User info stored in ICQ server.
+  "*Your state stored on the ICQ server.
+We're talking 'address' here, not online state.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-phone nil
-  "*User info stored in ICQ server.
+  "*Your phone number stored on the ICQ server.
+Do you really want to divulge this information?
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-fax nil
-  "*User info stored in ICQ server.
+  "*Your fax number stored on the ICQ server.
+Do you really want to divulge this information?
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-street nil
-  "*User info stored in ICQ server.
+  "*Your street name and number stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-cell-phone nil
-  "*User info stored in ICQ server.
+  "*Your cell phone number stored on the ICQ server.
+Do you really want to divulge this information?
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-zipcode nil
-  "*User info stored in ICQ server.
+  "*Your zip code/postal code stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-country nil
-  "*User info stored in ICQ server.
+  "*Your country stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-web-aware t
-  "*User info stored in ICQ server.
+  "*Set this to 't' if you want your presence know on the web.
+This doesn't appear to work. :-(
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-hide-ip nil
-  "*User info stored in ICQ server.
+  "*Set to 't' if you want to hide your IP.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-authorization t
-  "*User info stored in ICQ server.
+  "*Authorization needed to add you to others' contact lists..
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
@@ -212,101 +216,141 @@ Run `eicq-update-meta-info' after modifying this variable."
   and he can hack for a night;
 Teach a man to make new Emacs commands,
   and he can hack for a life time."
-  "*User info stored in ICQ server.
+  "*User 'about' info stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-homepage 
-  "http://users.ozlinx.com.au/~youngs_s/eicq/"
-  "*User info stored in ICQ server.
+  "http://eicq.sourceforge.net/"
+  "*User homepage stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
-(defcustom eicq-user-meta-age nil
-  "*User info stored in ICQ server.
+(defcustom eicq-user-meta-age 65535
+  "*Your age stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable.
 65535 = not entered."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-sex 'not-entered
-  "*User info stored in ICQ server.
+  "*Your sex stored on the ICQ server.
+No, it's not an invitation.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta
   :type '(choice (item male) (item female)
                  (item not-entered)))
 
 (defcustom eicq-user-meta-birth-year nil
-  "*User info stored in ICQ server.
+  "*Your birth year (YYYY) stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-birth-month nil
-  "*User info stored in ICQ server.
+  "*Your birth month (MM) stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-birth-day nil
-  "*User info stored in ICQ server.
+  "*Your birth day (DD) stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-language-1 0
-  "*User info stored in ICQ server.
+  "*User 1st language stored on the ICQ server.
+Possible values are:
+
+ 0 Unspecified 7 Chinese   17 French     27 Japanese   36 Portuguese 46 Tagalog
+55 Afrikaans   8 Croatian  18 Gaelic     28 Khmer      37 Romanian   47 Tatar
+58 Albanian    9 Czech     19 German     29 Korean     38 Russian    48 Thai
+ 1 Arabic     10 Danish    20 Greek      30 Lao        39 Serbian    49 Turkish
+59 Armenian   11 Dutch     21 Hebrew     31 Latvian    40 Slovak     50 Ukrainian
+ 2 Bhojpuri   12 English   22 Hindi      32 Lithuanian 41 Slovenian  51 Urdu
+ 3 Bulgarian  13 Esperanto 23 Hungarian  33 Malay      42 Somali     52 Vietnamese
+ 4 Burmese    14 Estonian  24 Icelandic  34 Norwegian  43 Spanish    53 Yiddish
+ 5 Cantonese  15 Farsi     25 Indonesian 57 Persian    44 Swahili    54 Yoruba
+ 6 Catalan    16 Finnish   26 Italian    35 Polish     45 Swedish
+
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-language-2 0
-  "*User info stored in ICQ server.
+  "*User 2nd language stored on the ICQ server.
+Possible values are:
+
+ 0 Unspecified 7 Chinese   17 French     27 Japanese   36 Portuguese 46 Tagalog
+55 Afrikaans   8 Croatian  18 Gaelic     28 Khmer      37 Romanian   47 Tatar
+58 Albanian    9 Czech     19 German     29 Korean     38 Russian    48 Thai
+ 1 Arabic     10 Danish    20 Greek      30 Lao        39 Serbian    49 Turkish
+59 Armenian   11 Dutch     21 Hebrew     31 Latvian    40 Slovak     50 Ukrainian
+ 2 Bhojpuri   12 English   22 Hindi      32 Lithuanian 41 Slovenian  51 Urdu
+ 3 Bulgarian  13 Esperanto 23 Hungarian  33 Malay      42 Somali     52 Vietnamese
+ 4 Burmese    14 Estonian  24 Icelandic  34 Norwegian  43 Spanish    53 Yiddish
+ 5 Cantonese  15 Farsi     25 Indonesian 57 Persian    44 Swahili    54 Yoruba
+ 6 Catalan    16 Finnish   26 Italian    35 Polish     45 Swedish
+
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-language-3 0
-  "*User info stored in ICQ server.
+  "*User 3rd language stored on the ICQ server.
+Possible values are:
+
+ 0 Unspecified 7 Chinese   17 French     27 Japanese   36 Portuguese 46 Tagalog
+55 Afrikaans   8 Croatian  18 Gaelic     28 Khmer      37 Romanian   47 Tatar
+58 Albanian    9 Czech     19 German     29 Korean     38 Russian    48 Thai
+ 1 Arabic     10 Danish    20 Greek      30 Lao        39 Serbian    49 Turkish
+59 Armenian   11 Dutch     21 Hebrew     31 Latvian    40 Slovak     50 Ukrainian
+ 2 Bhojpuri   12 English   22 Hindi      32 Lithuanian 41 Slovenian  51 Urdu
+ 3 Bulgarian  13 Esperanto 23 Hungarian  33 Malay      42 Somali     52 Vietnamese
+ 4 Burmese    14 Estonian  24 Icelandic  34 Norwegian  43 Spanish    53 Yiddish
+ 5 Cantonese  15 Farsi     25 Indonesian 57 Persian    44 Swahili    54 Yoruba
+ 6 Catalan    16 Finnish   26 Italian    35 Polish     45 Swedish
+
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-work-city nil
-  "*User info stored in ICQ server.
+  "*User work city stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-work-state nil
-  "*User info stored in ICQ server.
+  "*User work state stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-work-phone nil
-  "*User info stored in ICQ server.
+  "*User work phone number stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-work-fax nil
-  "*User info stored in ICQ server.
+  "*User work fax number stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-work-address nil
-  "*User info stored in ICQ server.
+  "*User work address stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-work-company nil
-  "*User info stored in ICQ server.
+  "*User company stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-work-department nil
-  "*User info stored in ICQ server.
+  "*User work department stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-work-position nil
-  "*User info stored in ICQ server.
+  "*User work position stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
-(defcustom eicq-user-meta-work-homepage nil
-  "*User info stored in ICQ server.
+(defcustom eicq-user-meta-work-homepage "http://eicq.sourceforge.net/"
+  "*User work homepage stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
@@ -318,43 +362,43 @@ Run `eicq-update-meta-info' after modifying this variable."
   :tag "eicq-sound-directory")
 
 (defcustom eicq-message-sound nil
-  "*Incoming message sound"
+  "*Incoming message sound."
   :group 'eicq-sound
   :type 'file
   :tag "Message Sound")
 
 (defcustom eicq-chat-sound nil
-  "*Incoming chat request sound"
+  "*Incoming chat request sound."
   :group 'eicq-sound
   :type 'file
   :tag "Chat Request Sound")
 
 (defcustom eicq-url-sound nil
-  "*Incoming URL sound"
+  "*Incoming URL sound."
   :group 'eicq-sound
   :type 'file
   :tag "Incoming URL Sound")
 
 (defcustom eicq-buddy-sound nil
-  "*Buddy online notify sound"
+  "*Buddy online notify sound."
   :group 'eicq-sound
   :type 'file
   :tag "Online Notify Sound")
 
 (defcustom eicq-auth-sound nil
-  "*Buddy online notify sound"
+  "*Authorize sound."
   :group 'eicq-sound
   :type 'file
   :tag "Authorize Sound")
 
 (defcustom eicq-emailx-sound nil
-  "*Buddy online notify sound"
+  "*Email Express sound."
   :group 'eicq-sound
   :type 'file
   :tag "Email Express Sound")
 
 (defcustom eicq-pager-sound nil
-  "*Buddy online notify sound"
+  "*Pager sound."
   :group 'eicq-sound
   :type 'file
   :tag "Pager Sound")
@@ -507,34 +551,15 @@ Same as `completing-read' but accepts strings as well as obarray."
    predicate require-match initial-contents history))
 
 ;;;###autoload
-
 (defun eicq-customize ()
   "Interactively customize settings and preferences."
   (interactive)
   (customize-group 'eicq))
 
-;;;###autoload
-
-(defun eicq-email-author ()
-  "Email comments or money to author."
-  (interactive)
-  (let ((reporter-prompt-for-summary-p t)
-        (salutation "
-;; Bug report, feature request, patch, thank-you card... are all welcome.
-;; Flammage is automagically > /dev/null.
-
-
-
-Dear Steve,
-"))
-    (reporter-submit-bug-report
-     "youngs@xemacs.org"
-     (format "eicq v%s" eicq-version) nil nil nil salutation)))
-
 (defun eicq-browse-homepage ()
   "Browse eicq homepage for news and files."
   (interactive)
-  (browse-url "http://users.ozlinx.com.au/~youngs_s/eicq/"))
+  (browse-url "http://eicq.sourceforge.net/"))
 
 (defcustom eicq-coding-system nil
   "*Coding for incoming and outgoing messages.
@@ -2675,32 +2700,33 @@ I'll come back to you soon."
 ;;; Code - system main:
 
 (defvar eicq-main-menu
-  '("eicq"
-    ["Show window" eicq-show-window t]
-    ["Hide window" eicq-hide-window t]
-    ["Register new UIN" eicq-register-new-user t]
-    ["Change password" eicq-change-password t]
+  '("Eicq"
+    ["Show Window" eicq-show-window t]
+    ["Hide Window" eicq-hide-window t]
+    ["Register New UIN" eicq-register-new-user t]
+    ["Change Password" eicq-change-password t]
     ["Login" eicq-login t]
     ["Logout" eicq-logout t]
     ["Disconnect" eicq-disconnect t]
     "---"
     ["Select" eicq-group-select-aliases t]
-    ["Send message" eicq-send-message t]
+    ["Send Message" eicq-send-message t]
     ["Send URL" eicq-send-url t]
     ["Authorize" eicq-authorize t]
-    ["Change status" eicq-change-status t]
+    ["Change Status" eicq-change-status t]
     ["Search" eicq-search t]
-    ["Update meta info" eicq-update-meta-info t]
+    ["Update Meta Info" eicq-update-meta-info t]
     "---"
     ["alias -> uin" eicq-alias-uin t]
     ["uin -> alias" eicq-uin-alias t]
-    ["Redo packet" eicq-redo-hex t]
-    ["Resend contact list" eicq-send-contact-list t]
-    ["Buddy buffer" eicq-buddy-show-buffer t]
-    ["Log buffer" eicq-log-show-buffer t]
-    ["Bridge buffer" eicq-bridge-show-buffer t]
+    ["Redo Packet" eicq-redo-hex t]
+    ["Resend Contact List" eicq-send-contact-list t]
+    ["Buddy Buffer" eicq-buddy-show-buffer t]
+    ["Log Buffer" eicq-log-show-buffer t]
+    ["Bridge Buffer" eicq-bridge-show-buffer t]
     "---"
-    ["Email author" eicq-email-author t]
+    ["Email Author" eicq-email-author t]
+    ["Submit Bug Report" eicq-report-bug t]
     ["Customize" eicq-customize t])
   "Menu for both `eicq-log-mode' and `eicq-buddy-mode'.")
 
@@ -2722,7 +2748,7 @@ Make connection to server and network if necessary."
     (eicq-log-show-buffer nil 'no-select)
     (eicq-connect)
     (when (eicq-connected-p)
-      (message "Logging in ICQ server...")
+      (message "Logging on the ICQ server...")
       (eicq-send (eicq-pack-login)))))
 
 (defun eicq-logout (&optional kill)
@@ -2941,7 +2967,7 @@ variable and modeline."
   (eicq-send (eicq-pack-set-random-group group)))
 
 (defun eicq-update-meta-info ()
-  "Update user meta info in ICQ server.
+  "Update user meta info on the ICQ server.
 Run this after changing any meta user info variables."
   (interactive)
   (eicq-send (eicq-pack-update-authorization))
@@ -3039,22 +3065,22 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
   "Buffer for log.")
 
 (defvar eicq-log-menu
-  '("e-log"
-    ["Select around" eicq-select-alias-around t]
-    ["Send message around" eicq-send-message-alias-around t]
-    ["Send URL around" eicq-send-url-alias-around t]
-    ["Authorize around" eicq-authorize-alias-around t]
-    ["Forward message" eicq-forward-message-around t]
-    ["Query around" eicq-query-info-alias-around t]
+  '("Eicq-log"
+    ["Select Around" eicq-select-alias-around t]
+    ["Send Message Around" eicq-send-message-alias-around t]
+    ["Send URL Around" eicq-send-url-alias-around t]
+    ["Authorize Around" eicq-authorize-alias-around t]
+    ["Forward Message" eicq-forward-message-around t]
+    ["Query Around" eicq-query-info-alias-around t]
     "---"
-    ["New log file" eicq-log-new-file t]
-    ["Contract log" eicq-log-contract t]
-    ["Expand log" eicq-log-expand t]
-    ["Previous log" eicq-log-previous t]
-    ["Next log" eicq-log-next t]
+    ["New Log File" eicq-log-new-file t]
+    ["Contract Log" eicq-log-contract t]
+    ["Expand Log" eicq-log-expand t]
+    ["Previous Log" eicq-log-previous t]
+    ["Next Log" eicq-log-next t]
     "---"
-    ["Mark read" eicq-log-mark-read t]
-    ["Mark unread" eicq-log-mark-unread t])
+    ["Mark Read" eicq-log-mark-read t]
+    ["Mark Unread" eicq-log-mark-unread t])
   "Menu for `eicq-log-mode'.")
 
 (easy-menu-define
@@ -3428,17 +3454,17 @@ See `eicq-process-alias-input'."
 
 (defvar eicq-buddy-menu
   '("e-buddy"
-    ["Select here" eicq-select-alias-here t]
-    ["Select by status" eicq-buddy-select-all-in-view-by-status t]
-    ["Select by regexp" eicq-buddy-select-all-in-view-by-regexp t]
-    ["Send message here" eicq-send-message-alias-here t]
-    ["Send URL here" eicq-send-url-alias-here t]
-    ["Authorize here" eicq-authorize-alias-here t]
-    ["Query info here" eicq-query-info-alias-here t]
+    ["Select Here" eicq-select-alias-here t]
+    ["Select By Status" eicq-buddy-select-all-in-view-by-status t]
+    ["Select By Regexp" eicq-buddy-select-all-in-view-by-regexp t]
+    ["Send Message Here" eicq-send-message-alias-here t]
+    ["Send URL Here" eicq-send-url-alias-here t]
+    ["Authorize Here" eicq-authorize-alias-here t]
+    ["Query Info Here" eicq-query-info-alias-here t]
     "---"
-    ["View connected" eicq-buddy-view-connected t]
-    ["View active" eicq-buddy-view-active t]
-    ["View all" eicq-buddy-view-all t])
+    ["View Connected" eicq-buddy-view-connected t]
+    ["View Active" eicq-buddy-view-active t]
+    ["View All" eicq-buddy-view-all t])
   "Menu for `eicq-buddy-mode'.")
 
 (easy-menu-define
