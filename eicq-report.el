@@ -5,8 +5,10 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2002-4-10 22:03:14 (steve)>
+;; Last-Modified: <2002-5-12 09:46:55 (steve)>
 ;; Keywords: bug-report
+
+;; This file is part of Eicq.
 
 ;; Eicq is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

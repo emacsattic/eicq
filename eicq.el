@@ -7,10 +7,12 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2002-05-12 01:41:05 (steve)>
+;; Last-Modified: <2002-05-12 09:44:25 (steve)>
 ;; Version: 0.5.0
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
+
+;; This file is part of Eicq.
 
 ;; Eicq is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the

@@ -1,5 +1,17 @@
 2002-05-12  Steve Youngs  <youngs@xemacs.org>
 
+	* icq2tcp.c: Add a "This file is part of" clause.
+
+	* eicq-comm.el: Ditto.
+
+	* eicq-convert.el: Ditto.
+
+	* eicq-report.el: Ditto.
+
+	* eicq-toolbar.el: Ditto.
+
+	* eicq-wharf.el: Ditto.
+
 	* eicq.el (eicq-dropped-packet-counter): Moved to eicq-comm.el.
 	(eicq-resend-packet-counter): Ditto.
 	(eicq-recent-packet): Ditto.
@@ -16,6 +28,7 @@
 	(eicq-disconnect): Bridges are now networks.
 	(eicq-pack-login): Use the encrypted password from eicq-comm.el.
 	(eicq-hide-window): Bridges are now networks.
+	Add a "This file is part of" clause.
 
 2002-05-11  Steve Youngs  <youngs@xemacs.org>
 

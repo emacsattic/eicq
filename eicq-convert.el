@@ -6,9 +6,11 @@
 ;; OriginalAuthor: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 06, 2001
-;; Last-Modified: <2001-9-15 20:12:47 (steve)>
+;; Last-Modified: <2002-5-12 09:47:23 (steve)>
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
+
+;; This file is part of Eicq.
 
 ;; Eicq is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the
