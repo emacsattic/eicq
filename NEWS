@@ -12,6 +12,10 @@
 	To be used when you have idled away as opposed to explicitly
 	marking yourself away (not yet working).
 - Cleaner layout for query output. (Me)
+- Remove background colour settings. (Me)
+- Auto-reconnect if kicked off ICQ server. (Me)
+- Don't log outgoing auto-response messages. (Me)
+- Optionally auto-save the log file on exiting Eicq. (Me)
 
 * 0.2.14 to 0.2.15
 

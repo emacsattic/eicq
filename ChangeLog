@@ -1,3 +1,18 @@
+2001-09-15  Steve Youngs  <youngs@xemacs.org>
+
+	* Version 0.2.16 released.
+
+	* README: Add comments about EicqWharf and starting Eicq in a new
+	frame. 
+
+	* eicq.el (eicq-save-log-on-exit-p): New.
+	(eicq-disconnect): Use 'eicq-save-log-on-exit-p'.  And don't
+	prompt to save the buffer, just kill it.
+	(eicq-disconnect): Only delete the wharf frame if it's loaded.
+	(eicq-show-window): Create the wharf frame after all the other
+	Eicq buffers have been created, and then only if it's needed.
+	(eicq-do-meta-user-general): A little nicer output.
+
 2001-09-13  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el: Autoload 'eicq-wharf-new-frame' to kill off a

@@ -2,7 +2,7 @@
 
 * Introduction
 
-http://eicq.sf.net/INSTALL (version 0.2.15)
+http://eicq.sf.net/INSTALL (version 0.2.16)
 
 This file is best viewed under XEmacs. Press C-c C-o now to
 see the outline of topics. You can use XEmacs menu to
@@ -93,6 +93,10 @@ Use M-r/M-s to search history.
 Watch out for monster eicq-log buffer size! Use M-x
 eicq-log-new-file occasionally.
 
+As of version 0.2.16 Eicq will automatically save the log file when
+you disconnect from ICQ.  You can change this behaviour with
+'M-x eicq-customize' in the 'eicq-log' group.
+
 ** hooks
 
 If you want to customize anything fancy:
@@ -104,6 +108,21 @@ eicq-read-message-hook
 eicq-status-update-hook
 eicq-system-message-hook
 
+** Using EicqWharf
+
+EicqWharf is a tiny frame that shows the number of unread messages you
+have.  It is suitable for docking into the GNOME panel (YMMV).
+
+To get the EicqWharf frame put into your ~/.xemacs/init.el:
+
+(require 'eicq-wharf)
+(setq eicq-wharf-frame-use-p t)
+
+** Eicq in its own frame
+
+You can optionally start Eicq in its own frame with:
+
+(setq eicq-start-in-new-frame t)
 
 ** newline
 

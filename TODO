@@ -1,6 +1,6 @@
 -*- outline -*-
 
-* Last Updated: September 8, 2001
+* Last Updated: September 15, 2001
 
 Here's a list of things I may or may not get around to putting
 into Eicq.
@@ -13,6 +13,8 @@ Feel free to do any of these things and send a patch to
 <eicq-devel@lists.sf.net>
 
 * Todo list
+
+** Figure out why sometime being kicked out after long inactivity.
 
 ** Builtin udp support in XEmacs.
 
@@ -51,8 +53,7 @@ Feel free to do any of these things and send a patch to
 
 ** Port icq2tcp to other platforms
 
-	So far we've got GNU/Linux, Cygwin, Solaris, FreeBSD & Alpha
-	Tru64 (although, I haven't got all the patches to those yet).
+	So far we've got GNU/Linux, Cygwin, Solaris & FreeBSD
 
 ** Toolbar
 	
@@ -100,10 +101,3 @@ Feel free to do any of these things and send a patch to
 	biff meets Eicq.  "Hey, you just got some email.  You better 
 	read it."  Or maybe "The power is out and your UPS just kicked 
 	on.".  The sky is the limit.
-
-** Register new user.
-
-	Eicq can do this, but only if you are already connected which
-	means that you need an ICQ account to make one.  That's
-	crazy.  A new user should be able to create a new ICQ account
-	with Eicq even if they don't have one to log in with.

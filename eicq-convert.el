@@ -6,8 +6,7 @@
 ;; OriginalAuthor: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 06, 2001
-;; Last-Modified: <2001-8-11 01:15:52 (steve)>
-;; Version: 0.2.14
+;; Last-Modified: <2001-9-15 20:12:47 (steve)>
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 

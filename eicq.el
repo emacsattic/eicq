@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-13 15:18:31 (steve)>
-;; Version: 0.2.16pre6
+;; Last-Modified: <2001-9-15 20:21:38 (steve)>
+;; Version: 0.2.16
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.16pre6"
+(defconst eicq-version "0.2.16"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -643,6 +643,12 @@ Nil means mark read."
 Nil means mark read."
   :group 'eicq-log
   :type 'boolean)
+
+(defcustom eicq-save-log-on-exit-p t
+  "*Non-nil means the log file will be automatically saved when exiting."
+  :group 'eicq-log
+  :type 'boolean
+  :tag "Save log on exit")
 
 (defcustom eicq-buddy-status-color-hint-flag t
   "*Non-nil means put status color hints."
@@ -1374,26 +1380,46 @@ PROCESS and CHANGE is for `set-process-sentinel'."
       (setq eicq-bridge-port nil)))
 
 (defvar eicq-frame nil
-  "The frame where EICQ is displayed.")
+  "The frame where Eicq is displayed.")
 
 (defvar eicq-wharf-frame)
+
+(defvar eicq-log-buffer nil
+  "Buffer for log.")
 
 (defun eicq-disconnect ()
   "Log out of ICQ and close all Eicq buffers."
   (interactive)
+  (if eicq-save-log-on-exit-p
+      (save-excursion
+	(set-buffer eicq-log-buffer)
+	(save-buffer)
+	(if (file-exists-p eicq-log-filename)
+	    (rename-file
+	     eicq-log-filename
+	     (concat eicq-log-filename
+		     ;; in case you do something stupid with it
+		     (format-time-string "-%Y-%b%d-%H%M-%S")))))
+    (save-excursion
+      (set-buffer eicq-log-buffer)
+      (save-buffer)
+      (if (file-exists-p eicq-log-filename)
+	  (delete-file eicq-log-filename))))
   (eicq-logout 'kill)
   (eicq-network-kill)
   (eicq-bridge-kill)
   (loop for each in '(eicq-log-buffer 
 		      eicq-buddy-buffer 
-		      eicq-status-buffer
-		      eicq-bridge-buffer)
+		      eicq-status-buffer)
+		      ;eicq-bridge-buffer)
     do (kill-buffer (symbol-value each)))
   (delete-other-windows)
-  (if eicq-start-in-new-frame
+  (if (and eicq-start-in-new-frame
+	   (frame-live-p eicq-frame))
       (delete-frame eicq-frame))
   (setq eicq-frame nil)
-  (if (frame-live-p eicq-wharf-frame)
+  (if (and (featurep 'eicq-wharf)
+	   (frame-live-p eicq-wharf-frame))
       (delete-frame eicq-wharf-frame))
   (setq eicq-wharf-frame nil))
 
@@ -2412,24 +2438,24 @@ Local alias: %s
      (eicq-decode-string
       (format
        "meta user general info =
-Nickname: %s
-Firstname: %s
-Lastname: %s
-Primary email: %s
+       Nickname: %s
+      Firstname: %s
+       Lastname: %s
+  Primary email: %s
 Secondary email: %s
-Old email: %s
-City: %s
-State: %s
-Phone: %s
-Fax: %s
-Street: %s
-Cellphone: %s
-Zipcode: %s
-Country: %s
-Timezone: %s
-Authorization: %s
-Web-aware: %s
-Hide-IP: %s"
+      Old email: %s
+           City: %s
+          State: %s
+          Phone: %s
+            Fax: %s
+         Street: %s
+      Cellphone: %s
+        Zipcode: %s
+        Country: %s
+       Timezone: %s
+  Authorization: %s
+      Web-aware: %s
+        Hide-IP: %s"
        nickname first-name last-name primary-email secondary-email
        old-email city state phone fax street cellphone
        (eicq-bin-hex zipcode)
@@ -3361,9 +3387,6 @@ ALIAS is an alias/uin."
 (defvar eicq-status-buffer nil
   "Buffer for statuses.")
 
-(defvar eicq-log-buffer nil
-  "Buffer for log.")
-
 (defvar eicq-wharf-frame-use-p)
 
 (autoload 'eicq-wharf-new-frame "eicq-wharf")
@@ -3374,15 +3397,11 @@ ALIAS is an alias/uin."
 Make them if not yet done.
 See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (interactive)
-  (if (featurep 'eicq-wharf)
-      (if eicq-wharf-frame-use-p
-	  (eicq-wharf-new-frame)))
   (unless (frame-live-p eicq-frame)
     (setq eicq-frame
-          (if eicq-start-in-new-frame
-              (new-frame)
-            (selected-frame))))
-  (select-frame eicq-frame)
+	  (if eicq-start-in-new-frame
+	      (new-frame)
+	    (selected-frame))))
   (eicq-buddy-show-buffer)
   (eicq-status-show-buffer)
   (eicq-log-show-buffer)
@@ -3393,7 +3412,13 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (set-window-buffer nil eicq-status-buffer)
   (set-window-buffer
    (split-window nil eicq-status-window-height) eicq-buddy-buffer)
-  (other-window 2))
+  (other-window 2)
+  (save-excursion
+    (if (featurep 'eicq-wharf)
+	(if eicq-wharf-frame-use-p
+	    (eicq-wharf-new-frame))))
+  (focus-frame eicq-frame))
+
 
 
 (defun eicq-hide-window ()
@@ -3539,7 +3564,11 @@ See `eicq-log-filename'."
     (with-current-buffer eicq-log-buffer
       (eicq-log-mode)
       (if (zerop (buffer-size))
-          (insert "====================\n"))))
+          (insert "=======================================\n"
+		  "Welcome to Eicq - The XEmacs ICQ Client\n\n"
+		  "If you experience problems, please use:\n"
+		  "  \'M-x eicq-report-bug RET\'\n"
+		  "=======================================\n\n"))))
   (unless no-select
     (switch-to-buffer eicq-log-buffer)))
 

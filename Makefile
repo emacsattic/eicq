@@ -18,7 +18,7 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 PACKAGE = eicq
-VER = 0.2.15
+VER = 0.2.16
 
 # csh... yell no, we won't go!
 
@@ -59,7 +59,6 @@ EMACS = xemacs
 EMACS_FLAGS = -batch
 CC = gcc
 CFLAGS = -O2 -Wall
-
 INSTALL = install -o 0 -g 0
 # Solaris #  Comment out above line and uncomment the line below
 # INSTALL = install -u 0 -g 0
