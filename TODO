@@ -1,6 +1,6 @@
 -*- outline -*-
 
-* Last Updated: September 15, 2001
+* Last Updated: January 11, 2002
 
 Here's a list of things I may or may not get around to putting
 into Eicq.
@@ -15,12 +15,6 @@ Feel free to do any of these things and send a patch to
 * Todo list
 
 ** Implement ICQ version 7/8 protocol.
-
-** Figure out why sometime being kicked out after long inactivity.
-
-** Builtin udp support in XEmacs.
-
-	Implement Eicq totally in Lisp.
 
 ** Visible/invisible list.
 
@@ -98,3 +92,19 @@ Feel free to do any of these things and send a patch to
 	biff meets Eicq.  "Hey, you just got some email.  You better 
 	read it."  Or maybe "The power is out and your UPS just kicked 
 	on.".  The sky is the limit.
+
+** PostgreSQL support
+
+	Take advantage of XEmacs' PostgreSQL support for storing and
+	retrieving all kinds of useless data about your contacts.
+
+** X-Faces
+
+	If someone in your contact list has an entry in BBDB with a
+	'face' field display the face in the buddy buffer.
+
+** Balloon-help style dialogs
+
+	Move your rat over an alias in the buddy buffer and a
+	balloon-help style dialog pops up containing stuff like real
+	name, email, UIN etc.

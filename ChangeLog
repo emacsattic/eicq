@@ -1,6 +1,12 @@
+2002-01-11  Steve Youngs  <youngs@xemacs.org>
+
+	* TODO: Add items about	PostgreSQL, X-Faces, Balloon-help
+	dialogs. 
+
 2002-01-03  Steve Youngs  <youngs@xemacs.org>
 
 	* README: Update, just testing patcher.
+	Another test.
 
 2001-12-24  Steve Youngs  <youngs@xemacs.org>
 
