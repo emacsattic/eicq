@@ -2,7 +2,7 @@
 
 * Introduction
 
-http://users.ozlinx.com.au/~youngs_s/eicq/README (version 0.2.5)
+http://eicq.sourceforge.net/INSTALL (version 0.2.10)
 
 This file is best viewed under XEmacs. Press C-c C-o now to
 see the outline of topics. You can use XEmacs menu to
@@ -36,9 +36,7 @@ also get:
 * Installation
 See the file 'INSTALL' in this directory.
 
-You can also subscribe to eicq mailing list by sending an
-email to majordomo@aarg.net with "subscribe eicq" in the
-body.
+There are a few mailing lists. See <http://eicq.sourceforge.net/#maillist>
 
 Have fun!
 

@@ -1,5 +1,11 @@
 -*- outline -*-
 
+* from 0.2.9 to 0.2.10
+
+** No longer distributed as an XEmacs package (due to compatibility issues)
+** Re-arrange variables so that everything compiles cleanly with no errors.
+** Uses XEmacs to create the info documentation.
+
 * from 0.2.8 to 0.2.9
 
 ** New function 'eicq-report-bug'

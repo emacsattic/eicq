@@ -1,19 +1,23 @@
 ;;; eicq.el --- ICQ client for Emacs
-;; $Id$
+
 ;; Copyright (C) 1999 by Stephen Tse
-;; Copyright (C) 2000 Steve Youngs
+;; Copyright (C) 2000, 2001 Steve Youngs
 
-;; Original Author: Stephen Tse <stephent@sfu.ca>
+;; RCS: $Id$
+;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
+;; Created: Aug 08, 1998
+;; Last Modified: Mar 6, 2001
+;; Version: 0.2.10
+;; Homepage: http://eicq.sourceforge.net/
+;; Keywords: comm ICQ
 
-;; This file is part of XEmacs.
-
-;; XEmacs is free software; you can redistribute it and/or modify it
+;; Eicq is free software; you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the
 ;; Free Software Foundation; either version 2, or (at your option) any
 ;; later version.
 
-;; XEmacs is distributed in the hope that it will be useful, but WITHOUT
+;; Eicq is distributed in the hope that it will be useful, but WITHOUT
 ;; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
 ;; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
 ;; for more details.
@@ -24,13 +28,6 @@
 ;; Boston, MA 02111-1307, USA.
 
 
-;; Created: Aug 08, 1998
-;; Updated: Feb 17, 2001
-
-;; Version: 0.2.9
-;; Homepage: http://eicq.sourceforge.net/
-;; Keywords: comm ICQ
-
 ;;; Commentary:
 ;;
 ;; Clone of Mirabilis ICQ communication client.
@@ -38,11 +35,9 @@
 ;; Entry points:
 ;;   eicq-login
 ;;   eicq-show-window
-;;   eicq-email-author
 ;;   eicq-customize
 ;;
-;;
-;; See README which comes with this file
+;; See README & INSTALL which come with this package
 ;;
 ;; This project is done without the consent of Mirabilis.
 ;;
@@ -53,7 +48,7 @@
   (require 'browse-url)
   (require 'outline))
 
-(defconst eicq-version "0.2.9"
+(defconst eicq-version "0.2.10"
   "Version of eicq you are currently using.")
 
 (defgroup eicq nil
@@ -555,6 +550,7 @@ Same as `completing-read' but accepts strings as well as obarray."
   (interactive)
   (customize-group 'eicq))
 
+;;;###autoload
 (defun eicq-browse-homepage ()
   "Browse eicq homepage for news and files."
   (interactive)
@@ -596,6 +592,10 @@ Decode string with `eicq-coding-system'."
     (replace-in-string string "\x0d\x0a" "\x0a")
     "%" "%%")
    eicq-coding-system))
+
+(defconst eicq-message-max-size 350
+  "Maximum size of message that ICQ will accept.
+Set it to small because size expands after `eicq-encode-string'.")
 
 (defun eicq-spliter (x)
   "Split a long message X into parts of maximum length `eicq-message-max-size'.
@@ -877,7 +877,7 @@ COUNT means how many time this packets has been resent. Default is 0."
 It bridges UDP (ICQ server) and TCP (Emacs).")
 
 (defcustom eicq-bridge-filename 
-  "/usr/local/lib/xemacs/xemacs-packages/lib-src/udp2tcp"
+  "/usr/local/bin/udp2tcp"
   "*Filename for `eicq-bridge' program."
   :group 'eicq-option)
 
@@ -971,6 +971,70 @@ this may allow central bridge servers in future."
    (t
     (eicq-log-system "....connection failed"))))
 
+(defvar eicq-main-map
+  (let ((map (make-keymap 'eicq-main-map)))
+    (suppress-keymap map)
+    (define-key map [X] nil)            ; BUG?
+    (define-key map [X i] 'eicq-login)
+    (define-key map [X o] 'eicq-logout)
+    (define-key map [X s] 'eicq-change-status)
+    (define-key map [S] 'eicq-group-select-aliases)
+    (define-key map [s] 'eicq-group-select-aliases)
+    (define-key map [w] 'eicq-show-window)
+    (define-key map [h] 'eicq-hide-window)
+    (define-key map [M] 'eicq-send-message)
+    (define-key map [m] 'eicq-send-message)
+    (define-key map [U] 'eicq-send-url)
+    (define-key map [u] 'eicq-send-url)
+    (define-key map [A] 'eicq-authorize)
+    (define-key map [a] 'eicq-authorize)
+    (define-key map [i] 'eicq-query-info)
+    (define-key map [I] 'eicq-query-info)
+    (define-key map [f] 'world-find)
+    (define-key map [V] nil)
+    (define-key map [V c] 'eicq-buddy-view-connected)
+    (define-key map [V v] 'eicq-buddy-view-active)
+    (define-key map [V a] 'eicq-buddy-view-all)
+    (define-key map [?1] 'eicq-buddy-show-buffer)
+    (define-key map [?2] 'eicq-log-show-buffer)
+    (define-key map [?4] 'eicq-bridge-show-buffer)
+    map)
+  "Keyboard map common for `eicq-log-mode-map' and `eicq-buddy-mode-map'.")
+
+(defvar eicq-main-menu
+  '("Eicq"
+    ["Show Window" eicq-show-window t]
+    ["Hide Window" eicq-hide-window t]
+    ["Register New UIN" eicq-register-new-user t]
+    ["Change Password" eicq-change-password t]
+    ["Login" eicq-login t]
+    ["Logout" eicq-logout t]
+    ["Disconnect" eicq-disconnect t]
+    "---"
+    ["Select" eicq-group-select-aliases t]
+    ["Send Message" eicq-send-message t]
+    ["Send URL" eicq-send-url t]
+    ["Authorize" eicq-authorize t]
+    ["Change Status" eicq-change-status t]
+    ["Search" eicq-search t]
+    ["Update Meta Info" eicq-update-meta-info t]
+    "---"
+    ["alias -> uin" eicq-alias-uin t]
+    ["uin -> alias" eicq-uin-alias t]
+    ["Redo Packet" eicq-redo-hex t]
+    ["Resend Contact List" eicq-send-contact-list t]
+    ["Buddy Buffer" eicq-buddy-show-buffer t]
+    ["Log Buffer" eicq-log-show-buffer t]
+    ["Bridge Buffer" eicq-bridge-show-buffer t]
+    "---"
+    ["Email Author" eicq-email-author t]
+    ["Submit Bug Report" (eicq-report-bug eicq-blurb) t]
+    ["Customize" eicq-customize t])
+  "Menu for both `eicq-log-mode' and `eicq-buddy-mode'.")
+
+(easy-menu-define
+ eicq-main-easymenu nil "Eicq Main" eicq-main-menu)
+
 (defun eicq-bridge-mode ()
   "Major mode for bridge debug output.
 Commands: \\{eicq-main-mode}"
@@ -1021,10 +1085,6 @@ Normally should use `eicq-logout' to logout first."
   (and (processp eicq-network)
        (eq (process-status eicq-network) 'open)))
 
-(defconst eicq-message-max-size 350
-  "Maximum size of message that ICQ will accept.
-Set it to small because size expands after `eicq-encode-string'.")
-
 (defun eicq-send-internal (bin)
   "Send a binary string BIN to `eicq-network'.
 `process-send-string' restricts the length of BIN to 500 or less."
@@ -1043,6 +1103,10 @@ It is sent anyway but it may not go through.\n"
     (eicq-log-error
      "Network is not connected when it tries to send a packet")
     (eicq-logout 'kill)))
+
+(defvar eicq-recent-packet nil
+  "The most recent incoming packet.
+For debug only.")
 
 (defun eicq-network-filter (process bin)
   "Handle a binary string from `eicq-network'.
@@ -1084,10 +1148,6 @@ See `eicq-network-filter'."
             (setq eicq-trimmed-packet nil)))))
     packets))
 
-(defvar eicq-recent-packet nil
-  "The most recent incoming packet.
-For debug only.")
-
 (defvar eicq-error-packets nil
   "A list of error incoming packets.
 For debug only.")
@@ -1102,6 +1162,11 @@ For debug only.")
 
 (defvar eicq-current-seq-num 1
   "Current sequence number in packet.")
+
+(defvar eicq-user-bin nil
+  "User alias in binary string.
+The mere purpose is to speed up operations.
+Updated by `eicq-world-update'.")
 
 (defun eicq-pack (command &rest parameters)
   "Pack a ICQ protocol version 5 packet.
@@ -1120,6 +1185,20 @@ Use `eicq-send' to send the string."
           (if parameters
               (apply 'concat parameters)
             "\x00\x00\x00\x00")))       ; must have at least 4 bytes
+
+(defvar eicq-valid-statuses
+  '("online" "away" "occ" "dnd" "ffc" "na" "invisible")
+  "All statuses valid for selection.
+Used by `eicq-change-status' and in `eicq-buddy-buffer'.")
+
+(defcustom eicq-user-initial-status "invisible"
+  "*Initial user status when login."
+  :group 'eicq-option
+  :type
+  (cons 'choice
+        (mapcar
+         (lambda (x) (list 'item x))
+         eicq-valid-statuses)))
 
 (defun eicq-pack-login ()
   "Pack login packet 03e8."
@@ -1164,6 +1243,11 @@ Obsoleted. Not used in v5."
 (defun eicq-pack-delete-offline-messages ()
   "Pack delete offline message packet 0442."
   (eicq-pack "\x42\x04"))
+
+(defvar eicq-all-uin nil
+  "All uin in `eicq-world'.
+The mere purpose is to speed up operations.
+Updated by `eicq-world-update'.")
 
 (defun eicq-pack-contact-list ()
   "Pack contact list packet 0406."
@@ -1559,6 +1643,10 @@ PACKET is raw network packet from server in binary string.
 0 means to ignore the packet.
 See `eicq-do-*'")
 
+(defvar seq-num-bin)
+(defvar seq-num)
+(defvar user-bin)
+
 (defun eicq-do (packet &optional no-ack)
   "Dispatch server packet to registered handler.
 See `eicq-do-alist'.
@@ -1638,6 +1726,8 @@ Remove acknowledged packets from `eicq-outgoing-queue'."
    (substring packet 21 25)
    (substring packet 29 -1)
    (substring packet 25 26)))
+
+(defvar local-year)
 
 (defun eicq-do-offline-message (packet)
   "Handle server command 00dc in PACKET."
@@ -1757,6 +1847,9 @@ Possible type: `eicq-message-types'."
                  (eicq-log-error "Unknown message type: %s"
                                  (eicq-bin-hex type-bin))))))
 
+(defvar eicq-user-status "offline"
+  "Current user status.")
+
 (defun eicq-auto-reply (alias)
   "Auto-reply to ALIAS/uin depending on `eicq-user-status'.
 Called by `eicq-do-message-heler'."
@@ -1844,6 +1937,8 @@ Email: %s
 Authorization: %s"
        uin alias nick-name first-name last-name email
        (if (= authorization 0) "Needed" "Not Needed"))))))
+
+(defvar country-status)
 
 (defun eicq-do-info-ext (packet)
   "Handle server command 0122 in PACKET.
@@ -2065,6 +2160,9 @@ Hide-IP: %s"
        (eicq-bin-hex web-aware)
        (eicq-bin-hex hide-ip))))))
 
+(defvar unknown)
+(defvar unknown-2)
+
 (defun eicq-do-meta-user-work (data)
   "Handle server command 03de subcommand 00d2 in DATA."
   (let* ((i 0)
@@ -2212,16 +2310,6 @@ Language-3: %s"
 The mere purpose is to speed up operations.
 Updated by `eicq-world-update'.")
 
-(defvar eicq-all-uin nil
-  "All uin in `eicq-world'.
-The mere purpose is to speed up operations.
-Updated by `eicq-world-update'.")
-
-(defvar eicq-user-bin nil
-  "User alias in binary string.
-The mere purpose is to speed up operations.
-Updated by `eicq-world-update'.")
-
 (defun eicq-world-getf (alias tag)
   "For ALIAS get property of TAG.
 If TAG is 'all, return the plist."
@@ -2280,6 +2368,12 @@ white spaces is alias.  For example,
 
 :icq 409533 fire :linux :eicq
 :icq 123456 the hatter :unreal")
+
+(defvar eicq-alias-map
+  (let ((map (make-sparse-keymap 'eicq-alias-map)))
+    (define-key map [button2] 'eicq-send-message-via-mouse)
+    map)
+  "Keymap for alias extent.")
 
 (defun eicq-world-update ()
   "Read `eicq-world-rc-filename' and update various user variables.
@@ -2587,23 +2681,6 @@ Zero-Padded to make it 4 byte-long."
   "Return the name of status from its the binary string BIN."
   (cadr (assoc bin eicq-statuses)))
 
-(defvar eicq-valid-statuses
-  '("online" "away" "occ" "dnd" "ffc" "na" "invisible")
-  "All statuses valid for selection.
-Used by `eicq-change-status' and in `eicq-buddy-buffer'.")
-
-(defvar eicq-user-status "offline"
-  "Current user status.")
-
-(defcustom eicq-user-initial-status "invisible"
-  "*Initial user status when login."
-  :group 'eicq-option
-  :type
-  (cons 'choice
-        (mapcar
-         (lambda (x) (list 'item x))
-         eicq-valid-statuses)))
-
 (defcustom eicq-auto-reply-away
   "I am currently away from ICQ.
 Please leave me messages,
@@ -2709,42 +2786,7 @@ As succinctly as possible, tell us:-\n
 ======================================================================\n"
   "Preamble to the bug report.")
 
-(defvar eicq-main-menu
-  '("Eicq"
-    ["Show Window" eicq-show-window t]
-    ["Hide Window" eicq-hide-window t]
-    ["Register New UIN" eicq-register-new-user t]
-    ["Change Password" eicq-change-password t]
-    ["Login" eicq-login t]
-    ["Logout" eicq-logout t]
-    ["Disconnect" eicq-disconnect t]
-    "---"
-    ["Select" eicq-group-select-aliases t]
-    ["Send Message" eicq-send-message t]
-    ["Send URL" eicq-send-url t]
-    ["Authorize" eicq-authorize t]
-    ["Change Status" eicq-change-status t]
-    ["Search" eicq-search t]
-    ["Update Meta Info" eicq-update-meta-info t]
-    "---"
-    ["alias -> uin" eicq-alias-uin t]
-    ["uin -> alias" eicq-uin-alias t]
-    ["Redo Packet" eicq-redo-hex t]
-    ["Resend Contact List" eicq-send-contact-list t]
-    ["Buddy Buffer" eicq-buddy-show-buffer t]
-    ["Log Buffer" eicq-log-show-buffer t]
-    ["Bridge Buffer" eicq-bridge-show-buffer t]
-    "---"
-    ["Email Author" eicq-email-author t]
-    ["Submit Bug Report" (eicq-report-bug eicq-blurb) t]
-    ["Customize" eicq-customize t])
-  "Menu for both `eicq-log-mode' and `eicq-buddy-mode'.")
-
-(easy-menu-define
- eicq-main-easymenu nil "Eicq Main" eicq-main-menu)
-
 ;;;###autoload
-
 (defun eicq-login ()
   "Login to ICQ server.
 Make connection to server and network if necessary."
@@ -2866,6 +2908,9 @@ See `eicq-process-alias-input'."
         do (eicq-send-message-helper
             ;; encoding outgoing but not that to be insert in log buffer
             (eicq-encode-string x) aliases 'normal x)))))
+
+(defvar eicq-buddy-buffer nil
+  "Buffer for contact list.")
 
 (defun eicq-send-message-via-mouse (event)
   ;; Erik Arneson <erik@starseed.com> (from VM)
@@ -3047,8 +3092,10 @@ ALIAS is an alias/uin."
   "*Width of window for `eicq-buddy-buffer'."
   :group 'eicq-interface)
 
-;;;###autoload
+(defvar eicq-log-buffer nil
+  "Buffer for log.")
 
+;;;###autoload
 (defun eicq-show-window ()
   "Show windows of eicq buffers.
 Make them if not yet done.
@@ -3070,9 +3117,6 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
 ;;; Code - log:
 
 ;; message history buffer
-
-(defvar eicq-log-buffer nil
-  "Buffer for log.")
 
 (defvar eicq-log-menu
   '("Eicq-log"
@@ -3106,6 +3150,28 @@ Log in buffer is auto-filled, that is, word-wrapped upto this column.
 Normally frame width is 80 and window width of `eicq-buddy-buffer' is 20,
 therefore default value 50 will be nice."
   :group 'eicq-log)
+
+(defvar eicq-log-mode-map
+  (let ((map (make-sparse-keymap 'eicq-log-mode-map)))
+    (set-keymap-parents map (list eicq-main-map))
+    (define-key map [delete] 'eicq-log-contract)
+    (define-key map [insert] 'eicq-log-expand)
+    (define-key map [(control up)] 'eicq-log-previous)
+    (define-key map [(control down)] 'eicq-log-next)
+    (define-key map [N] 'eicq-log-mark-unread)
+    (define-key map [c] 'eicq-log-mark-read)
+    (define-key map [W] 'eicq-alias-around)
+    (define-key map [s] 'eicq-select-alias-around)
+    (define-key map [m] 'eicq-send-message-alias-around)
+    (define-key map [u] 'eicq-send-url-alias-around)
+    (define-key map [a] 'eicq-authorize-alias-around)
+    (define-key map [i] 'eicq-query-info-alias-around)
+    (define-key map [f] 'eicq-forward-message-around)
+    (define-key map [n] 'eicq-log-next)
+    (define-key map [o] 'other-window)
+    (define-key map [p] 'eicq-log-previous)
+    map)
+  "Keymap for `eicq-log-mode'.")
 
 (defun eicq-log-mode ()
   "Major mode for logging messages in eicq.
@@ -3268,6 +3334,14 @@ MESSAGES is an argument list for `format' to be inserted."
 ALIAS is an id to be logged under.
 MESSAGES is an argument list for `format' to be inserted."
   (eicq-log alias (apply 'format messages) eicq-log-buddy-message-flag))
+
+(defvar eicq-url-map
+  (let ((map (make-sparse-keymap 'eicq-url-map)))
+    (define-key map [button2] 'browse-url-at-mouse)
+    (define-key map [B] 'browse-url-at-point)
+    (define-key map [return] 'browse-url-at-point)
+    map)
+  "Keymap for URL extent.")
 
 (defun eicq-log-buddy-url (alias message url)
   "See `eicq-log-buddy-message-flag'.
@@ -3459,9 +3533,6 @@ See `eicq-process-alias-input'."
 
 ;; contact list (list of aliases) buffer
 
-(defvar eicq-buddy-buffer nil
-  "Buffer for contact list.")
-
 (defvar eicq-buddy-menu
   '("Eicq-Buddy"
     ["Select Here" eicq-select-alias-here t]
@@ -3492,6 +3563,21 @@ in the frame by `one-window'."
   (unless (= (frame-width)
              (window-width (get-buffer-window buffer)))
     (delete-other-windows (get-buffer-window buffer))))
+
+(defvar eicq-buddy-mode-map
+  (let ((map (make-sparse-keymap 'eicq-buddy-mode-map)))
+    (set-keymap-parents map (list eicq-main-map))
+    (define-key map [W] 'eicq-alias-here)
+    (define-key map [s] 'eicq-select-alias-here)
+    (define-key map [m] 'eicq-send-message-alias-here)
+    (define-key map [u] 'eicq-send-url-alias-here)
+    (define-key map [a] 'eicq-authorize-alias-here)
+    (define-key map [i] 'eicq-query-info-alias-here)
+    (define-key map [n] 'next-line)
+    (define-key map [o] 'other-window)
+    (define-key map [p] 'previous-line)
+    map)
+  "Keymap for `eicq-buddy-mode'.")
 
 (defun eicq-buddy-mode ()
   "Major mode for contact list in eicq.
@@ -3770,36 +3856,6 @@ See `eicq-buddy-select-all-in-view'."
 
 ;;; Code - keymap:
 
-(defvar eicq-main-map
-  (let ((map (make-keymap 'eicq-main-map)))
-    (suppress-keymap map)
-    (define-key map [X] nil)            ; BUG?
-    (define-key map [X i] 'eicq-login)
-    (define-key map [X o] 'eicq-logout)
-    (define-key map [X s] 'eicq-change-status)
-    (define-key map [S] 'eicq-group-select-aliases)
-    (define-key map [s] 'eicq-group-select-aliases)
-    (define-key map [w] 'eicq-show-window)
-    (define-key map [h] 'eicq-hide-window)
-    (define-key map [M] 'eicq-send-message)
-    (define-key map [m] 'eicq-send-message)
-    (define-key map [U] 'eicq-send-url)
-    (define-key map [u] 'eicq-send-url)
-    (define-key map [A] 'eicq-authorize)
-    (define-key map [a] 'eicq-authorize)
-    (define-key map [i] 'eicq-query-info)
-    (define-key map [I] 'eicq-query-info)
-    (define-key map [f] 'world-find)
-    (define-key map [V] nil)
-    (define-key map [V c] 'eicq-buddy-view-connected)
-    (define-key map [V v] 'eicq-buddy-view-active)
-    (define-key map [V a] 'eicq-buddy-view-all)
-    (define-key map [?1] 'eicq-buddy-show-buffer)
-    (define-key map [?2] 'eicq-log-show-buffer)
-    (define-key map [?4] 'eicq-bridge-show-buffer)
-    map)
-  "Keyboard map common for `eicq-log-mode-map' and `eicq-buddy-mode-map'.")
-
 (defun eicq-global-map-set (&optional symbol value)
   "Set `eicq-global-key-prefix'.
 WARNING: Bindings with old prefix is not deleted.  Fixable?"
@@ -3809,57 +3865,6 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
   "*Prefix for all key macros in global."
   :group 'eicq-option
   :set 'eicq-global-map-set)
-
-(defvar eicq-log-mode-map
-  (let ((map (make-sparse-keymap 'eicq-log-mode-map)))
-    (set-keymap-parents map (list eicq-main-map))
-    (define-key map [delete] 'eicq-log-contract)
-    (define-key map [insert] 'eicq-log-expand)
-    (define-key map [(control up)] 'eicq-log-previous)
-    (define-key map [(control down)] 'eicq-log-next)
-    (define-key map [N] 'eicq-log-mark-unread)
-    (define-key map [c] 'eicq-log-mark-read)
-    (define-key map [W] 'eicq-alias-around)
-    (define-key map [s] 'eicq-select-alias-around)
-    (define-key map [m] 'eicq-send-message-alias-around)
-    (define-key map [u] 'eicq-send-url-alias-around)
-    (define-key map [a] 'eicq-authorize-alias-around)
-    (define-key map [i] 'eicq-query-info-alias-around)
-    (define-key map [f] 'eicq-forward-message-around)
-    (define-key map [n] 'eicq-log-next)
-    (define-key map [o] 'other-window)
-    (define-key map [p] 'eicq-log-previous)
-    map)
-  "Keymap for `eicq-log-mode'.")
-
-(defvar eicq-buddy-mode-map
-  (let ((map (make-sparse-keymap 'eicq-buddy-mode-map)))
-    (set-keymap-parents map (list eicq-main-map))
-    (define-key map [W] 'eicq-alias-here)
-    (define-key map [s] 'eicq-select-alias-here)
-    (define-key map [m] 'eicq-send-message-alias-here)
-    (define-key map [u] 'eicq-send-url-alias-here)
-    (define-key map [a] 'eicq-authorize-alias-here)
-    (define-key map [i] 'eicq-query-info-alias-here)
-    (define-key map [n] 'next-line)
-    (define-key map [o] 'other-window)
-    (define-key map [p] 'previous-line)
-    map)
-  "Keymap for `eicq-buddy-mode'.")
-
-(defvar eicq-url-map
-  (let ((map (make-sparse-keymap 'eicq-url-map)))
-    (define-key map [button2] 'browse-url-at-mouse)
-    (define-key map [B] 'browse-url-at-point)
-    (define-key map [return] 'browse-url-at-point)
-    map)
-  "Keymap for URL extent.")
-
-(defvar eicq-alias-map
-  (let ((map (make-sparse-keymap 'eicq-alias-map)))
-    (define-key map [button2] 'eicq-send-message-via-mouse)
-    map)
-  "Keymap for alias extent.")
 
 ;;; Code - footer:
 

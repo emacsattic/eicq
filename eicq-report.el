@@ -2,13 +2,21 @@
 
 ;; Copyright (C) 2001 Steve Youngs
 
+;; Based heavily on efs-report.el by Andy Norman
+;; EFS is currently maintained by Mike Sperber <sperber@informatik.uni-tuebingen.de>
 
-;; This program is free software; you can redistribute it and/or modify
+;; RCS: $Id$
+;; Author: Steve Youngs <youngs@xemacs.org>
+;; Maintainer: Steve Youngs <youngs@xemacs.org>
+;; Last Modified: Mar 6, 2001
+;; Keywords: bug-report
+
+;; Eicq is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2 of the License, or
 ;; (at your option) any later version.
 
-;; This program is distributed in the hope that it will be useful,
+;; Eicq is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
@@ -24,11 +32,16 @@
 
 ;;; Code:
 (require 'eicq)
-(require 'gnus)
-(require 'gnus-util)
 (require 'reporter)
+(require 'gnus)
 
-(defvar reporter-version) ; For the byte-compiler
+;; To keep the byte-compiler from spewing out warnings.
+(defvar reporter-version)
+(defvar after-sep-pos)
+(defvar final-resting-place)
+(defvar vars)
+(defvar reporter-confirm-p)
+(defvar reporter-package-abbrev)
 
 ;;; Variables
 

@@ -1,24 +1,25 @@
-/** udp2tcp.c   -*-C-*-
+/** udp2tcp.cc   -*-C-*-
  ** 
- ** $Id$
- **
  ** Copyright (C) 1999 by Stephen Tse
- ** Copyright (C) 2000 Steve Youngs
- **  
+ ** Copyright (C) 2000, 2001 Steve Youngs
  ** 
- ** This program is free software; you can redistribute it and/or modify
+ ** 
+ ** Eicq is free software; you can redistribute it and/or modify
  ** it under the terms of the GNU General Public License as published by
  ** the Free Software Foundation; either version 2 of the License, or
  ** (at your option) any later version.
  ** 
- ** This program is distributed in the hope that it will be useful,
+ ** Eicq is distributed in the hope that it will be useful,
  ** but WITHOUT ANY WARRANTY; without even the implied warranty of
  ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  ** GNU General Public License for more details.
  ** 
  ** You should have received a copy of the GNU General Public License
  ** along with this program; if not, write to the Free Software
- ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA **/
+ ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA 
+ **/
+
+
 
 /* --------------------------------------------------------------- */
 
@@ -30,7 +31,7 @@
  * Maintainer: Steve Youngs <youngs@xemacs.org>
  * License: GPL
  * Created: Aug 08, 1998
- * Version: 0.2.9
+ * Version: 0.2.10
  * Where: http://eicq.sourceforge.net/
  * Keywords: udp, tcp, network, bridge, icq, emacs
  * 
@@ -41,7 +42,7 @@
  * 
  *   Initially developed to solve the deficiency of no UDP support in
  *   Emacs, in order to connect ICQ server with UDP packets. However,
- *   only the function send_v5() is eicq (an Emacs ICQ cleint) dependent,
+ *   only the function send_v5() is Eicq (an XEmacs ICQ client) dependent,
  *   you can easily modify it for other general use.
  * 
  *   thost: TCP-speaking host
@@ -207,9 +208,9 @@ void v5_encrypt(byte *buf, size_t len)
     strncpy(safe, (char *)(buf+len), 3);
     
     for (dword pos = 0xa; pos < (len+3); pos+=4) {
-	dword code2 = code1 + v5_table[pos & 0xff];
-	dword data = chars_2_dw(buf+pos) ^ code2;
-	dw_2_chars(buf+pos, data);
+        dword code2 = code1 + v5_table[pos & 0xff];
+        dword data = chars_2_dw(buf+pos) ^ code2;
+        dw_2_chars(buf+pos, data);
     }
 
     strncpy((char *)(buf+len), safe, 3);
@@ -242,8 +243,8 @@ void v5_encrypt(byte *buf, size_t len)
 int send_v5(int s, char *msg, size_t len, int flags)
 {
     if (msg[0] == 0x05 && msg[1] == 0x00) {
-	send(s, msg, len, flags);
-	v5_encrypt((byte *)msg, len);
+        send(s, msg, len, flags);
+        v5_encrypt((byte *)msg, len);
 // 	debug_socket("||||||||| encrypted\t", msg, len);
     }
     
@@ -254,19 +255,19 @@ int main(int argc, char *argv[])
 {
     int retval1, retval2;
     struct sockaddr_in udp_local_addr, udp_remote_addr, 
-	tcp_local_addr, tcp_remote_addr;
+        tcp_local_addr, tcp_remote_addr;
 
-    printf("UDP <-> TCP bridge v0.2.9\n\
+    printf("UDP <-> TCP bridge v0.2.10\n\
 \n\
 http://eicq.sourceforge.net/\n\n");
   
     if (argc != 4) {
-	printf("Invalid number of parameters.\n\
+        printf("Invalid number of parameters.\n\
 \n\
 Usuage: %s [udp_host] [udp_remote_port] [tcp_local_port]\n\
 \n\
 For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
-	exit(1);
+        exit(1);
     };
   
     char *udp_remote_host = argv[1];
@@ -295,9 +296,9 @@ For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
     memset(&(tcp_local_addr.sin_zero), 0, 8);
 
     retval1 = bind(udp_sock, (struct sockaddr *)&udp_local_addr,
-		   sizeof(struct sockaddr));
+                   sizeof(struct sockaddr));
     retval2 = bind(tcp_sock, (struct sockaddr *)&tcp_local_addr,
-		   sizeof(struct sockaddr));
+                   sizeof(struct sockaddr));
 
     sock_error_exit(retval1 == -1 || retval2 == -1, "bind");
 
@@ -307,19 +308,19 @@ For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
     struct hostent *udp_host = gethostbyname(udp_remote_host);
 
     if (udp_host == NULL) {
-	herror("gethostbyname"); // instead of perror
-	close(udp_sock);
-	close(tcp_sock);
-	exit(1);
+        herror("gethostbyname"); // instead of perror
+        close(udp_sock);
+        close(tcp_sock);
+        exit(1);
     }
 
     udp_remote_addr.sin_family = AF_INET;
     udp_remote_addr.sin_port = htons(udp_remote_port);
     udp_remote_addr.sin_addr = *((struct in_addr *)udp_host->h_addr);
     memset(&(udp_remote_addr.sin_zero), 0, 8);
-
+    
     retval1 = connect(udp_sock, (struct sockaddr *)&udp_remote_addr,
-		      sizeof(struct sockaddr));
+                      sizeof(struct sockaddr));
 
     sock_error_exit(retval1 == -1, "connect");
 
@@ -338,7 +339,7 @@ For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
     size_t sin_size = sizeof(struct sockaddr_in);
 #endif
     tcp_new_sock = accept(tcp_sock, (struct sockaddr *)&tcp_remote_addr,
-			  &sin_size);
+                          &sin_size);
 
     sock_error_exit(tcp_new_sock == -1, "accept");
 
@@ -353,69 +354,69 @@ For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
     fd_set rfds;
     char *buf = new char[MAXDATASIZE];
     int large_sock = 
-	tcp_new_sock > udp_sock ? tcp_new_sock : udp_sock;
+        tcp_new_sock > udp_sock ? tcp_new_sock : udp_sock;
 
     while (!quit) {
-	// put inside while loop to reset every loop for Linux
-	tv.tv_sec = 2;
-	tv.tv_usec = 500000;
-	FD_ZERO(&rfds);
-	FD_SET(udp_sock, &rfds);
-	FD_SET(tcp_new_sock, &rfds);
+        // put inside while loop to reset every loop for Linux
+        tv.tv_sec = 2;
+        tv.tv_usec = 500000;
+        FD_ZERO(&rfds);
+        FD_SET(udp_sock, &rfds);
+        FD_SET(tcp_new_sock, &rfds);
 
-	retval1 = select(large_sock+1, &rfds, NULL, NULL, &tv);
+        retval1 = select(large_sock+1, &rfds, NULL, NULL, &tv);
 
-	if (retval1 == 0) {
-	    // printf("timeout\n");
-	    continue;
-	}
+        if (retval1 == 0) {
+            // printf("timeout\n");
+            continue;
+        }
         
-	sock_error_exit(retval1 < 0, "select");
+        sock_error_exit(retval1 < 0, "select");
 
-	// from UDP_REMOTE_HOST to TCP_HOST
-	if (FD_ISSET(udp_sock, &rfds)) {
-	    numchars = recv(udp_sock, buf+2, MAXDATASIZE-2, 0);
+        // from UDP_REMOTE_HOST to TCP_HOST
+        if (FD_ISSET(udp_sock, &rfds)) {
+            numchars = recv(udp_sock, buf+2, MAXDATASIZE-2, 0);
 
-	    sock_error_exit(numchars == -1, "recv");
+            sock_error_exit(numchars == -1, "recv");
 
-	    // length prefix
-	    buf[0] = (dword)numchars & 0xff;
-	    buf[1] = ((dword)numchars >> 8) & 0xff;
-	    debug_socket("---------\t", buf+2, numchars);
-	    retval1 = send(tcp_new_sock, buf, numchars+2, 0);
-	    sock_error_exit(retval1 == -1, "send");
-	}
+            // length prefix
+            buf[0] = (dword)numchars & 0xff;
+            buf[1] = ((dword)numchars >> 8) & 0xff;
+            debug_socket("---------\t", buf+2, numchars);
+            retval1 = send(tcp_new_sock, buf, numchars+2, 0);
+            sock_error_exit(retval1 == -1, "send");
+        }
 
-	// from TCP_HOST to UDP_REMOTE_HOST
-	if (FD_ISSET(tcp_new_sock, &rfds)) {
-	    numchars = recv(tcp_new_sock, buf, MAXDATASIZE, 0);
+        // from TCP_HOST to UDP_REMOTE_HOST
+        if (FD_ISSET(tcp_new_sock, &rfds)) {
+            numchars = recv(tcp_new_sock, buf, MAXDATASIZE, 0);
 
-	    sock_error_exit(retval1 == -1, "recv");
-	    if (numchars == 0) {
-		printf("tcp host signals terminates\n");
-		sock_close();
-		exit(1);
-	    }
+            sock_error_exit(retval1 == -1, "recv");
+            if (numchars == 0) {
+                printf("tcp host signals terminates\n");
+                sock_close();
+                exit(1);
+            }
 
-	    // debug raw uncut packets
-	    // debug_socket("********* raw\t", buf, numchars);
+            // debug raw uncut packets
+            // debug_socket("********* raw\t", buf, numchars);
 
-	    char *p = buf;
-	    dword len;
-	    while (p < buf+numchars) {
-		len = (byte)p[0] + ((byte)p[1] << 8);
-		p += 2;			// skip length prefix
-		if (p+len <= buf+numchars && len > 0) {
-		    debug_socket("/////////\t", p, len);	
-		    retval1 = send_v5(udp_sock, p, len, 0);
-		    sock_error_exit(retval1 == -1, "send");
-		    p += len;
-		} else {
-		    debug_socket("********* error\t", buf, numchars);
-		    break;
-		}	
-	    }
-	}
+            char *p = buf;
+            dword len;
+            while (p < buf+numchars) {
+                len = (byte)p[0] + ((byte)p[1] << 8);
+                p += 2;			// skip length prefix
+                if (p+len <= buf+numchars && len > 0) {
+                    debug_socket("/////////\t", p, len);	
+                    retval1 = send_v5(udp_sock, p, len, 0);
+                    sock_error_exit(retval1 == -1, "send");
+                    p += len;
+                } else {
+                    debug_socket("********* error\t", buf, numchars);
+                    break;
+                }	
+            }
+        }
     }
 
  

@@ -2,7 +2,7 @@
 ## eicq-user-install.sh   -*-Shell-script-*-
 ## $Id$
 
-## Copyright (C) 2000 Steve Youngs
+## Copyright (C) 2000, 2001 Steve Youngs
 
 
 ## This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@
 # Variables and constants
 MKDIR=/bin/mkdir
 INSTALL=/usr/bin/install
-RCFILE=/usr/local/lib/xemacs/xemacs-packages/etc/eicq/world
+RCFILE=/usr/local/lib/xemacs/site-packages/etc/eicq/world
 RCDIR=${HOME}/.eicq
 
 # Code

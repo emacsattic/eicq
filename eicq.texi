@@ -8,8 +8,8 @@
 @setchapternewpage odd
 @c %**end of header
 @set EDITION 1.0
-@set VERSION 0.2.8
-@set UPDATED Jan 25, 2001
+@set VERSION 0.2.10
+@set UPDATED Mar 6, 2001
 
 @dircategory Lisp
 @direntry
@@ -18,14 +18,14 @@
 
 @ifinfo
 
-This file documents eicq, a Mirabilis ICQ clone for XEmacs
+This file documents Eicq, a Mirabilis ICQ clone for XEmacs
 
 @end ifinfo
 
 @titlepage
-@title eicq
+@title Eicq
 @subtitle Yet another ICQ clone
-@subtitle Edition @value{EDITION}, for eicq Version @value{VERSION}
+@subtitle Edition @value{EDITION}, for Eicq Version @value{VERSION}
 @author by Steve Youngs
 
 @end titlepage
@@ -53,9 +53,9 @@ into another language, under the above conditions for modified versions.
 @node Top, Licenses, (dir), (dir)
 
 @ifinfo 
-This file documents the @code{eicq} elisp package.
+This file documents the @code{Eicq} elisp package.
 
-This manual corresponds with @code{eicq} @value{VERSION}.
+This manual corresponds with @code{Eicq} @value{VERSION}.
 @end ifinfo
 
 Umm, well, you see, it's like this... The info file isn't actually done yet.  But I will do it soon.
@@ -78,7 +78,7 @@ Umm, well, you see, it's like this... The info file isn't actually done yet.  Bu
 @chapter Software License
 @cindex Licenses
 @cindex Software License
-eicq - a Mirabilis ICQ clone for XEmacs
+Eicq - a Mirabilis ICQ clone for XEmacs
 
 Copyright @copyright{} 2000 Steve Youngs
 
@@ -96,7 +96,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111 USA.
 
-@email{youngs_s@@ozlinx.com.au, Steve Youngs}
+@email{youngs@@xemacs.org, Steve Youngs}
 
 @node Documentation License,  Concept Index, Software License, Licenses
 @chapter Documentation License

@@ -1,20 +1,16 @@
 
-===========================================================
-As of the latest version, I develop and test Eicq _only_ on
-my system, XEmacs 21.2.x & 21.1.x in GNU/Linux. I use some 
-XEmacs 20 specific codes and thus Eicq will not run in other 
-versions of Emacs without modifications. Feel free to test 
-and port it in other platforms, and send me the patch.
-===========================================================
+========================================================================
+As of the latest version, I develop and test Eicq _only_ on my system,
+XEmacs 21.2.x on GNU/Linux. I use some XEmacs 20 specific codes and thus
+Eicq will not run in other versions of Emacs without modifications. Feel
+free to test and port it in other platforms, and send me the patch.
+========================================================================
 
 This installation is definitely a 'no-brainer'
 
-1 - cd /usr/local/lib/xemacs/xemacs-packages RET (or where your package
-      root is)
-2 - tar zxvf /path/to/eicq-x.x.x.tar.gz RET
-
-Yeah, I know, you're swearing at me because you've already unpacked the
-thing to /usr/local/src.  Well life is full of things like that... :P
+1) Check the Makefile, and edit anything as required.
+2) 'make'
+3) become 'root' and then 'make install'
 
 Hold it, you're not finished yet...
 
@@ -30,7 +26,7 @@ Add the following to your ~/.emacs
 
 As the user that will be using Eicq, run...
 
-/usr/local/lib/xemacs/xemacs-packages/lib-src/eicq-user-install.sh
+eicq-user-install.sh
 
 That will set up the needed stuff in your home directory.
 
