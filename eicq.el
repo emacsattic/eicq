@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-10 10:57:24 (steve)>
-;; Version: 0.2.15pre4
+;; Last-Modified: <2001-8-10 14:38:00 (steve)>
+;; Version: 0.2.15pre5
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.15pre4"
+(defconst eicq-version "0.2.15pre5"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -435,28 +435,45 @@ Used by `eicq-change-status' and in `eicq-buddy-buffer'.")
 (defcustom eicq-auto-reply-away
   "I am currently away from ICQ.
 Please leave me messages,
-I'll come back to you soon."
+I'll get back to you asap.
+
+This message has been automatically sent to you
+by the XEmacs ICQ client \"Eicq\".
+<http://eicq.sf.net/>"
   "Auto reply with this when you are away."
   :group 'eicq-option)
 
 (defcustom eicq-auto-reply-occ
   "I am currently occupied.
 Please leave me messages,
-I'll come back to you soon."
+I'll get back to you when I can.
+
+This message has been automatically sent to you
+by the XEmacs ICQ client \"Eicq\".
+<http://eicq.sf.net/>"
   "Auto reply with this when you are occupied."
   :group 'eicq-option)
 
 (defcustom eicq-auto-reply-dnd
-  "I am currently concentrating on some stuff.
-Please leave me messages,
-I'll come back to you soon."
+  "Hey, the sign on the door says \"Do Not Disturb\"!
+
+Leave me a message, if you feel you must.
+I might get back to you.
+
+This message has been automatically sent to you
+by the XEmacs ICQ client \"Eicq\".
+<http://eicq.sf.net/>"
   "Auto reply with this when you want to leave alone."
   :group 'eicq-option)
 
 (defcustom eicq-auto-reply-na
-  "I am currently not in the mood of ICQ.
+  "I am currently not available.
 Please leave me messages,
-I'll come back to you soon."
+I'll get back to you when I get a chance.
+
+This message has been automatically sent to you
+by the XEmacs ICQ client \"Eicq\".
+<http://eicq.sf.net/>"
   "Auto reply with this when you are not available."
   :group 'eicq-option)
 
@@ -1916,6 +1933,11 @@ Remove acknowledged packets from `eicq-outgoing-queue'."
              (substring packet 35 -1))
      (substring packet 31 32))))
 
+(defvar eicq-auto-reply-p nil
+  "If non-nil Eicq will not automatically set your state to online.
+
+It is used in `eicq-do-message-helper' and `eicq-send-message-helper'.")
+
 (defun eicq-do-message-helper (uin-bin message type-bin)
   "Helper for handling offline and online messages.
 UIN-BIN is uin of message sender in binary string.
@@ -1935,6 +1957,7 @@ Possible type: `eicq-message-types'."
       (setq url (eicq-decode-string (second url))))
 
     (when (member eicq-user-status '("away" "na" "dnd" "occ"))
+      (setq eicq-auto-reply-p t)
       (eicq-auto-reply alias))
 
     (run-hooks 'eicq-do-message-hook)
@@ -3041,12 +3064,15 @@ LOG-MESSAGE is a message to put in log.
 
 See `eicq-send-message', `eicq-send-url' and `eicq-authorize'."
   (if eicq-user-auto-away-p
-      (eicq-change-status "online"))
+      (progn
+	(if (not eicq-auto-reply-p)
+	    (eicq-change-status "online"))))
   (add-to-list 'eicq-alias-list-history aliases)
   (loop for alias in aliases
     do (add-to-list 'eicq-active-aliases alias)
     do (eicq-send (eicq-pack-send-message alias message type))
-    do (eicq-log-outgoing alias ">>> %s" log-message)))
+    do (eicq-log-outgoing alias ">>> %s" log-message))
+  (setq eicq-auto-reply-p nil))
 
 (defvar eicq-message-history nil
   "History of `eicq-send-message' for `completing-read'.")
