@@ -1,3 +1,23 @@
+2001-09-02  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq-report.el: Require 'message. 
+
+	* eicq.el (eicq-face-online): Remove background colour to make it
+	look better for light backgrounds.
+	(eicq-face-away): Ditto.
+	(eicq-face-occ): Ditto.
+	(eicq-face-dnd): Ditto.
+	(eicq-face-ffc): Ditto.
+	(eicq-face-na): Ditto.
+	(eicq-face-offline): Ditto.
+	(eicq-face-log-unread): Ditto.
+	(eicq-face-log-read): Ditto.
+	(eicq-auto-response-messages-p): New.
+	(eicq-do-message-helper): Use 'eicq-auto-response-messages-p'.
+
+	* eicq-wharf.el (eicq-wharf-default-face): Remove background
+	colour to make it look better for light backgrounds.
+
 2001-08-18  Steve Youngs  <youngs@xemacs.org>
 
 	* README: Minor updates.

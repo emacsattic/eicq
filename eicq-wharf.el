@@ -6,7 +6,7 @@
 ;; Author: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 10, 2001
-;; Last-Modified: <2001-8-18 12:05:58 (steve)>
+;; Last-Modified: <2001-9-2 14:12:26 (steve)>
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -54,7 +54,7 @@
 
 (defface eicq-wharf-default-face
   '((((class color))
-     (:foreground "Green" :background "Black" :family "fixed" :size "9pt"))
+     (:foreground "Green" :family "fixed" :size "9pt"))
     (t
      (:family "fixed" :size "9pt")))
   "Face used in EicqWharf window.  If you want this to be dockable, make sure

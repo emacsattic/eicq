@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-18 13:01:31 (steve)>
-;; Version: 0.2.16pre2
+;; Last-Modified: <2001-9-2 15:57:59 (steve)>
+;; Version: 0.2.16pre3
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.16pre2"
+(defconst eicq-version "0.2.16pre3"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -437,6 +437,14 @@ Used by `eicq-change-status' and in `eicq-buddy-buffer'.")
         (mapcar
          (lambda (x) (list 'item x))
          eicq-valid-statuses)))
+
+(defcustom eicq-auto-response-messages-p t
+  "Set this to non-NIL to send automatic messages.
+The automatic messages are those that are sent when somebody
+sends you a message while you are 'away', 'na', 'dnd', or 'occ'."
+  :tag "Send auto-response messages."
+  :type 'boolean
+  :group 'eicq-option)
 
 (defcustom eicq-auto-reply-away
   "I am currently away from ICQ.
@@ -2017,12 +2025,13 @@ Possible type: `eicq-message-types'."
       (setq message (eicq-decode-string (first url)))
       (setq url (eicq-decode-string (second url))))
 
-    (when (member eicq-user-status '("away" "na" "dnd" "occ"))
-      (if eicq-user-auto-away-p
-	  (progn
-	    (setq eicq-auto-reply-p t)
-	    (eicq-idle-reply alias))
-	(eicq-auto-reply alias)))
+    (if eicq-auto-response-messages-p
+	(when (member eicq-user-status '("away" "na" "dnd" "occ"))
+	  (if eicq-user-auto-away-p
+	      (progn
+		(setq eicq-auto-reply-p t)
+		(eicq-idle-reply alias))
+	    (eicq-auto-reply alias))))
 
     (run-hooks 'eicq-new-message-hook)
     
@@ -2954,7 +2963,7 @@ Zero-Padded to make it 4 byte-long."
   '((((background dark))
      (:foreground "green"))
     (((background light))
-     (:foreground "green" :background "black")))
+     (:foreground "green")))
   "Face for ONLINE status."
   :group 'eicq-buddy)
 
@@ -2962,7 +2971,7 @@ Zero-Padded to make it 4 byte-long."
   '((((background dark))
      (:foreground "red"))
     (((background light))
-     (:foreground "red" :background "black")))
+     (:foreground "red")))
   "Face for AWAY status."
   :group 'eicq-buddy)
 
@@ -2970,7 +2979,7 @@ Zero-Padded to make it 4 byte-long."
   '((((background dark))
      (:foreground "orange"))
     (((background light))
-     (:foreground "orange" :background "black")))
+     (:foreground "orange")))
   "Face for OCCUPIED status."
   :group 'eicq-buddy)
 
@@ -2978,7 +2987,7 @@ Zero-Padded to make it 4 byte-long."
   '((((background dark))
      (:foreground "lightblue"))
     (((background light))
-     (:foreground "lightblue" :background "black")))
+     (:foreground "lightblue")))
   "Face for DO NOT DISTURB status."
   :group 'eicq-buddy)
 
@@ -2986,7 +2995,7 @@ Zero-Padded to make it 4 byte-long."
   '((((background dark))
      (:foreground "yellow"))
     (((background light))
-     (:foreground "yellow" :background "black")))
+     (:foreground "yellow")))
   "Face for FREE FOR CHAT status."
   :group 'eicq-buddy)
 
@@ -2994,7 +3003,7 @@ Zero-Padded to make it 4 byte-long."
   '((((background dark))
      (:foreground "pink"))
     (((background light))
-     (:foreground "pink" :background "black")))
+     (:foreground "pink")))
   "Face for NOT AVAILABLE status."
   :group 'eicq-buddy)
 
@@ -3002,7 +3011,7 @@ Zero-Padded to make it 4 byte-long."
   '((((background dark))
      (:foreground "grey"))
     (((background light))
-     (:foreground "grey" :background "black")))
+     (:foreground "grey")))
   "Face for OFFLINE status."
   :group 'eicq-buddy)
 
@@ -3634,7 +3643,7 @@ MESSAGES is an argument list for `format' to be inserted."
   '((((background dark))
      (:foreground "red"))
     (((background light))
-     (:foreground "red" :background "black")))
+     (:foreground "red")))
   "Face for unread log messages."
   :group 'eicq-log)
 
@@ -3642,7 +3651,7 @@ MESSAGES is an argument list for `format' to be inserted."
   '((((background dark))
      (:foreground "turquoise"))
     (((background light))
-     (:foreground "turquoise" :background "black")))
+     (:foreground "turquoise")))
   "Face for read log messages."
   :group 'eicq-log)
 

@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2001-8-18 01:25:25 (steve)>
+;; Last-Modified: <2001-9-2 16:00:02 (steve)>
 ;; Keywords: bug-report
 
 ;; Eicq is free software; you can redistribute it and/or modify
@@ -30,6 +30,7 @@
 ;;; Code:
 (require 'eicq)
 (require 'gnus)
+(require 'message)
 (require 'shadow)
 (require 'font-lock)
 

@@ -1,7 +1,7 @@
 \input texinfo @c eicq.texi   -*-TeXinfo-*-
 @c $Id$
 @c Copyright (C) 2000, 2001 Steve Youngs
-@c Last-Modified: <2001-8-11 15:48:37 (steve)>
+@c Last-Modified: <2001-9-2 15:45:25 (steve)>
 @c %**start of header
 @setfilename eicq.info
 @settitle A Mirabilis ICQ clone for XEmacs
@@ -10,7 +10,7 @@
 @c %**end of header
 @set EDITION 1.1
 @set VERSION 0.2.15
-@set UPDATED Jul 22, 2001
+@set UPDATED Sep 2, 2001
 
 @dircategory Lisp
 @direntry
@@ -156,7 +156,7 @@ Re-start XEmacs and you're ready to rock and roll. @code{M-x eicq-login RET},
 enter your password and away you go.
 
 @menu
-* User Commands::               M-xerie things you can do.
+* User Commands::               M-x'erie things you can do.
 * User Variables::              All the stuff you can setq.
 * Global Key Bindings::         Key bindings common througout Eicq.
 @end menu
@@ -208,7 +208,7 @@ clients think that they need this.
 @item eicq-authorize-alias-around
 
 Have a look at @code{eicq-authorize} and @code{eicq-alias-around}.  This
-is sort of a combination of these two.
+is sort of a combination of these two.  Bound to @kbd{A}.
 
 @cindex alias
 @cindex authorize
@@ -217,7 +217,7 @@ is sort of a combination of these two.
 @item eicq-authorize-alias-here
 
 Have a look at @code{eicq-authorize} and @code{eicq-alias-here}.  This
-is sort of a combination of these two.
+is sort of a combination of these two.  Bound to @kbd{a}.
 
 @cindex bridge
 @cindex eicq-bridge
@@ -226,7 +226,7 @@ is sort of a combination of these two.
 @item eicq-bridge-show-buffer
 
 Switch to the @code{eicq-bridge-buffer} to view debugging info.  You're
-fluent in hex aren't you?
+fluent in hex aren't you?  Bound to @kbd{4}.
 
 @cindex homepage
 @cindex eicq-browse-homepage
@@ -256,21 +256,21 @@ Switch to the @code{eicq-buddy-buffer}.
 @item eicq-buddy-view-active
 
 Change the view of the buddy buffer to show just the buddies that you
-have exchanged messages with in this session.
+have exchanged messages with in this session.  Bound to @kbd{V v}.
 
 @cindex buddy
 @cindex eicq-buddy-buffer
 @item eicq-buddy-view-all
 
 Change the view of the buddy buffer to show all buddies in your contact
-list. 
+list.  Bound to @kbd{V a}.
 
 @cindex buddy
 @cindex eicq-buddy-buffer
 @item eicq-buddy-view-connected
 
 Change the view of the buddy buffer to show only those buddies in your
-contact list that are currently connected to ICQ.
+contact list that are currently connected to ICQ.  Bound to @kbd{V c}
 
 @cindex password
 @item eicq-change-password
@@ -304,17 +304,26 @@ Wanna change something?  Go here.
 
 This will log you off the ICQ server and close all the Eicq buffers.
 
+@cindex email
+@cindex contact
+@cindex email-author
+@item eicq-email-author
+
+Send comments to the Eicq author via email.  Donations of money or beer
+gratiously accepted, flames > /dev/null.
+
 @cindex forward
 @item eicq-forward-message-around
 
 Forward the message around point to somebody else.  It includes a header
-of the original message author's details.
+of the original message author's details.  Bound to @kbd{f}.
 
 @cindex forward
 @item eicq-forward-message-around-without-header
 
 The same as @code{eicq-forward-message-around} except that it doesn't
-include the header of the original message author's details.
+include the header of the original message author's details.  Bound to
+@kbd{F}. 
 
 @item eicq-hex-bin
 
@@ -323,9 +332,182 @@ letter hex characters, which makes reading string from
 @code{eicq-bin-pretty-hex} and network debug convenient.  If the length
 of HEX is odd, ?0 is appended to its end.
 
+@cindex window
+@item eicq-hide-window
 
+Hide all the Eicq buffers.  Bound to @kbd{h}.
+
+@cindex convert
+@cindex buddy
+@cindex contacts
+@item eicq-import-from-licq
+
+Convert your Licq contact list to Eicq's @file{world} format, appending
+it to the end of @file{~/.eicq/world}.  It doesn't convert any ignored
+UINs that you may have in Licq.  And it doesn't make any changes to the
+Licq contact list.
+
+@cindex convert
+@cindex buddy
+@cindex contacts
+@item eicq-import-from-micq
+
+Convert your Micq contact list to Eicq's @file{world} format, appending
+it to the end of @file{~/.eicq/world}.  It doesn't make any changes to
+the Micq contact list.
+
+@cindex log
+@item eicq-log-around
+
+Return the log message around point.  If called interactively, push the
+log message into the kill-ring.
+
+@cindex log
+@item eicq-log-contract
+
+Collapse the log message at point to show just the first line.  Bound to
+@kbd{delete}.
+
+@cindex log
+@item eicq-log-expand
+
+Expand the collapsed log message at point to show the full log message.
+Bound to @kbd{insert}.
+
+@cindex log
+@item eicq-log-mark-read
+
+Mark the log message at point as @code{read}.  Bound to @kbd{c}.
+
+@cindex log
+@item eicq-log-mark-unread
+
+Mark the log message at point as @code{unread}.  Bound to @kbd{v}.
+
+@cindex log
+@item eicq-log-new-file
+
+Rotate the log file, saving it with a unique filename and opening a new
+log file.  
+
+@cindex log
+@item eicq-log-next
+
+Move to the next log message, either read or unread.  Bound to @kbd{N}.
+
+@cindex log
+@item eicq-log-next-unread
+
+Move to the next unread log message.  Bound to @kbd{n}.
+
+@cindex log
+@item eicq-log-previous
+
+Move to the previous log message, either read or unread.  Bound to
+@kbd{P}. 
+
+@cindex log
+@item eicq-log-previous-unread
+
+Move to the previous unread log message.  Bound to @kbd{p}.
+
+@cindex log
+@item eicq-log-show-buffer
+
+Switch to the log buffer.
+
+@cindex login
+@cindex start
+@item eicq-login
+
+OK, this is what you do to get things rockin and rollin.  It'll prompt
+you for your password (if you haven't set @var{eicq-user-password}), log
+you into the ICQ server, and bring up the Eicq buffers.  Oh, and did I
+mention that it'll do the dishes and order out for pizza as well?
+
+This is bound to @kbd{M-` Xi}.
+
+@cindex logout
+@item eicq-logout
+
+Log out of ICQ.  But why would you ever want to do that?  Bound to @kbd{Xo}
+
+@item eicq-query-info-alias-around
+
+Request user info stored on the ICQ server, prompting for an alias/UIN.
+Bound to @kbd{I}
+
+@item eicq-query-info-alias-here
+
+Request user info stored on the ICQ server for the alias/UIN at point.
+Bound to @kbd{i}.
+
+@item eicq-register-new-user
+
+Register a new user on the ICQ server, prompting for a password.
+
+@item eicq-report-bug
+
+In case something goes wrong, please use this to report the bug.  It'll
+send the Eicq bug hunting boys and girls all kinds of useful information
+to help track down the bug.
+
+@item eicq-search
+
+Search for an ICQ user.
+
+@item eicq-search-random-user
+
+Find a random user.
+
+@item eicq-send-message-alias-around
+
+Send a private ICQ message, prompting for the alias/UIN.  Bound to @kbd{M}.
+
+@item eicq-send-message-alias-here
+
+Send a private ICQ message to the alias/UIN at point.  Bound to @kbd{m}.
+
+@item eicq-send-url-alias-around
+
+Send a URL, prompting for an alias/UIN.  Bound to @kbd{U}.
+
+@item eicq-send-url-alias-here
+
+Send a URL to the alias/UIN at point.  Bound to @kbd{u}.
+
+@item eicq-set-random-group
+
+Set a random group for @code{eicq-search-random-user}.  The different
+groups are: "general" "romance" "games" "students" "age-20" "age-30"
+"age-40" "age-50+" "women-wanted" "men-wanted".  You get the idea,
+generally it's where all the, ahem, "lonely" people hang out.
+
+@item eicq-show-window
+
+Show the Eicq buffers.
+
+@item eicq-uin-alias
+
+Return an alias from a UIN.  If called interactively, push the result
+into the kill-ring.
+
+@item eicq-update-meta-info
+
+Update your account details on the ICQ server.  Stuff like name,
+address, occupation, homepage etc.
+
+@item eicq-version
+
+Return the version of Eicq that you are running.  If called with a
+prefix arg, print the version in the current buffer at point.
 
 @end table
+
+@node User Variables, Global Key Bindings, User Commands, Invoking
+@chapter User Variables
+
+The myriad of things that you can tweek.
 
 @node Buddy Buffer, Log Buffer, Invoking, Top
 @chapter Buddy Buffer
@@ -763,7 +945,7 @@ to permit their use in free software.
 @bye
 
 @c Local Variables:
-@c time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
+@c time-stamp-start: "Last-Modified:[   ]+\\\\?[\"<]+"
 @c time-stamp-end: "\\\\?[\">]"
 @c time-stamp-line-limit: 10
 @c time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
