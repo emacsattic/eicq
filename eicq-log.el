@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
 ;; Created:       2002-10-01
-;; Last-Modified: <2002-10-01 10:14:56 (steve)>
+;; Last-Modified: <2002-10-03 14:22:33 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -23,7 +23,7 @@
 ;; for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with XEmacs; see the file COPYING.  If not, write to
+;; along with this program; see the file COPYING.  If not, write to
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
@@ -31,6 +31,10 @@
 ;;; Commentary:
 ;;
 ;; Logs incoming and outgoing events in Eicq.
+
+(eval-and-compile
+  (require 'eicq-menu)
+  (require 'outline))
 
 (defgroup eicq-log nil
   "Message logging preferences."
@@ -157,6 +161,11 @@ Nil means mark read."
   :type 'boolean
   :tag "Save log on exit")
 
+(defcustom eicq-smiley nil
+  "*Non-nil means smileys are enabled."
+  :group 'eicq-interface
+  :type '(choice (item t) (item nil)))
+
 ;;; Internal variables
 
 (defvar eicq-log-buffer nil
@@ -195,6 +204,7 @@ Turning on `eicq-log-mode' runs the hook `eicq-log-mode-hook'."
 
   (run-hooks 'eicq-log-mode-hook))
 
+;;;###autoload
 (defun eicq-log-show-buffer (&optional new no-select)
   "Switch to `eicq-log-buffer'.
 Create buffer with log file if buffer does not exists already.

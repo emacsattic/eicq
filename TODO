@@ -47,10 +47,6 @@ Feel free to do any of these things and send a patch to
 
 ** Openssl support.
 
-** Port icq2tcp to other platforms
-
-	So far we've got GNU/Linux, Cygwin, Solaris & FreeBSD
-
 ** Toolbar
 	
 	Move the help icon to the right hand edge of frame ala w3.

@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
 ;; Created:       2002-04-10
-;; Last-Modified: <2002-07-29 17:53:31 (steve)>
+;; Last-Modified: <2002-10-03 09:41:35 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -25,6 +25,10 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+(eval-and-compile
+  (require 'eicq-log)
+  (require 'eicq-menu))
 
 (defgroup eicq-network nil
   "All things networkish."
@@ -119,6 +123,8 @@ gets encrypted.  Everything else is sent in clear text.")
       (setq pass (cdr pass)))
     (setq eicq-encrypted-password (nreverse encrypted-pass))))
 
+
+(autoload 'eicq-logout "eicq")
 
 (defun eicq-network-mode ()
   "Major mode for network debug output.

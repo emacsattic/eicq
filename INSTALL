@@ -37,16 +37,14 @@ Hold it, you're not finished yet...
 Add the following to your ~/.emacs or ~/.xemacs/init.el
 ---------- cut ----------
 
-(require 'eicq)
-(require 'eicq-toolbar)
 (setq eicq-user-alias "me")
 (eicq-world-update)
 
 ---------- cut ----------
 
-As the user that will be using Eicq, run...
+As the user that will be using Eicq, fire up XEmacs and...
 
-eicq-user-install.sh
+M-x eicq-setup RET
 
 That will set up the needed stuff in your home directory.
 
@@ -65,10 +63,10 @@ line in your ~/.emacs to match.
 
 Ok, now you're done.
 
-Fire up XEmacs, and do 'M-x eicq-login'.  There you go! Use XEmacs
-eicq menu to send messages, authorize, customize... On Windows you
-will at least have to customize the path to the toolbar icons!  Use
-the Eicq/Customize menu.  It's in the 'Option' group under 'Toolbar
-Directory'.  Or simply, 'M-x eicq-customize'.  For new XEmacs users,
-you can press C-h t for a tutorial on XEmacs.  Don't hesitate to
-message me a success report or mail me your screenshots!
+'M-x eicq-login'.  There you go! Use XEmacs eicq menu to send
+messages, authorize, customize... On Windows you will at least have to
+customize the path to the toolbar icons!  Use the Eicq/Customize menu.
+It's in the 'Option' group under 'Toolbar Directory'.  Or simply, 'M-x
+eicq-customize'.  For new XEmacs users, you can press C-h t for a
+tutorial on XEmacs.  Don't hesitate to message me a success report or
+mail me your screenshots!

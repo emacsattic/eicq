@@ -1,3 +1,134 @@
+2002-10-03  Steve Youngs  <youngs@xemacs.org>
+
+	* etc/*: Removed, we do it all in lisp now.
+	
+	* eicq-buddy.el (eicq-buddy-status-color-hint-flag): Removed.
+	(eicq-face-online): Removed.
+	(eicq-face-away): Removed.
+	(eicq-face-occ): Removed.
+	(eicq-face-dnd): Removed.
+	(eicq-face-ffc): Removed.
+	(eicq-face-na): Removed.
+	(eicq-face-offline): Removed.
+	(eicq-buddy-update-status): Removed.
+
+	* NEWS: Updated.
+	
+	* TODO: Updated.
+
+	* INSTALL: Updated.
+
+	* eicq-convert.el: Update requires
+
+	* eicq-report.el (eicq-report-debug): Add missing .el files.
+
+	* eicq-toolbar.el (eicq-icon-directory): Removed.
+	(eicq-use-toolbar): Test for featurep 'xpm.
+	(eicq-password-icon): Create toolbar icon in lisp.
+	(eicq-send-message-here-icon): Ditto.
+	(eicq-send-message-around-icon): Ditto.
+	(eicq-send-url-here-icon): Ditto.
+	(eicq-send-url-around-icon): Ditto.
+	(eicq-query-info-here-icon): Ditto.
+	(eicq-query-info-around-icon): Ditto.
+	(eicq-update-info-icon): Ditto.
+	(eicq-search-icon): Ditto.
+	(eicq-authorize-here-icon): Ditto.
+	(eicq-login-icon): Ditto.
+	(eicq-logout-icon): Ditto.
+	(eicq-disconnect-icon): Ditto.
+	(eicq-new-log-icon): Ditto.
+	(eicq-help-icon): Ditto.
+
+	* .cvsignore: Updated.
+
+	* Makefile (DATA_DIR): Removed.
+	(BIN_DIR): Removed.
+	(BIN_STAGING): Removed.
+	(DATA_STAGING): Removed.
+	(INSTALL): Remove the BIN and DATA stuff.
+	(SOURCES): Use a wildcard instead of listing each file.
+
+	* eicq-menu.el (eicq-main-map): Autoload it.
+	(eicq-global-map-set): Ditto.
+	(eicq-global-key-prefix): Ditto.
+	(eicq-log-mode-map): Ditto.
+	(eicq-alias-map): Ditto.
+	(eicq-url-map): Ditto.
+	(eicq-buddy-mode-map): Ditto.
+
+	* eicq-world.el (eicq-world): New.
+	(eicq-all-aliases): New.
+	(eicq-world-rc-regexp): New.
+	(Format): New.
+	(unknown)): New.
+	(unknown-2)): New.
+	(eicq-do-meta-user-work): New.
+	(eicq-do-meta-user-more): New.
+	(Language-1): New.
+	(Language-2): New.
+	(Language-3): New.
+	(eicq-do-meta-user-about): New.
+	(eicq-do-meta-user-interest): New.
+	(eicq-do-meta-user-background): New.
+	(eicq-do-meta-user-picture): New.
+	(eicq-do-meta-user-found): New.
+	(eicq-do-meta-user-update-general-confirm): New.
+	(eicq-do-meta-user-update-work-confirm): New.
+	(eicq-do-meta-user-update-more-confirm): New.
+	(eicq-do-meta-user-update-about-confirm): New.
+	(eicq-do-meta-user-update-security-confirm): New.
+	(eicq-do-meta-user-password): New.
+	(eicq-update-meta-info): New.
+
+	* eicq-setup.el: New.
+
+	* eicq-status.el (eicq-buddy-status-color-hint-flag): New.
+	(eicq-status-window-height): New.
+	(eicq-valid-statuses): New.
+	(eicq-user-initial-status): New.
+	(eicq-status-update-hook): New.
+	(eicq-face-online): New.
+	(eicq-face-away): New.
+	(eicq-face-occ): New.
+	(eicq-face-dnd): New.
+	(eicq-face-ffc): New.
+	(eicq-face-na): New.
+	(eicq-face-offline): New.
+	(eicq-statuses): New.
+	(eicq-status-face): New.
+	(eicq-status-bin): New.
+	(eicq-status-auto-reply): New.
+	(eicq-status-idle-reply): New.
+	(eicq-status-name): New.
+	(eicq-buddy-update-status): New.
+	(eicq-user-status): New.
+	(eicq-pack-status-change): New.
+	(eicq-do-status-update): New.
+	(eicq-change-status): New.
+	(eicq-status-buffer): New.
+	(eicq-status-show-buffer): New.
+
+	* eicq.el (eicq-meta): Removed.
+	(eicq-user-meta-nickname): Removed.
+	(eicq-user-meta-firstname): Removed.
+	(eicq-user-meta-lastname): Removed.
+	(eicq-user-meta-primary-email): Removed.
+	(eicq-user-meta-secondary-email): Removed.
+	(eicq-user-meta-old-email): Removed.
+	(eicq-auto-response-messages-p):
+	(eicq-valid-statuses): Removed.
+	(eicq-user-initial-status): Removed.
+	(eicq-new-message-hook): defvar -> defcustom
+	(eicq-status-window-height): Removed.
+	(eicq-read-message-hook): defvar -> defcustom
+	(eicq-user-status): Removed.
+	(eicq-system-message-hook): defvar -> defcustom
+	(eicq-status-update-hook): Removed.
+	(eicq-load-hook): New.
+	(eicq-monthnames): Removed.
+	(eicq-country-code): Removed.
+
 2002-10-01  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq-buddy.el: New file.

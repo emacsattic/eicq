@@ -36,12 +36,6 @@ PREFIX = /usr/local/lib/xemacs/site-packages
 # Where the lisp files go.
 LISP_DIR = $(PREFIX)/lisp/$(PACKAGE)
 
-# Where the toolbar images go.
-DATA_DIR = $(PREFIX)/etc/$(PACKAGE)
-
-# Where the binary and user install script go.
-BIN_DIR = $(PREFIX)/lib-src
-
 # Where the info files go.
 INFO_DIR = $(PREFIX)/info
 
@@ -49,16 +43,12 @@ INFO_DIR = $(PREFIX)/info
 # PC's you can 'make pkg'.  The 'pkg' target uses these directories to
 # build the tarball.
 STAGING = ../build-pkg
-BIN_STAGING = $(STAGING)/lib-src
-DATA_STAGING = $(STAGING)/etc/$(PACKAGE)
 INFO_STAGING = $(STAGING)/info
 LISP_STAGING = $(STAGING)/lisp/$(PACKAGE)
 
 # Programs and their flags.
 EMACS = xemacs
 EMACS_FLAGS = -batch
-# CC = gcc
-# CFLAGS = -O2 -Wall
 INSTALL = install -o 0 -g 0
 # Solaris #  Comment out above line and uncomment the line below
 # INSTALL = install -u 0 -g 0
@@ -71,15 +61,10 @@ TAR_FLAGS = czf
 ##                No User Configurable Items Below Here                   ##
 ############################################################################
 
-# BIN = icq2tcp
-USERSH = eicq-user-install.sh
-SOURCES = eicq-comm.el eicq.el eicq-toolbar.el eicq-report.el eicq-convert.el \
-	eicq-wharf.el eicq-menu.el eicq-log.el eicq-buddy.el eicq-world.el \
-	eicq-v8proto.el
+SOURCES = $(wildcard ./eicq*.el)
 OBJECTS = $(SOURCES:.el=.elc)
 EXTRA_SRC = ChangeLog INSTALL NEWS README TODO
 EXTRA_OBJ = $(wildcard ./auto-autoloads.el*) $(wildcard ./custom-load.el*)
-DATA_FILES = $(wildcard ./etc/$(PACKAGE)/*.xpm) ./etc/$(PACKAGE)/world
 TEXI_FILES = $(PACKAGE).texi
 INFO_FILES = $(TEXI_FILES:.texi=.info)
 
@@ -91,14 +76,6 @@ AUTO_PRELOADS = -eval \("setq autoload-package-name \"$(PACKAGE)\""\)
 .SUFFIXES: .info .texi .elc .el
 
 all:: autoloads $(OBJECTS) customloads texinfo
-
-# $(BIN): $(BIN).c
-# 	$(CC) $(CFLAGS) -o $(BIN) $(BIN).c
-# Solaris # Comment out the above and uncomment the following.
-# $(BIN): $(BIN).c
-# 	$(CC) $(CFLAGS) -o $(BIN) $(BIN).c -lsocket -lnsl
-
-# bin: $(BIN)
 
 autoloads: auto-autoloads.el
 
@@ -121,24 +98,15 @@ custom-load.el : $(SOURCES)
 	$(EMACS) $(EMACS_FLAGS) -f batch-byte-compile ./custom-load.el
 
 install: all
-	$(INSTALL) -d $(BIN_DIR) $(DATA_DIR) $(INFO_DIR) $(LISP_DIR)
-	# $(INSTALL) -s -m 755 $(BIN) $(BIN_DIR)
-	$(INSTALL) -m 755 $(USERSH) $(BIN_DIR)
-	$(INSTALL) -m 644 $(DATA_FILES) $(DATA_DIR)
+	$(INSTALL) -d $(INFO_DIR) $(LISP_DIR)
 	$(INSTALL) -m 644 $(INFO_FILES) $(INFO_DIR)
 	$(INSTALL) -m 644 $(SOURCES) $(EXTRA_SRC) $(OBJECTS) $(EXTRA_OBJ) \
 		$(LISP_DIR)
 
 # Solaris # Comment out the above and uncomment the following.
 # install: all
-# 	for file in $(BIN_DIR) $(DATA_DIR) $(INFO_DIR) $(LISP_DIR); \
+# 	for file in $(INFO_DIR) $(LISP_DIR); \
 # 	  do $(INSTALL) -d $$file; \
-# 	done
-# 	for file in $(USERSH) $(BIN); \
-# 	  do $(INSTALL) -f $(BIN_DIR) -m 755 $$file; \
-# 	done
-# 	for file in $(DATA_FILES); \
-# 	  do $(INSTALL) -f $(DATA_DIR) -m 644 $$file; \
 # 	done
 # 	for file in $(INFO_FILES); \
 # 	  do $(INSTALL) -f $(INFO_DIR) -m 644 $$file; \
@@ -149,11 +117,7 @@ install: all
 
 
 pkg: all
-	$(PKG_INSTALL) -d $(STAGING) $(BIN_STAGING) $(DATA_STAGING) \
-		$(INFO_STAGING) $(LISP_STAGING)
-	# $(PKG_INSTALL) -s -m 755 $(BIN) $(BIN_STAGING)
-	$(PKG_INSTALL) -m 755 $(USERSH) $(BIN_STAGING)
-	$(PKG_INSTALL) -m 644 $(DATA_FILES) $(DATA_STAGING)
+	$(PKG_INSTALL) -d $(STAGING) $(INFO_STAGING) $(LISP_STAGING)
 	$(PKG_INSTALL) -m 644 $(INFO_FILES) $(INFO_STAGING)
 	$(PKG_INSTALL) -m 644 $(SOURCES) $(EXTRA_SRC) $(OBJECTS) $(EXTRA_OBJ) \
 		$(LISP_STAGING)
@@ -163,8 +127,8 @@ pkg: all
 upgrade: uninstall install
 
 uninstall:: 
-	rm -rf $(DATA_DIR) $(LISP_DIR)
-	rm -f $(INFO_DIR)/$(INFO_FILES) $(BIN_DIR)/$(USERSH)
+	rm -rf $(LISP_DIR)
+	rm -f $(INFO_DIR)/$(INFO_FILES)
 
 clean::
 	rm -f $(OBJECTS) $(INFO_FILES) \

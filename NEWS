@@ -1,5 +1,17 @@
 -*- Outline -*-
 
+* 0.2.17 to 0.5.0
+
+- Major cleanup and restructuring (Me)
+	Lots and lots of stuff has changed, see the ChangeLog for all
+	the gory details.  Oh, it would be a REALLY GOOD IDEA if you
+	remove any previous version of Eicq BEFORE you install this
+	one.  Yes, it's changed THAT much.
+
+	We haven't achieved ICQv8 protocol compliance yet, but
+	hopefully, we'll be at least partially there with this
+	release. 
+
 * 0.2.16 to 0.2.17
 
 - Auto-reconnect (Me)

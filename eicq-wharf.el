@@ -3,12 +3,12 @@
 ;; Copyright (C) 2001 Steve Youngs, Erik Arneson
 
 ;; RCS: $Id$
-;; Author: Erik Arneson <erik@aarg.net>
-;; Maintainer: Erik Arneson <erik@aarg.net>
-;; Created: Aug 10, 2001
-;; Last-Modified: <2002-5-12 09:44:57 (steve)>
-;; Homepage: http://eicq.sf.net/
-;; Keywords: comm ICQ
+;; Author:        Erik Arneson <erik@aarg.net>
+;; Maintainer:    Erik Arneson <erik@aarg.net>
+;; Created:       Aug 10, 2001
+;; Last-Modified: <2002-10-03 14:59:21 (steve)>
+;; Homepage:      http://eicq.sf.net/
+;; Keywords:      comm ICQ
 
 ;; This file is part of Eicq.
 
@@ -23,11 +23,9 @@
 ;; for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with XEmacs; see the file COPYING.  If not, write to
+;; along with this program; see the file COPYING.  If not, write to
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
-
-(require 'eicq)
 
 (defvar eicq-wharf-frame nil
   "Frame in which EicqWharf is running.")
@@ -63,6 +61,7 @@
 you use a small but readable font."
   :group 'eicq-wharf)
 
+;;;###autoload
 (defcustom eicq-wharf-frame-use-p nil
   "If non-NIL, start up the EicqWharf mini-frame."
   :type 'boolean
@@ -137,5 +136,5 @@ you use a small but readable font."
 ;time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
 ;time-stamp-end: "\\\\?[\">]"
 ;time-stamp-line-limit: 10
-;time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
+;time-stamp-format: "%4y-%02m-%02d %02H:%02M:%02S (%u)"
 ;End: 

@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
 ;; Created:       2002-10-01
-;; Last-Modified: <2002-10-01 13:22:38 (steve)>
+;; Last-Modified: <2002-10-03 14:21:59 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -23,22 +23,24 @@
 ;; for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with XEmacs; see the file COPYING.  If not, write to
+;; along with this program; see the file COPYING.  If not, write to
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
+
+(eval-and-compile
+  (require 'eicq-menu)
+  (require 'eicq-status)
+  (require 'eicq-world))
+
 
 (defgroup eicq-buddy nil
   "Contact list preferences."
   :group 'eicq)
 
+;;;###autoload
 (defcustom eicq-buddy-window-width 20
   "*Width of window for `eicq-buddy-buffer'."
   :group 'eicq-interface)
-
-(defcustom eicq-buddy-status-color-hint-flag t
-  "*Non-nil means put status color hints."
-  :type 'boolean
-  :group 'eicq-buddy)
 
 (defcustom eicq-buddy-view 
   'eicq-connected-aliases
@@ -54,61 +56,6 @@ See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
                  (item eicq-active-aliases))
   :initialize 'custom-initialize-default)
 
-(defface eicq-face-online
-  '((((background dark))
-     (:foreground "green"))
-    (((background light))
-     (:foreground "green")))
-  "Face for ONLINE status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-away
-  '((((background dark))
-     (:foreground "red"))
-    (((background light))
-     (:foreground "red")))
-  "Face for AWAY status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-occ
-  '((((background dark))
-     (:foreground "orange"))
-    (((background light))
-     (:foreground "orange")))
-  "Face for OCCUPIED status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-dnd
-  '((((background dark))
-     (:foreground "lightblue"))
-    (((background light))
-     (:foreground "lightblue")))
-  "Face for DO NOT DISTURB status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-ffc
-  '((((background dark))
-     (:foreground "yellow"))
-    (((background light))
-     (:foreground "yellow")))
-  "Face for FREE FOR CHAT status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-na
-  '((((background dark))
-     (:foreground "pink"))
-    (((background light))
-     (:foreground "pink")))
-  "Face for NOT AVAILABLE status."
-  :group 'eicq-buddy)
-
-(defface eicq-face-offline
-  '((((background dark))
-     (:foreground "grey"))
-    (((background light))
-     (:foreground "grey")))
-  "Face for OFFLINE status."
-  :group 'eicq-buddy)
 
 (defface eicq-face-selected
   '((((background dark))
@@ -120,6 +67,7 @@ See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
 
 ;;; Internal variables
 
+;;;###autoload
 (defvar eicq-buddy-buffer nil
   "Buffer for contact list.")
 
@@ -165,6 +113,7 @@ Turning on `eicq-buddy-mode' runs the hook `eicq-buddy-mode-hook'."
   (set-default symbol value)
   (eicq-buddy-show-buffer 'new 'no-select))
 
+;;;###autoload
 (defun eicq-buddy-show-buffer (&optional new no-select)
   "Switch to `eicq-buddy-buffer'.
 Create buffer if buffer does not exists already or
@@ -202,37 +151,6 @@ See `eicq-buddy-view' and `eicq-connected-aliases'."
 See `eicq-buddy-view' and `eicq-active-aliases'."
   (interactive)
   (eicq-buddy-view-set 'eicq-buddy-view 'eicq-active-aliases))
-
-(defun eicq-buddy-update-status (alias status)
-  "Update ALIAS with new STATUS."
-  ;; update alias variables
-  (unless (member status (mapcar 'second eicq-statuses))
-    (push (cons 'unknown-status eicq-recent-packet)
-          eicq-error-packets)
-    (eicq-log-error "Unknown status: %s" status)
-    (setq status "online"))             ; assumed online
-
-  (unless (equal status (eicq-world-getf alias 'status))
-    (eicq-log-buddy-status alias "*** %s" status)
-    (eicq-world-putf alias 'status status)
-    (if (string= status "offline")
-	(if (member alias eicq-connected-aliases)
-	    (setq eicq-connected-aliases
-		  (delete alias eicq-connected-aliases))
-	  (eicq-log-buddy-status alias "*** has been invisible"))
-      ;; if not offline
-      (add-to-list 'eicq-connected-aliases alias))
-
-    ;; update buffer
-
-    ;; view != all + offline -> delete
-    ;; view = all + offline -> offline-face
-    (if (and (string= status "offline")
-	     (not (eq eicq-buddy-view 'eicq-all-aliases)))
-	(eicq-buddy-update-face alias 'delete)
-      (if (or (member alias (symbol-value eicq-buddy-view))
-	      (string= status "offline"))
-	  (eicq-buddy-update-face alias)))))
 
 (defun eicq-buddy-update-face (alias &optional delete)
   "Update face of ALIAS.

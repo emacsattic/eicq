@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
 ;; Created:       2002-10-01
-;; Last-Modified: <2002-10-01 14:02:20 (steve)>
+;; Last-Modified: <2002-10-03 12:29:12 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -23,13 +23,28 @@
 ;; for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with XEmacs; see the file COPYING.  If not, write to
+;; along with this program; see the file COPYING.  If not, write to
 ;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
 
 ;;; Commentary:
 ;;
+
+
+(eval-when-compile
+  (require 'eicq-meta)
+  (require 'eicq-menu)
+  (autoload 'eicq-search-by-uin "eicq" nil t)
+  (autoload 'eicq-buddy-show-buffer "eicq-buddy" nil t)
+  (autoload 'eicq-send "eicq")
+  (autoload 'eicq-pack "eicq")
+  (autoload 'eicq-uin-bin "eicq")
+  (autoload 'eicq-process-alias-input "eicq")
+  (autoload 'eicq-buddy-update-face "eicq-buddy")
+  (autoload 'eicq-completing-aliases "eicq")
+  (autoload 'eicq-valid-uin-p "eicq")
+  (autoload 'eicq-alias-bin "eicq"))
 
 (defvar eicq-world-rc-filename "~/.eicq/world"
   "*Filename for resource file.")
@@ -51,6 +66,14 @@ Updated by `eicq-world-update'.")
 The mere purpose is to speed up operations.
 Updated by `eicq-world-update'.")
 
+(defvar eicq-world nil
+  "List of alias, uin, and plist.")
+
+(defvar eicq-all-aliases nil
+  "All aliases in `eicq-world'.
+The mere purpose is to speed up operations.
+Updated by `eicq-world-update'.")
+
 (defvar eicq-add-user-p nil)
 (defvar eicq-new-buddy nil)
 (defvar eicq-new-uin nil)
@@ -61,6 +84,16 @@ Updated by `eicq-world-update'.")
   (setq eicq-new-uin uin)
   (setq eicq-add-user-p t)
   (eicq-search-by-uin uin))
+
+(defvar eicq-world-rc-regexp
+  "^:icq[ \t]+\\([0-9]+\\)[ \t]+\\([^:]+?\\)[ \t]?\\( :.*\\)*$"
+  "*Regular expression for rc file.
+Format: :icq uin alias group
+Group is prefixed by a colon :.  Anything between uin and group including
+white spaces is alias.  For example,
+
+:icq 409533 fire :linux :eicq
+:icq 123456 the hatter :unreal")
 
 (defun eicq-add-new-user-to-buddy-buffer ()
   "Push the nick name from `eicq-add-user' into the buddy buffer.
@@ -122,21 +155,6 @@ See `eicq-process-alias-input'."
          (eicq-world-putf x 'selected state)
          (eicq-buddy-update-face x)))
 
-;;; Code - world:
-
-;; Currently eicq supports only external resource file method of storing
-;; buddy info (uin, alias, and properties). Certainly it can be extended
-;; but keep all the interface variables and functions in this section. See
-;; section "world by rc"
-
-(defvar eicq-world nil
-  "List of alias, uin, and plist.")
-
-(defvar eicq-all-aliases nil
-  "All aliases in `eicq-world'.
-The mere purpose is to speed up operations.
-Updated by `eicq-world-update'.")
-
 (defun eicq-world-getf (alias tag)
   "For ALIAS get property of TAG.
 If TAG is 'all, return the plist."
@@ -181,18 +199,7 @@ If called interactively, display and push alias into `kill-ring'."
       (kill-new alias))
     alias))
 
-;;; Code - world by rc:
-
-(defvar eicq-world-rc-regexp
-  "^:icq[ \t]+\\([0-9]+\\)[ \t]+\\([^:]+?\\)[ \t]?\\( :.*\\)*$"
-  "*Regular expression for rc file.
-Format: :icq uin alias group
-Group is prefixed by a colon :.  Anything between uin and group including
-white spaces is alias.  For example,
-
-:icq 409533 fire :linux :eicq
-:icq 123456 the hatter :unreal")
-
+;;;###autoload
 (defun eicq-world-update ()
   "Read `eicq-world-rc-filename' and update various user variables.
 Need to call this whenever RC is modified and to be updated.
@@ -237,8 +244,6 @@ RC file is not closed if it is the buffer of current window or it is modified."
   "Return local info of buddy ALIAS."
   ;; TODO
   (assoc alias eicq-world))
-
-;; world mode
 
 (defun world-mode ()
   "eicq resource file mode.

@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <youngs@xemacs.org>
 ;; Maintainer:    Steve Youngs <youngs@xemacs.org>
 ;; Created:       2002-10-01
-;; Last-Modified: <2002-10-01 09:40:41 (steve)>
+;; Last-Modified: <2002-10-03 12:40:12 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -26,6 +26,7 @@
 ;; along with this program; if not, write to the Free Software
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
+;;;###autoload
 (defvar eicq-main-map
   (let ((map (make-keymap 'eicq-main-map)))
     (suppress-keymap map)
@@ -56,11 +57,13 @@
     map)
   "Keyboard map common for `eicq-log-mode-map' and `eicq-buddy-mode-map'.")
 
+;;;###autoload
 (defun eicq-global-map-set (&optional symbol value)
   "Set `eicq-global-key-prefix'.
 WARNING: Bindings with old prefix is not deleted.  Fixable?"
   (define-key global-map value eicq-main-map))
 
+;;;###autoload
 (defcustom eicq-global-key-prefix [(meta \`)]
   "*Prefix for all key macros in global."
   :group 'eicq-option
@@ -124,6 +127,7 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
 (easy-menu-define
  eicq-buddy-easymenu nil "Eicq Buddy" eicq-log-menu)
 
+;;;###autoload
 (defvar eicq-log-mode-map
   (let ((map (make-sparse-keymap 'eicq-log-mode-map)))
     (set-keymap-parents map (list eicq-main-map))
@@ -166,12 +170,14 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
 (easy-menu-define
  eicq-log-easymenu nil "Eicq Log" eicq-buddy-menu)
 
+;;;###autoload
 (defvar eicq-alias-map
   (let ((map (make-sparse-keymap 'eicq-alias-map)))
     (define-key map [button2] 'eicq-send-message-via-mouse)
     map)
   "Keymap for alias extent.")
 
+;;;###autoload
 (defvar eicq-url-map
   (let ((map (make-sparse-keymap 'eicq-url-map)))
     (define-key map [button2] 'browse-url-at-mouse)
@@ -180,6 +186,7 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
     map)
   "Keymap for URL extent.")
 
+;;;###autoload
 (defvar eicq-buddy-mode-map
   (let ((map (make-sparse-keymap 'eicq-buddy-mode-map)))
     (set-keymap-parents map (list eicq-main-map))

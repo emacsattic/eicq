@@ -3,10 +3,10 @@
 ;; Copyright (C) 2001 Steve Youngs
 
 ;; RCS: $Id$
-;; Author: Steve Youngs <youngs@xemacs.org>
-;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2002-10-1 12:28:01 (steve)>
-;; Keywords: bug-report
+;; Author:        Steve Youngs <youngs@xemacs.org>
+;; Maintainer:    Steve Youngs <youngs@xemacs.org>
+;; Last-Modified: <2002-10-03 16:48:52 (steve)>
+;; Keywords:      bug-report
 
 ;; This file is part of Eicq.
 
@@ -30,15 +30,22 @@
 ;; To send general comments/questions use: M-x eicq-email-author
 
 ;;; Code:
-(require 'eicq)
-(require 'gnus)
-(require 'message)
-(require 'shadow)
-(require 'font-lock)
+
+(eval-when-compile
+  (autoload 'eicq-version "eicq" 
+    "Version of eicq you are currently using." t nil)
+  (require 'sendmail)
+  (require 'shadow)
+  (require 'gnus-msg)
+  (require 'gnus-util)
+  (require 'message))
 
 ;; To keep the byte-compiler from spewing out warnings.
-(defvar after-sep-pos)
-(defvar final-resting-place)
+(eval-when-compile
+  (defvar after-sep-pos)
+  (defvar final-resting-place)
+  (defvar eicq-version))
+
 
 ;;; Variables
 
@@ -100,9 +107,10 @@
   "Go through the Eicq source files and report what variables have been changed.
 The source file has to be in the load path."
   (interactive)
-  (let ((files '("eicq.el" "eicq-toolbar.el" "eicq-report.el"
-		 "eicq-wharf.el" "eicq-comm.el" "eicq-menu.el"
-		 "eicq-log.el" "eicq-buddy.el" "eicq-world.el"))
+  (let ((files '("eicq-buddy.el" "eicq-comm.el" "eicq-log.el" 
+		 "eicq-menu.el" "eicq-meta.el" "eicq-report.el" 
+		 "eicq-status.el" "eicq-toolbar.el" "eicq-wharf.el" 
+		 "eicq-world.el" "eicq.el"))
 	(point (point))
 	file expr olist sym)
     (message "Please wait while we snoop your variables...")
@@ -327,5 +335,5 @@ Uses Gnus if available, otherwise standard mail command."
 ;time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
 ;time-stamp-end: "\\\\?[\">]"
 ;time-stamp-line-limit: 10
-;time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
+;time-stamp-format: "%4y-%02m-%02d %02H:%02M:%02S (%u)"
 ;End: 
