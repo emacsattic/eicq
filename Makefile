@@ -63,6 +63,7 @@ INFO_FILES = $(wildcard ./$(PACKAGE).info*)
 
 EICQ_INFO_COMPILE = ./infohack.el 
 PRELOADS = -eval \("push default-directory load-path"\)
+AUTO_PRELOADS = -eval \("setq autoload-package-name \"$(PACKAGE)\""\)
 
 .SUFFIXES:
 .SUFFIXES: .info .texi .elc .el
@@ -83,7 +84,7 @@ texinfo: $(TEXI_FILES)
 	$(EMACS) $(EMACS_FLAGS) -l $(EICQ_INFO_COMPILE) -f batch-makeinfo $<
 
 auto-autoloads.el : $(SOURCES)
-	$(EMACS) $(EMACS_FLAGS) -f batch-update-directory ./
+	$(EMACS) $(EMACS_FLAGS) $(AUTO_PRELOADS) -f batch-update-directory ./
 	$(EMACS) $(EMACS_FLAGS) -f batch-byte-compile ./auto-autoloads.el
 
 custom-load.el : $(SOURCES)
