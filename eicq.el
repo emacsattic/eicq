@@ -3061,8 +3061,7 @@ See `eicq-auto-away'."
 Nil means leave messages on server and you will receive the same offline
 messages again next time you login."
   :group 'eicq-option
-  :type (choice (item t) (item ask) (item nil)))
-
+  :type '(choice (item t) (item ask) (item nil)))
 
 (defun eicq-delete-offline-messages ()
   "Delete offline messages from ICQ server.
