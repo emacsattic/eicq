@@ -38,16 +38,17 @@ CC = g++
 CFLAGS = -O2 -Wall -static
 STRIP = /usr/bin/strip
 
-
+USERSH = eicq-user-install.sh
 BIN_BASE = udp2tcp
+LIBSRC_FILES = $(BIN) $(USERSH)
+
+include ../../XEmacs.rules
+
 ifeq ($(XEMACS_NATIVE_NT),t)
 BIN = $(BIN_BASE).exe
 else
 BIN = $(BIN_BASE)
 endif
-USERSH = eicq-user-install.sh
-
-LIBSRC_FILES = $(BIN) $(USERSH)
 
 EXTRA_SOURCES = README NEWS INSTALL TODO $(BIN_BASE).cc
 
@@ -55,7 +56,6 @@ EXTRA_OBJS = $(BIN)
 
 GENERATED += custom-load.elc
 
-include ../../XEmacs.rules
 
 all:: $(BIN) $(ELCS) auto-autoloads.elc custom-load.elc $(INFO_FILES)
 

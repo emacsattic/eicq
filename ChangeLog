@@ -1,5 +1,8 @@
 2001-03-02  Steve Youngs  <youngs@xemacs.org>
 
+	* Makefile: Re-shuffle the order of the variables so everything
+	gets installed properly.  This supercedes the change I made earlier.
+
 	* INSTALL: Update.
 
 	* NEWS: Ditto.
