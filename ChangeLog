@@ -1,3 +1,9 @@
+2001-08-06  Erik Arneson  <erik@aarg.net>
+
+	* eicq-convert.el: New File.
+	(eicq-import-from-licq): New.  Converts an LICQ configuration to
+	an EICQ 'world' file.
+
 2001-08-02  Thorsten Bonow  <thorsten.bonow@post.rwth-aachen.de>
 
 	* Makefile: Add program locations/path for Windows/Cygwin.
