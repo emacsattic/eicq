@@ -1,5 +1,7 @@
 2001-04-28  Steve Youngs  <youngs@xemacs.org>
 
+	* Version 0.2.13 released.
+
 	* eicq.el (eicq-message-sound): Removed, put into alist.
 	(eicq-chat-sound): Ditto.
 	(eicq-url-sound): Ditto.
