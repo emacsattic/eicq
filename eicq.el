@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-7 15:39:40 (steve)>
-;; Version: 0.2.15pre3
+;; Last-Modified: <2001-8-9 12:13:41 (steve)>
+;; Version: 0.2.15pre4
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.15pre3"
+(defconst eicq-version "0.2.15pre4"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -1931,8 +1931,8 @@ Possible type: `eicq-message-types'."
       (setq message (eicq-decode-string (first url)))
       (setq url (eicq-decode-string (second url))))
 
-    ;; TODO
-    ;; (eicq-auto-reply alias)
+    (when (member eicq-user-status '("away" "na" "dnd" "occ"))
+      (eicq-auto-reply alias))
 
     (run-hooks 'eicq-do-message-hook)
     

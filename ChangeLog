@@ -1,3 +1,10 @@
+2001-08-09  Steve Youngs  <youngs@xemacs.org>
+
+	* Makefile (CC): Change to 'gcc'.
+
+	* eicq.el (eicq-do-message-helper): Auto-response messages
+	now work.
+
 2001-08-08  Erik Arneson  <erik@aarg.net>
 
 	* Makefile ($(BIN)): Fixed to compile icq2tcp.c instead of the C++

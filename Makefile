@@ -55,7 +55,7 @@ LISP_STAGING = $(STAGING)/lisp/$(PACKAGE)
 # Programs and their flags.
 EMACS = xemacs
 EMACS_FLAGS = -batch
-CC = g++
+CC = gcc
 CFLAGS = -O2 -Wall
 INSTALL = install -o 0 -g 0
 PKG_INSTALL = install
