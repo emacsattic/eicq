@@ -274,9 +274,9 @@ main(argc, argv)
     struct sockaddr_in udp_local_addr, udp_remote_addr, 
         tcp_local_addr, tcp_remote_addr;
     struct hostent *udp_host;
-    char *udp_remote_host = argv[1];
-    int udp_remote_port = atoi(argv[2]);
-    int tcp_local_port = atoi(argv[3]);
+    char *udp_remote_host;
+    int udp_remote_port;
+    int tcp_local_port;
 #ifdef __CYGWIN__
     int sin_size;
 #else
@@ -302,6 +302,11 @@ Usuage: %s [udp_host] [udp_remote_port] [tcp_local_port]\n\
 For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
         exit(1);
     };
+
+    udp_remote_host = argv[1];
+    udp_remote_port = atoi(argv[2]);
+    tcp_local_port = atoi(argv[3]);
+
   
     printf("creating....\n");
     udp_sock = socket(AF_INET, SOCK_DGRAM, 0);
