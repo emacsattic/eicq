@@ -1,3 +1,7 @@
+2001-05-05  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-status-show-buffer): Change name of buffer to "*Status*".
+
 2001-05-02  Steve Youngs  <youngs@xemacs.org>
 
 	* Makefile (AUTO_PRELOADS): New.

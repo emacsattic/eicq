@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-4-28 16:48:43 (steve)>
+;; Last-Modified: <2001-5-5 01:23:34 (steve)>
 ;; Version: 0.2.13
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
@@ -3811,7 +3811,7 @@ Don't select status window if NO-SELECT is non-nil."
   (interactive)
   (when (or (not (buffer-live-p eicq-status-buffer))
             new)
-    (setq eicq-status-buffer (get-buffer-create "*Statuses*"))
+    (setq eicq-status-buffer (get-buffer-create "*Status*"))
     (set-buffer eicq-status-buffer)
     (and (fboundp 'set-specifier)
 	 (set-specifier horizontal-scrollbar-visible-p nil 
