@@ -1,12 +1,14 @@
+2002-02-17  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-version): Boost it up to version 0.5.0 as the
+	start of the ICQv7/8 series.
+	(eicq-server-hostname): Change to "login.icq.com".
+	(eicq-server-port): Change to 5190.
+
 2002-01-11  Steve Youngs  <youngs@xemacs.org>
 
 	* TODO: Add items about	PostgreSQL, X-Faces, Balloon-help
 	dialogs. 
-
-2002-01-03  Steve Youngs  <youngs@xemacs.org>
-
-	* README: Update, just testing patcher.
-	Another test.
 
 2001-12-24  Steve Youngs  <youngs@xemacs.org>
 

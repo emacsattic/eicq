@@ -1,14 +1,14 @@
 ;;; eicq.el --- ICQ client for Emacs
 
 ;; Copyright (C) 1999 by Stephen Tse
-;; Copyright (C) 2000, 2001 Steve Youngs
+;; Copyright (C) 2000, 2001, 2002, Steve Youngs
 
 ;; RCS: $Id$
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-29 09:27:56 (steve)>
-;; Version: 0.2.17
+;; Last-Modified: <2002-2-17 11:46:48 (steve)>
+;; Version: 0.5.0
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.17"
+(defconst eicq-version "0.5.0"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -415,11 +415,11 @@ by `eicq-bridge-hostname' and `eicq-bridge-port'."
   :group 'eicq-option
   :type 'boolean)
 
-(defcustom eicq-server-hostname "icq1.mirabilis.com"
+(defcustom eicq-server-hostname "login.icq.com"
   "*Hostname or IP address of Mirabilis ICQ server."
   :group 'eicq-option)
 
-(defcustom eicq-server-port 4000
+(defcustom eicq-server-port 5190
   "*Port of Mirabilis ICQ server."
   :group 'eicq-option)
 
