@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-5-20 15:34:18 (steve)>
-;; Version: 0.2.13
+;; Last-Modified: <2001-6-7 00:09:40 (steve)>
+;; Version: 0.2.14
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
 
@@ -51,8 +51,10 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.13"
+(defconst eicq-version "0.2.14"
   "Version of eicq you are currently using.")
+
+;; Customize Groups.
 
 (defgroup eicq nil
   "Mirabilis ICQ communication client."
@@ -87,36 +89,7 @@ Run `eicq-update-meta-info' after changing any of these variables."
   "Change the look and \"feel\"."
   :group 'eicq)
 
-(defun eicq-version ()
-  "Return the version of eicq you are currently using."
-  (interactive)
-  (message "eicq version %s" eicq-version))
-
-;;; Code - compatibility:
-
-;; MULE compatibility functions for 20.4
-
-(defun-when-void encode-coding-string (string encoding-system)
-  "Stub for compatibility with MULE."
-  string)
-
-(defun-when-void decode-coding-string (string encoding-system)
-  "Stub for compatibility with MULE."
-  string)
-
-;;; Code - user info:
-
-(defcustom eicq-user-alias "me"
-  "*Your alias in `eicq-world'.
-Run `eicq-world-update' after modifying this variable."
-  :group 'eicq-info)
-
-(defcustom eicq-user-password nil
-  "*Password for your ICQ account.
-Nil means prompt for entering password every time you login."
- :group 'eicq-info)
-
-;;; Code - user meta info:
+;; Customize.
 
 (defcustom eicq-user-meta-nickname "e-i-c-q"
   "*Your nickname stored on the ICQ server.
@@ -197,19 +170,21 @@ Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-web-aware t
-  "*Set this to 't' if you want your presence know on the web.
-This doesn't appear to work. :-(
+  "*Set this to non-nil if you want your presence know on the web.
 Run `eicq-update-meta-info' after modifying this variable."
+  :type 'boolean
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-hide-ip nil
-  "*Set to 't' if you want to hide your IP.
+  "*Set to non-nil if you want to hide your IP.
 Run `eicq-update-meta-info' after modifying this variable."
+  :type 'boolean
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-authorization t
   "*Authorization needed to add you to others' contact lists..
 Run `eicq-update-meta-info' after modifying this variable."
+  :type 'boolean
   :group 'eicq-meta)
 
 (defcustom eicq-user-meta-about
@@ -242,7 +217,7 @@ Run `eicq-update-meta-info' after modifying this variable."
                  (item not-entered)))
 
 (defcustom eicq-user-meta-birth-year nil
-  "*Your birth year (YYYY) stored on the ICQ server.
+  "*Your birth year (YY) stored on the ICQ server.
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
@@ -399,6 +374,305 @@ The possible sound events are:
 	  (cons (sexp :tag "Sound Event") 
 		(sexp :tag "Sound File")))
   :tag "Sounds")
+
+(defcustom eicq-coding-system nil
+  "*Coding for incoming and outgoing messages.
+This feature is supported only in Emacs with MULE.
+Nil means not to use any codings.
+See `list-coding-systems'."
+  :group 'eicq-option
+  :type
+  (append '(choice (item nil))
+          (if (fboundp 'coding-system-list)
+              (mapcar
+               (lambda (x) (list 'item x))
+               (coding-system-list)))))
+
+(defcustom eicq-bridge-filename 
+  "/usr/local/bin/udp2tcp"
+  "*Filename for `eicq-bridge' program."
+  :group 'eicq-option)
+
+(defcustom eicq-bridge-buffer nil
+  "Buffer for `eicq-bridge'.
+Nil means no associated buffer, or no debug info."
+  :group 'eicq-option)
+
+(defcustom eicq-bridge-hostname "127.0.0.1"
+  "*IP address of `eicq-bridge'.
+See `eicq-connect'."
+  :group 'eicq-option)
+
+(defcustom eicq-bridge-port
+  ;; plant random seed
+  (progn (random t) nil)
+  "*Port of `eicq-bridge'.
+See `eicq-connect'."
+  :group 'eicq-option)
+
+(defcustom eicq-server-hostname "icq1.mirabilis.com"
+  "*Hostname or IP address of Mirabilis ICQ server."
+  :group 'eicq-option)
+
+(defcustom eicq-server-port 4000
+  "*Port of Mirabilis ICQ server."
+  :group 'eicq-option)
+
+(defvar eicq-valid-statuses
+  '("online" "away" "occ" "dnd" "ffc" "na" "invisible")
+  "All statuses valid for selection.
+Used by `eicq-change-status' and in `eicq-buddy-buffer'.")
+
+(defcustom eicq-user-initial-status "invisible"
+  "*Initial user status when login."
+  :group 'eicq-option
+  :type
+  (cons 'choice
+        (mapcar
+         (lambda (x) (list 'item x))
+         eicq-valid-statuses)))
+
+(defcustom eicq-auto-reply-away
+  "I am currently away from ICQ.
+Please leave me messages,
+I'll come back to you soon."
+  "Auto reply with this when you are away."
+  :group 'eicq-option)
+
+(defcustom eicq-auto-reply-occ
+  "I am currently occupied.
+Please leave me messages,
+I'll come back to you soon."
+  "Auto reply with this when you are occupied."
+  :group 'eicq-option)
+
+(defcustom eicq-auto-reply-dnd
+  "I am currently concentrating on some stuff.
+Please leave me messages,
+I'll come back to you soon."
+  "Auto reply with this when you want to leave alone."
+  :group 'eicq-option)
+
+(defcustom eicq-auto-reply-na
+  "I am currently not in the mood of ICQ.
+Please leave me messages,
+I'll come back to you soon."
+  "Auto reply with this when you are not available."
+  :group 'eicq-option)
+
+(defcustom eicq-delete-offline-messages-flag 'ask
+  "*Non-nil means delete all offline messages from server.
+'ask means to ask user every time.
+Nil means leave messages on server and you will receive the same offline
+messages again next time you login."
+  :group 'eicq-option
+  :type '(choice (item t) (item ask) (item nil)))
+
+(defcustom eicq-buddy-window-width 20
+  "*Width of window for `eicq-buddy-buffer'."
+  :group 'eicq-interface)
+
+(defcustom eicq-status-window-height 9
+  "*Height of window for `eicq-status-buffer'."
+  :group 'eicq-interface)
+
+(defcustom eicq-log-fill-column 50
+  "Fill column for `eicq-log-buffer'.
+Log in buffer is auto-filled, that is, word-wrapped upto this column.
+Normally frame width is 80 and window width of `eicq-buddy-buffer' is 20,
+therefore default value 50 will be nice."
+  :group 'eicq-log)
+
+(defcustom eicq-log-filename "~/.eicq/log"
+  "*Pathname and filename for storing eicq log.
+Automatically created if the directory is non-existent."
+  :group 'eicq-log)
+
+(defcustom eicq-log-buffer-position-flag 'tail
+  "*Non-nil means automatically updating buffer position.
+Nil means no automatic update, 'tail means keeping the bottom of the buffer 
+visible, other non-nil means keeping the top of the buffer visible."
+  :group 'eicq-log
+  :type '(choice (item t) (item tail) (item nil)))  
+
+(defcustom eicq-log-info-flag 'tail
+  "*Non-nil means log misc info.
+These include any info from ICQ server other than buddy messages, status
+change notice, and query results.
+Nil means no log, 'tail means putting new log at the end of the log
+buffer, other non-nil means putting new log at the beginning."
+  :group 'eicq-log
+  :type '(choice (item t) (item tail) (item nil)))
+
+(defcustom eicq-log-buddy-status-flag 'tail
+  "*Non-nil means log buddy status change notice.
+Nil means no log, 'tail means putting new log at the end of the log
+buffer, other non-nil means putting new log at the beginning."
+  :group 'eicq-log
+  :type '(choice (item t) (item tail) (item nil)))
+
+(defcustom eicq-log-buddy-message-flag 'tail
+  "*Non-nil means log buddy messages from ICQ server.
+Nil means no log, 'tail means putting new log at the end of the log
+buffer, other non-nil means putting new log at the beginning."
+  :group 'eicq-log
+  :type '(choice (item t) (item tail) (item nil)))
+
+(defcustom eicq-log-outgoing-flag 'tail
+  "*Non-nil means log outgoing messages to ICQ server.
+Nil means no log, 'tail means putting new log at the end of the log
+buffer, other non-nil means putting new log at the beginning."
+  :group 'eicq-log
+  :type '(choice (item t) (item tail) (item nil)))
+
+(defcustom eicq-log-error-flag 'tail
+  "*Non-nil means log critical error messages.
+Nil means no log, 'tail means putting new log at the end of the log
+buffer, other non-nil means putting new log at the beginning."
+  :group 'eicq-log
+  :type '(choice (item t) (item tail) (item nil)))
+
+(defcustom eicq-log-debug-flag nil
+  "*Non-nil means log verbose debugging messages.
+Nil means no log, 'tail means putting new log at the end of the log
+buffer, other non-nil means putting new log at the beginning."
+  :group 'eicq-log
+  :type '(choice (item t) (item tail) (item nil)))
+
+(defcustom eicq-log-system-flag 'tail
+  "*Non-nil means log system messages.
+These include network status, login status, and others.
+Nil means no log, 'tail means putting new log at the end of the log
+buffer, other non-nil means putting new log at the beginning."
+  :group 'eicq-log
+  :type '(choice (item t) (item tail) (item nil)))
+
+(defcustom eicq-log-info-mark nil
+  "*Non-nil means mark unread.
+These include any info from ICQ server other than buddy messages, 
+status change notice, and query results.
+Nil means mark read."
+  :group 'eicq-log
+  :type 'boolean)
+
+(defcustom eicq-log-buddy-status-mark nil
+  "*Non-nil means mark buddy status change notice unread.
+Nil means mark read."
+  :type 'boolean
+  :group 'eicq-log)
+
+(defcustom eicq-log-buddy-message-mark t
+  "*Non-nil means mark buddy messages unread.
+Nil means mark read."
+  :type 'boolean
+  :group 'eicq-log)
+
+(defcustom eicq-log-outgoing-mark nil
+  "*Non-nil means mark outgoing messages unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type 'boolean)
+
+(defcustom eicq-log-error-mark t
+  "*Non-nil means mark critical error messages unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type 'boolean)
+
+(defcustom eicq-log-debug-mark t
+  "*Non-nil means mark verbose debugging messages unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type 'boolean)
+
+(defcustom eicq-log-system-mark nil
+  "*Non-nil means mark system messages unread.
+Nil means mark read."
+  :group 'eicq-log
+  :type 'boolean)
+
+(defcustom eicq-buddy-status-color-hint-flag t
+  "*Non-nil means put status color hints."
+  :type 'boolean
+  :group 'eicq-buddy)
+
+(defcustom eicq-buddy-view 
+  'eicq-connected-aliases
+  "*View of buddy buffer.
+It determines what aliases to be display in buddy buffer.  For example,
+\(eicq-connected-aliases) means display all connected aliases.
+
+See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
+`eicq-buddy-view-active'."
+  :group 'eicq-buddy
+  :type '(choice (item eicq-all-aliases)
+                 (item eicq-connected-aliases)
+                 (item eicq-active-aliases))
+  :initialize 'custom-initialize-default)
+
+(defvar eicq-user-status "offline"
+  "Current user status.")
+
+(defvar eicq-dropped-packet-counter 0
+  "For debug purpose only.")
+
+(defvar eicq-resend-packet-counter 0
+  "For debug purpose only.")
+
+(defvar eicq-recent-packet nil
+  "The most recent incoming packet.
+For debug only.")
+
+(defvar eicq-trimmed-packet-counter 0
+  "For debug purpose only.")
+
+(defvar eicq-error-packets nil
+  "A list of error incoming packets.
+For debug only.")
+
+(defvar eicq-world-rc-filename "~/.eicq/world"
+  "*Filename for resource file.")
+
+(defvar eicq-do-message-hook nil
+  "*Hooks to run when there is an incoming message.
+Dynamically ALIAS and MESSAGE are binded to be used in hooks.")
+
+(defvar eicq-do-status-update-hook nil
+  "*Hooks to run when a buddy change his status.
+Dynamically ALIAS and STATUS are binded to be used in hooks.")
+
+;;; Internal variables
+
+(defcustom eicq-user-alias "me"
+  "*Your alias in `eicq-world'.
+Run `eicq-world-update' after modifying this variable."
+  :group 'eicq-info)
+
+(defcustom eicq-user-password nil
+  "*Password for your ICQ account.
+Nil means prompt for entering password every time you login."
+ :group 'eicq-info)
+
+;;;###autoload
+(defun eicq-version (&optional arg)
+  "Return the version of eicq you are currently using.
+If ARG, insert version string at point."
+  (interactive "P")
+  (if arg
+      (insert (message "Eicq version %s" eicq-version))
+    (message "Eicq version %s" eicq-version)))
+
+;;; Code - compatibility:
+
+;; MULE compatibility functions for 20.4
+
+(defun-when-void encode-coding-string (string encoding-system)
+  "Stub for compatibility with MULE."
+  string)
+
+(defun-when-void decode-coding-string (string encoding-system)
+  "Stub for compatibility with MULE."
+  string)
 
 ;; Load the toolbar
 (add-hook 'eicq-buddy-mode-hook 'eicq-install-buddy-toolbar)
@@ -558,19 +832,6 @@ Same as `completing-read' but accepts strings as well as obarray."
   "Browse eicq homepage for news and files."
   (interactive)
   (browse-url "http://eicq.sourceforge.net/"))
-
-(defcustom eicq-coding-system nil
-  "*Coding for incoming and outgoing messages.
-This feature is supported only in Emacs with MULE.
-Nil means not to use any codings.
-See `list-coding-systems'."
-  :group 'eicq-option
-  :type
-  (append '(choice (item nil))
-          (if (fboundp 'coding-system-list)
-              (mapcar
-               (lambda (x) (list 'item x))
-               (coding-system-list)))))
 
 (defun eicq-encode-string (string)
   "Return a encoded string from STRING with DOS stuff added.
@@ -841,12 +1102,6 @@ COUNT means how many time this packets has been resent. Default is 0."
                        bin
                        (or count 0))))))
 
-(defvar eicq-dropped-packet-counter 0
-  "For debug purpose only.")
-
-(defvar eicq-resend-packet-counter 0
-  "For debug purpose only.")
-
 (defun eicq-send-queue-start ()
   "Start sending outgoing queue."
   (eicq-send-queue-stop)
@@ -878,36 +1133,6 @@ COUNT means how many time this packets has been resent. Default is 0."
 (defvar eicq-bridge nil
   "Process `udp2tcp'.
 It bridges UDP (ICQ server) and TCP (Emacs).")
-
-(defcustom eicq-bridge-filename 
-  "/usr/local/bin/udp2tcp"
-  "*Filename for `eicq-bridge' program."
-  :group 'eicq-option)
-
-(defcustom eicq-bridge-buffer nil
-  "Buffer for `eicq-bridge'.
-Nil means no associated buffer, or no debug info."
-  :group 'eicq-option)
-
-(defcustom eicq-bridge-hostname "127.0.0.1"
-  "*IP address of `eicq-bridge'.
-See `eicq-connect'."
-  :group 'eicq-option)
-
-(defcustom eicq-bridge-port
-  ;; plant random seed
-  (progn (random t) nil)
-  "*Port of `eicq-bridge'.
-See `eicq-connect'."
-  :group 'eicq-option)
-
-(defcustom eicq-server-hostname "icq1.mirabilis.com"
-  "*Hostname or IP address of Mirabilis ICQ server."
-  :group 'eicq-option)
-
-(defcustom eicq-server-port 4000
-  "*Port of Mirabilis ICQ server."
-  :group 'eicq-option)
 
 (defun eicq-bridge-show-buffer ()
   "Switch to `eicq-bridge-buffer' for network dump info."
@@ -1113,10 +1338,6 @@ It is sent anyway but it may not go through.\n"
      "Network is not connected when it tries to send a packet")
     (eicq-logout 'kill)))
 
-(defvar eicq-recent-packet nil
-  "The most recent incoming packet.
-For debug only.")
-
 (defun eicq-network-filter (process bin)
   "Handle a binary string from `eicq-network'.
 PROCESS is the process which invokes this filter.
@@ -1132,9 +1353,6 @@ Due to limited buffer size of Emacs network buffer, packets can be trimmed
 and attached at the beginning of next callback.  Use this in
 `eicq-network-separator' to concatenate a packet across two callbacks.
 Usually only one per 1000 packets needs this.")
-
-(defvar eicq-trimmed-packet-counter 0
-  "For debug purpose only.")
 
 (defun eicq-network-separator (bin)
   "Separate multiple packets BIN into a list of packet.
@@ -1156,10 +1374,6 @@ See `eicq-network-filter'."
         (if (zerop (length bin))
             (setq eicq-trimmed-packet nil)))))
     packets))
-
-(defvar eicq-error-packets nil
-  "A list of error incoming packets.
-For debug only.")
 
 ;;; Code - client to server packets:
 
@@ -1195,20 +1409,6 @@ Use `eicq-send' to send the string."
               (apply 'concat parameters)
             "\x00\x00\x00\x00")))       ; must have at least 4 bytes
 
-(defvar eicq-valid-statuses
-  '("online" "away" "occ" "dnd" "ffc" "na" "invisible")
-  "All statuses valid for selection.
-Used by `eicq-change-status' and in `eicq-buddy-buffer'.")
-
-(defcustom eicq-user-initial-status "invisible"
-  "*Initial user status when login."
-  :group 'eicq-option
-  :type
-  (cons 'choice
-        (mapcar
-         (lambda (x) (list 'item x))
-         eicq-valid-statuses)))
-
 (defun eicq-pack-login ()
   "Pack login packet 03e8."
   (let* ((password (or eicq-user-password
@@ -1236,11 +1436,6 @@ Used by `eicq-change-status' and in `eicq-buddy-buffer'.")
 (defun eicq-pack-keep-alive ()
   "Pack keep alive packet 042e."
   (eicq-pack "\x2e\x04"))
-
-(defun eicq-pack-keep-alive-1 ()
-  "Pack another keep alive packet 051e.
-Obsoleted. Not used in v5."
-  (eicq-pack "\x1e\x05"))
 
 (defun eicq-pack-logout ()
   "Pack logout packet using 0438."
@@ -1383,9 +1578,22 @@ ALIAS is the alias/uin to query info for."
    eicq-user-meta-cell-phone
    ;; zip code? only accept valid values
    "\x00\x00\x00\x00"
-   (eicq-int-bin (car (rassoc eicq-user-meta-country eicq-country-code)))
-   (if eicq-user-meta-web-aware "\x00" "\x01")
-   (if eicq-user-meta-hide-ip "\x00" "\x01")))
+   (eicq-int-bin (car (rassoc eicq-user-meta-country eicq-country-code)))))
+
+(defun eicq-pack-meta-user-security ()
+  "Pack meta user packet 064a:0424."
+  (eicq-pack
+   "\x4a\x06"
+   "\x24\x04"
+   (if eicq-user-meta-authorization
+       "\x00"
+     "\x01")
+   (if eicq-user-meta-web-aware
+       "\x01" 
+     "\x00")
+   (if eicq-user-meta-hide-ip 
+       "\x00" 
+     "\x01")))
 
 (defun eicq-pack-meta-user-update-work ()
   "Pack meta user packet 064a:03f2.
@@ -1445,22 +1653,6 @@ ALIAS is the alias/uin to query info for."
    (eicq-int-bin (length eicq-user-meta-about))
    eicq-user-meta-about))
 
-(defun eicq-pack-info-request (alias)
-  "Pack info request packet 0460.
-ALIAS is the alias/uin to query info for.
-Obsoleted. Use meta user instead."
-  (eicq-pack
-   "\x60\x04"
-   (eicq-alias-bin alias)))
-
-(defun eicq-pack-info-ext-request (alias)
-  "Pack extended info request packet 046a.
-ALIAS is the alias/uin to query info for.
-Obsoleted. Use meta user instead."
-  (eicq-pack
-   "\x6a\x04"
-   (eicq-alias-bin alias)))
-
 (defun eicq-pack-search-by-uin (uin) ; TODO
   "Pack search by UIN packet 041a."
   (eicq-pack "\x1a\x04"))
@@ -1481,55 +1673,13 @@ Obsoleted. Use meta user instead."
    (eicq-int-bin (1+ (length email)))
    email "\x00"))
 
-(defun eicq-pack-update-info (nick-name first-name last-name email)
-  "Pack update info packet 050a.
-Obsolete. Use meta user command instead."
-  (eicq-pack
-   "\x0a\x05"
-   (eicq-int-bin (1+ (length nick-name)))
-   nick-name "\x00"
-   (eicq-int-bin (1+ (length first-name)))
-   first-name "\x00"
-   (eicq-int-bin (1+ (length last-name)))
-   last-name "\x00"
-   (eicq-int-bin (1+ (length email)))
-   email "\x00"))
-
-(defun eicq-pack-update-info-ext
-  (city country-code state age sex phone homepage about)
-  "Pack update extended info packet 04b0.
-Obsolete. Use meta user command instead."
-  (eicq-pack
-   "\xb0\x04"
-   (eicq-int-bin (1+ (length city)))
-   city "\x00"
-   ;; \xff\xff = not entered
-   (eicq-int-bin country-code)
-   "\x00"                               ; time-zone
-   ;; max length = 5 + null
-   (eicq-int-bin (min 6 (1+ (length state))))
-   (substring state 0 (min 5 (length state))) "\x00"
-   ;; \xff = not entered
-   (eicq-int-bin age)
-   ;; \x00 = not entered
-   ;; \x01 = female
-   ;; \x02 = male
-   (eicq-int-byte sex)
-   (eicq-int-bin (1+ (length phone)))
-   phone "\x00"
-   (eicq-int-bin (1+ (length homepage)))
-   homepage "\x00"
-   (eicq-int-bin (1+ (length about)))
-   about "\x00"
-   "\x00\x00\x00\x00"))                 ; zip-code
-
-(defun eicq-pack-update-authorization ()
-  "Pack update authorization packet 0514"
-  (eicq-pack
-   "\x14\x05"
-   (if eicq-user-meta-authorization
-       "\x00\x00\x00\x00"
-     "\x01\x00\x00\x00")))
+; (defun eicq-pack-update-authorization ()
+;   "Pack update authorization packet 0514"
+;   (eicq-pack
+;    "\x14\x05"
+;    (if eicq-user-meta-authorization
+;        "\x00\x00\x00\x00"
+;      "\x01\x00\x00\x00")))
 
 (defun eicq-pack-add-user-to-contact-list ()
   "Pack add packet 053c."
@@ -1765,10 +1915,6 @@ Remove acknowledged packets from `eicq-outgoing-queue'."
              (substring packet 35 -1))
      (substring packet 31 32))))
 
-(defvar eicq-do-message-hook nil
-  "*Hooks to run when there is an incoming message.
-Dynamically ALIAS and MESSAGE are binded to be used in hooks.")
-
 (defun eicq-do-message-helper (uin-bin message type-bin)
   "Helper for handling offline and online messages.
 UIN-BIN is uin of message sender in binary string.
@@ -1866,19 +2012,12 @@ Possible type: `eicq-message-types'."
                  (eicq-log-error "Unknown message type: %s"
                                  (eicq-bin-hex type-bin))))))
 
-(defvar eicq-user-status "offline"
-  "Current user status.")
-
 (defun eicq-auto-reply (alias)
   "Auto-reply to ALIAS/uin depending on `eicq-user-status'.
 Called by `eicq-do-message-heler'."
   (let ((message (symbol-value (eicq-status-auto-reply eicq-user-status))))
     (if message
         (eicq-send-message message alias))))
-
-(defvar eicq-do-status-update-hook nil
-  "*Hooks to run when a buddy change his status.
-Dynamically ALIAS and STATUS are binded to be used in hooks.")
 
 (defun eicq-do-status-update (packet)
   "Handle server command 01a4 in PACKET."
@@ -2178,7 +2317,9 @@ Hide-IP: %s"
        (eicq-bin-hex zipcode)
        (cdr (assoc country eicq-country-code))
        (eicq-bin-hex timezone)
-       (if (= authorization 0) "Needed" "Not Needed")
+       (if (= authorization 0) 
+	   "Needed" 
+	 "Not Needed")
        (eicq-bin-hex web-aware)
        (eicq-bin-hex hide-ip))))))
 
@@ -2313,6 +2454,10 @@ Language-3: %s"
   "Handle server command 03de subcommand 0082 in DATA."
   (eicq-log-info "meta user update about info succeeded"))
 
+(defun eicq-do-meta-user-update-security-confirm (data)
+  "Handle server command 03de subcommand a000 in DATA."
+  (eicq-log-info "meta user update security info succeeded"))
+
 (defun eicq-do-meta-user-password (data)
   "Handle server command 03de subcommand 00aa in DATA."
   (eicq-log-info "meta user password change succeeded"))
@@ -2377,9 +2522,6 @@ If called interactively, display and push alias into `kill-ring'."
     alias))
 
 ;;; Code - world by rc:
-
-(defvar eicq-world-rc-filename "~/.eicq/world"
-  "*Filename for resource file.")
 
 (defvar eicq-world-rc-regexp
   "^:icq[ \t]+\\([0-9]+\\)[ \t]+\\([^:]+?\\)\\( :.*\\)*$"
@@ -2703,34 +2845,6 @@ Zero-Padded to make it 4 byte-long."
   "Return the name of status from its the binary string BIN."
   (cadr (assoc bin eicq-statuses)))
 
-(defcustom eicq-auto-reply-away
-  "I am currently away from ICQ.
-Please leave me messages,
-I'll come back to you soon."
-  "Auto reply with this when you are away."
-  :group 'eicq-option)
-
-(defcustom eicq-auto-reply-occ
-  "I am currently occupied.
-Please leave me messages,
-I'll come back to you soon."
-  "Auto reply with this when you are occupied."
-  :group 'eicq-option)
-
-(defcustom eicq-auto-reply-dnd
-  "I am currently concentrating on some stuff.
-Please leave me messages,
-I'll come back to you soon."
-  "Auto reply with this when you want to leave alone."
-  :group 'eicq-option)
-
-(defcustom eicq-auto-reply-na
-  "I am currently not in the mood of ICQ.
-Please leave me messages,
-I'll come back to you soon."
-  "Auto reply with this when you are not available."
-  :group 'eicq-option)
-
 (defface eicq-face-online
   '((((background dark))
      (:foreground "green"))
@@ -2882,6 +2996,40 @@ Need to relogin afterwards."
 (defvar eicq-user-auto-away-p nil
   "This variable is set when the auto-away timer expires, 
 and it is reset in eicq-send-message-helper and eicq-change-status.")
+
+(defun eicq-auto-away-timeout-set (&optional symbol value)
+  "Set timer for auto-away.  See 'eicq-auto-away-timeout'."
+  (delete-itimer "eicq auto-away")      ; delete previous
+  (start-itimer
+   "eicq auto-away"
+   (lambda ()
+     ;; auto away for first idle
+     (when (member eicq-user-status '("online" "ffc"))
+       (eicq-log-system "Auto away.")
+       (eicq-change-status "away")
+       (setq eicq-user-auto-away-p t)))
+   value value
+   'is-idle)
+  (delete-itimer "eicq auto-na")
+  (start-itimer
+   "eicq auto-na"
+   (lambda ()
+     ;; auto na for second idle
+     (when (and eicq-user-auto-away-p 
+		(equal eicq-user-status "away"))
+       (eicq-log-system "Auto na.")
+       (eicq-change-status "na")
+       ;; eicq-change-status resets this flag
+       (setq eicq-user-auto-away-p t)))
+   (* 2 value) (* 2 value)
+   nil))
+
+(defcustom eicq-auto-away-timeout 300
+  "*Seconds of inactivity in Emacs before auto-away.
+After two times the seconds of auto-away, it goes auto-na.
+See `eicq-auto-away'."
+  :group 'eicq-option
+  :set 'eicq-auto-away-timeout-set)
 
 (defun eicq-send-message-helper (message aliases type log-message)
   "Send message, url, authorization or others.
@@ -3053,53 +3201,12 @@ variable and modeline."
   "Update user meta info on the ICQ server.
 Run this after changing any meta user info variables."
   (interactive)
-  (eicq-send (eicq-pack-update-authorization))
+  ;(eicq-send (eicq-pack-update-authorization))
+  (eicq-send (eicq-pack-meta-user-security))
   (eicq-send (eicq-pack-meta-user-update-general))
   (eicq-send (eicq-pack-meta-user-update-work))
   (eicq-send (eicq-pack-meta-user-update-more))
   (eicq-send (eicq-pack-meta-user-update-about)))
-
-(defun eicq-auto-away-timeout-set (&optional symbol value)
-  "Set timer for auto-away.  See 'eicq-auto-away-timeout'."
-  (delete-itimer "eicq auto-away")      ; delete previous
-  (start-itimer
-   "eicq auto-away"
-   (lambda ()
-     ;; auto away for first idle
-     (when (member eicq-user-status '("online" "ffc"))
-       (eicq-log-system "Auto away.")
-       (eicq-change-status "away")
-       (setq eicq-user-auto-away-p t)))
-   value value
-   'is-idle)
-  (delete-itimer "eicq auto-na")
-  (start-itimer
-   "eicq auto-na"
-   (lambda ()
-     ;; auto na for second idle
-     (when (and eicq-user-auto-away-p 
-		(equal eicq-user-status "away"))
-       (eicq-log-system "Auto na.")
-       (eicq-change-status "na")
-       ;; eicq-change-status resets this flag
-       (setq eicq-user-auto-away-p t)))
-   value value
-   nil))
-
-(defcustom eicq-auto-away-timeout 300
-  "*Seconds of inactivity in Emacs before auto-away.
-After two times the seconds of auto-away, it goes auto-na.
-See `eicq-auto-away'."
-  :group 'eicq-option
-  :set 'eicq-auto-away-timeout-set)
-
-(defcustom eicq-delete-offline-messages-flag 'ask
-  "*Non-nil means delete all offline messages from server.
-'ask means to ask user every time.
-Nil means leave messages on server and you will receive the same offline
-messages again next time you login."
-  :group 'eicq-option
-  :type '(choice (item t) (item ask) (item nil)))
 
 (defun eicq-delete-offline-messages ()
   "Delete offline messages from ICQ server.
@@ -3126,14 +3233,6 @@ ALIAS is an alias/uin."
     (if local-info
         (eicq-log-info "Local info:\n%s" local-info)))
   (eicq-send (eicq-pack-meta-user-query alias)))
-
-(defcustom eicq-buddy-window-width 20
-  "*Width of window for `eicq-buddy-buffer'."
-  :group 'eicq-interface)
-
-(defcustom eicq-status-window-height 9
-  "*Height of window for `eicq-status-buffer'."
-  :group 'eicq-interface)
 
 (defvar eicq-status-buffer nil
   "Buffer for statuses.")
@@ -3197,13 +3296,6 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
 (defvar eicq-log-outline-regexp "^...:.. "
   "Regexp for log header.
 See `outline-regexp'.")
-
-(defcustom eicq-log-fill-column 50
-  "Fill column for `eicq-log-buffer'.
-Log in buffer is auto-filled, that is, word-wrapped upto this column.
-Normally frame width is 80 and window width of `eicq-buddy-buffer' is 20,
-therefore default value 50 will be nice."
-  :group 'eicq-log)
 
 (defun eicq-switch-to-buddy-buffer ()
   "Switches from the log buffer to the buddy buffer.
@@ -3279,11 +3371,6 @@ Turning on `eicq-log-mode' runs the hook `eicq-log-mode-hook'."
 
   (run-hooks 'eicq-log-mode-hook))
 
-(defcustom eicq-log-filename "~/.eicq/log"
-  "*Pathname and filename for storing eicq log.
-Automatically created if the directory is non-existent."
-  :group 'eicq-log)
-
 (defun eicq-log-show-buffer (&optional new no-select)
   "Switch to `eicq-log-buffer'.
 Create buffer with log file if buffer does not exists already.
@@ -3322,108 +3409,6 @@ See `eicq-log-filename'."
   "Rotate and create a new log file."
   (interactive)
   (eicq-log-show-buffer 'new))
-
-(defcustom eicq-log-buffer-position-flag 'tail
-  "*Non-nil means automatically updating buffer position.
-Nil means no automatic update, 'tail means keeping the bottom of the buffer 
-visible, other non-nil means keeping the top of the buffer visible."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))  
-
-(defcustom eicq-log-info-flag 'tail
-  "*Non-nil means log misc info.
-These include any info from ICQ server other than buddy messages, status
-change notice, and query results.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-buddy-status-flag 'tail
-  "*Non-nil means log buddy status change notice.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-buddy-message-flag 'tail
-  "*Non-nil means log buddy messages from ICQ server.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-outgoing-flag 'tail
-  "*Non-nil means log outgoing messages to ICQ server.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-error-flag 'tail
-  "*Non-nil means log critical error messages.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-debug-flag nil
-  "*Non-nil means log verbose debugging messages.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-system-flag 'tail
-  "*Non-nil means log system messages.
-These include network status, login status, and others.
-Nil means no log, 'tail means putting new log at the end of the log
-buffer, other non-nil means putting new log at the beginning."
-  :group 'eicq-log
-  :type '(choice (item t) (item tail) (item nil)))
-
-(defcustom eicq-log-info-mark nil
-  "*Non-nil means mark unread.
-These include any info from ICQ server other than buddy messages, status change notice, and query results.
-Nil means mark read."
-  :group 'eicq-log
-  :type '(choice (item t) (item nil)))
-
-(defcustom eicq-log-buddy-status-mark nil
-  "*Non-nil means mark buddy status change notice unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type '(choice (item t) (item nil)))
-
-(defcustom eicq-log-buddy-message-mark t
-  "*Non-nil means mark buddy messages unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type '(choice (item t) (item nil)))
-
-(defcustom eicq-log-outgoing-mark nil
-  "*Non-nil means mark outgoing messages unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type '(choice (item t) (item nil)))
-
-(defcustom eicq-log-error-mark t
-  "*Non-nil means mark critical error messages unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type '(choice (item t) (item nil)))
-
-(defcustom eicq-log-debug-mark t
-  "*Non-nil means mark verbose debugging messages unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type '(choice (item t) (item nil)))
-
-(defcustom eicq-log-system-mark nil
-  "*Non-nil means mark system messages unread.
-Nil means mark read."
-  :group 'eicq-log
-  :type '(choice (item t) (item nil)))
 
 (defconst eicq-log-entry-re "^[SMTWRFA][0-9][0-9]:[0-9][0-9]"
   "Regular expression matching the beginning of a log entry.")
@@ -3769,24 +3754,6 @@ Turning on `eicq-buddy-mode' runs the hook `eicq-buddy-mode-hook'."
   (setq modeline-format "%b")
 
   (run-hooks 'eicq-buddy-mode-hook))
-
-(defcustom eicq-buddy-status-color-hint-flag t
-  "*Non-nil means put status color hints."
-  :group 'eicq-buddy)
-
-(defcustom eicq-buddy-view 
-  'eicq-connected-aliases
-  "*View of buddy buffer.
-It determines what aliases to be display in buddy buffer.  For example,
-\(eicq-connected-aliases) means display all connected aliases.
-
-See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
-`eicq-buddy-view-active'."
-  :group 'eicq-buddy
-  :type '(choice (item eicq-all-aliases)
-                 (item eicq-connected-aliases)
-                 (item eicq-active-aliases))
-  :initialize 'custom-initialize-default)
 
 (defun eicq-buddy-view-set (&optional symbol value)
   "Set `eicq-buddy-view'."

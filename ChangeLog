@@ -1,3 +1,40 @@
+2001-06-06  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq-report.el (eicq-report-debug): New.
+	(eicq-prepare-report): Use it.
+
+2001-06-05  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-version): Add optional arg so you can insert the
+	version string at point.  Autoload it.
+	(eicq-user-meta-web-aware): Type boolean.
+	(eicq-user-meta-hide-ip): Ditto.
+	(eicq-user-meta-authorization): Ditto.
+	(eicq-log-info-mark): Ditto.
+	(eicq-log-buddy-status-mark): Ditto.
+	(eicq-log-buddy-message-mark): Ditto.
+	(eicq-log-outgoing-mark): Ditto.
+	(eicq-log-error-mark): Ditto.
+	(eicq-log-debug-mark): Ditto.
+	(eicq-log-system-mark): Ditto.
+	(eicq-buddy-status-color-hint-flag): Ditto.
+
+	Most user variables moved to take advantage of new bug-report
+	code.
+
+2001-06-03  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-user-meta-birth-year): Format for this variable
+	should be YY, update doc accordingly.
+
+2001-05-31  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-pack-keep-alive-1): Remove - obsolete.
+	(eicq-pack-info-request): Ditto.
+	(eicq-pack-info-ext-request): Ditto.
+	(eicq-pack-update-info): Ditto.
+	(eicq-pack-update-info-ext): Ditto.
+	
 2001-05-20  Steve Youngs  <youngs@xemacs.org>
 
 	* Makefile (superupgrade): Make sure owner/group is set correctly

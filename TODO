@@ -14,10 +14,6 @@ Feel free to do any of these things and send a patch to
 
 * Todo list
 
-** hilarious auto reply messages
-
-** face colors for light background
-
 ** figure out why sometime being kicked out after long inactivity
 
 ** builtin udp support in XEmacs
@@ -69,7 +65,3 @@ Feel free to do any of these things and send a patch to
 
 	not necessary once Eicq is totally Lisp.
 
-** implement a 'eicq-use-sound' flag
-
-	Yep, somebody asked me how to switch off the sound.
-	Perhaps 3 settings - on, off, beep (pc speaker).

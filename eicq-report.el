@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2001-4-24 16:06:29 (steve)>
+;; Last-Modified: <2001-6-6 00:29:58 (steve)>
 ;; Keywords: bug-report
 
 ;; Eicq is free software; you can redistribute it and/or modify
@@ -43,10 +43,10 @@
    "Salut bug team:"
    "Guten Tag bug team:"
    "To whom it may concern:"
-   "Fellow eicq'ers:"
+   "Fellow Eicq'ers:"
    "Yo bug team:"
    "G'day bug team:"
-   "Greetings earthlings:"]
+   "Greetings Earthlings:"]
   "A list of salutations used for `eicq-report-bug'.")
 
 (defvar eicq-bug-address
@@ -82,6 +82,64 @@
 	   ?\n ?\ )
 	(insert subj)))))
 
+;; Stolen from Gnus.
+(defun eicq-report-debug ()
+  "Go through the Eicq source files and report what variables have been changed.
+The source file has to be in the load path."
+  (interactive)
+  (let ((files '("eicq.el" "eicq-toolbar.el"))
+	(point (point))
+	file expr olist sym)
+    (message "Please wait while we snoop your variables...")
+    (sit-for 0)
+    ;; Go through all the files looking for non-default values for variables.
+    (save-excursion
+      (set-buffer (get-buffer-create " *eicq bug info*"))
+      (while files
+	(erase-buffer)
+	(when (and (setq file (locate-library (pop files)))
+		   (file-exists-p file))
+	  (insert-file-contents file)
+	  (goto-char (point-min))
+	  (if (not (re-search-forward "^;;* *Internal variables" nil t))
+	      (message "Malformed sources in file %s" file)
+	    (narrow-to-region (point-min) (point))
+	    (goto-char (point-min))
+	    (while (setq expr (ignore-errors (read (current-buffer))))
+	      (ignore-errors
+		(and (or (eq (car expr) 'defvar)
+			 (eq (car expr) 'defcustom))
+		     (stringp (nth 3 expr))
+		     (or (not (boundp (nth 1 expr)))
+			 (not (equal (eval (nth 2 expr))
+				     (symbol-value (nth 1 expr)))))
+		     (push (nth 1 expr) olist)))))))
+      (kill-buffer (current-buffer)))
+    (when (setq olist (nreverse olist))
+      (insert "\n"))
+    (while olist
+      (if (boundp (car olist))
+	  (condition-case ()
+	      (pp `(setq ,(car olist)
+			 ,(if (or (consp (setq sym (symbol-value (car olist))))
+				  (and (symbolp sym)
+				       (not (or (eq sym nil)
+						(eq sym t)))))
+			      (list 'quote (symbol-value (car olist)))
+			    (symbol-value (car olist))))
+		  (current-buffer))
+	    (error
+	     (format "(setq %s 'whatever)\n" (car olist))))
+	(insert ";; (makeunbound '" (symbol-name (car olist)) ")\n"))
+      (setq olist (cdr olist)))
+    (insert "\n\n\n")
+    ;; Remove any control chars - they seem to cause trouble for some
+    ;; mailers.  (Byte-compiled output from the stuff above.)
+    (goto-char point)
+    (while (re-search-forward "[\000-\010\013-\037\200-\237]" nil t)
+      (replace-match (format "\\%03o" (string-to-char (match-string 0)))
+		     t t))))
+
 (defun eicq-prepare-report ()
   "Grabs the variables, features to include in bug report.
 Then put it all into a mail buffer, nicely formatted."
@@ -92,39 +150,12 @@ Then put it all into a mail buffer, nicely formatted."
   (setq after-sep-pos (point))
   (setq final-resting-place (point-marker))
   (insert "\n\n"
-	  (emacs-version) "\n\n"
-	  "Current State:\n==============\n"
-	  (format "(setq\n eicq-version %s\n" eicq-version)
-	  (format " eicq-world-rc-filename %s\n" (symbol-value
-						  'eicq-world-rc-filename))
-	  (format " eicq-log-filename %s\n" (symbol-value
-					     'eicq-log-filename))
-	  (format " eicq-sound-directory %s\n" (symbol-value 
-						'eicq-sound-directory))
-	  (format " eicq-bridge-filename %s\n" (symbol-value
-						'eicq-bridge-filename))
-	  (format " eicq-bridge-hostname %s\n" (symbol-value
-						'eicq-bridge-hostname))
-	  (format " eicq-bridge-port %s\n" (symbol-value 
-					    'eicq-bridge-port))
-	  (format " eicq-server-hostname %s\n" (symbol-value 
-						'eicq-server-hostname))
-	  (format " eicq-server-port %s\n" (symbol-value 
-					    'eicq-server-port))
-	  (format " eicq-dropped-packet-counter %s\n" (symbol-value
-						       'eicq-dropped-packet-counter))
-	  (format " eicq-resend-packet-counter %s\n" (symbol-value
-						      'eicq-resend-packet-counter))
-	  (format " eicq-trimmed-packet-counter %s\n" (symbol-value
-						       'eicq-trimmed-packet-counter))
-	  (format " eicq-error-packets %s\n" (symbol-value
-					      'eicq-error-packets))
-	  (format " eicq-buddy-view %s\n" (symbol-value
-					   'eicq-buddy-view))
-	  (format " eicq-delete-offline-messages-flag %s)\n" 
-		  (symbol-value
-		   'eicq-delete-offline-messages-flag))
-	  (format "\nFeatures:\n\t%s" (symbol-value 'features)))
+	  (emacs-version) "\n")
+  (eicq-version 1)
+  (insert "\n\nCurrent State:\n==============")
+  (eicq-report-debug)
+  (insert
+   (format "\n\nFeatures:\n\t%s" (symbol-value 'features)))
   (message "Formatting output so the bug team can read it.  Please wait...")
   (fill-paragraph t)
   (insert "\n\n")

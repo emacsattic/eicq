@@ -1,94 +1,106 @@
 -*- Outline -*-
 
-* from 0.2.12 to 0.2.13
+* 0.2.13 to 0.2.14
 
-** The number of tools on toolbar reduced.
-** Statuses moved from buddy buffer to their own read-only buffer.
-** Smilies 
-** URL/email highlighting in normal messages.
-** Can turn sounds off/on.
+- Rewrote the bug report code.  
+	It now reports any user variable that has be changed 
+	from the default.
+- eicq-version now accepts arg.
+	So C-u M-x eicq-version RET will insert the version string
+	in the current buffer at point.
+- Added type boolean to all the 'on/off' defcustoms.
+- Removed some obsolete v2 stuff.
+	
 
-* from 0.2.11 to 0.2.12
+* 0.2.12 to 0.2.13
 
-** Change status via widgets in the buddy buffer.
-** In log buffer:
+- The number of tools on toolbar reduced.
+- Statuses moved from buddy buffer to their own read-only buffer.
+- Smilies 
+- URL/email highlighting in normal messages.
+- Can turn sounds off/on.
+
+* 0.2.11 to 0.2.12
+
+- Change status via widgets in the buddy buffer.
+- In log buffer:
 	'n' move to next unread message
 	'p' move to previous unread message
 	'N' move to next message (whether read or unread)
 	'P' move to previous message (whether read or unread)
 	Outgoing messages are automatically marked as read.
-** Auto away/na timeouts now work correctly.
-** Auto online after a auto away/na.
-** Use the same toolbar in both the log and buddy buffers.
-** M-x eicq-login automatically brings up the buddy and log buffers.
-** The toolbar button "Disconnect":
+- Auto away/na timeouts now work correctly.
+- Auto online after a auto away/na.
+- Use the same toolbar in both the log and buddy buffers.
+- M-x eicq-login automatically brings up the buddy and log buffers.
+- The toolbar button "Disconnect":
 	Does a 'eicq-logout'
 	Kills the Eicq buffers.
 
-* from 0.2.10 to 0.2.11
+* 0.2.10 to 0.2.11
 
-** 'eicq-report-bug' now working.
+- 'eicq-report-bug' now working.
 
-* from 0.2.9 to 0.2.10
+* 0.2.9 to 0.2.10
 
-** No longer distributed as an XEmacs package (due to compatibility issues)
-** Re-arrange variables so that everything compiles cleanly with no errors.
-** Uses XEmacs to create the info documentation.
+- No longer distributed as an XEmacs package (due to compatibility issues)
+- Re-arrange variables so that everything compiles cleanly with no errors.
+- Uses XEmacs to create the info documentation.
 
-* from 0.2.8 to 0.2.9
+* 0.2.8 to 0.2.9
 
-** New function 'eicq-report-bug'
-** 'eicq-email-author' uses Gnus if available.
+- New function 'eicq-report-bug'
+- 'eicq-email-author' uses Gnus if available.
 
-* from 0.2.5 to 0.2.8
+* 0.2.5 to 0.2.8
 
-** Mainly just doc fixes.
+- Mainly just doc fixes.
 
-* from 0.2.4 to 0.2.5
+* 0.2.4 to 0.2.5
 
-** entered into the mainstream XEmacs packages
+- entered into the mainstream XEmacs packages
 
-* from 0.2.3 to 0.2.4
+* 0.2.3 to 0.2.4
 
-** clickety click toolbars
-** new locations for files (a system wide approach)
-** more sound
+- clickety click toolbars
+- new locations for files (a system wide approach)
+- more sound
 
-* from 0.2.2 to 0.2.3
+* 0.2.2 to 0.2.3
 
-** sound added
+- sound added
 
-* from 0.2.1 to 0.2.2
+* 0.2.1 to 0.2.2
 
-** highlight alias and url (from Erik)
-** world-mode
-** eicq-change-user, eicq-hide-window
+- highlight alias and url (from Erik)
+- world-mode
+- eicq-change-user, eicq-hide-window
 
-* from 0.2.0 to 0.2.1
+* 0.2.0 to 0.2.1
 
-** remove relogin, more stable
+- remove relogin, more stable
 
-* from 0.1.3 to 0.2.0
+* 0.1.3 to 0.2.0
 
-** ICQ version 5 protocol
-** meta user info query and update
-** register new user, change password
-** receive contact list transfer
-** forward message
-** more stable (less kicked out)
+- ICQ version 5 protocol
+- meta user info query and update
+- register new user, change password
+- receive contact list transfer
+- forward message
+- more stable (less kicked out)
 
-* from 0.1.2 to 0.1.3
+* 0.1.2 to 0.1.3
 
-** restructure of eicq-world
-** use resource file instead of lisp structure
-** new files in package: NEWS and world (resource file)
-** alias selection as temporary group
-** fixed random popping up uin
-** safer udp2tcp: use length prefix instead of delimiting magic string
-** eicq-do-status-update-hook and eicq-do-message-hook for customization
-** split and send long messages
-** search users, update basic info and extended info
-** relogin quiently after being kicked out
-** auto-na
+- restructure of eicq-world
+- use resource file instead of lisp structure
+- new files in package: NEWS and world (resource file)
+- alias selection as temporary group
+- fixed random popping up uin
+- safer udp2tcp: use length prefix instead of delimiting magic string
+- eicq-do-status-update-hook and eicq-do-message-hook for customization
+- split and send long messages
+- search users, update basic info and extended info
+- relogin quiently after being kicked out
+- auto-na
 
 

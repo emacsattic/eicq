@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2001-4-24 16:08:33 (steve)>
+;; Last-Modified: <2001-6-5 21:56:16 (steve)>
 ;; Keywords: eicq, toolbar, comm
 
 ;; Eicq is free software; you can redistribute it and/or modify it
@@ -36,6 +36,21 @@
   :group 'eicq-option
   :type 'directory
   :tag "Toolbar Directory")
+
+(defcustom eicq-use-toolbar (if (featurep 'toolbar)
+				'default-toolbar
+			      nil)
+  "*If nil, do not use a toolbar.
+If it is non-nil, it must be a toolbar.  The five valid values are
+`default-toolbar', `top-toolbar', `bottom-toolbar',
+`right-toolbar', and `left-toolbar'."
+  :type '(choice (const default-toolbar)
+		 (const top-toolbar) (const bottom-toolbar)
+		 (const left-toolbar) (const right-toolbar)
+		 (const :tag "no toolbar" nil))
+  :group 'eicq-option)
+
+;;; Internal variables
 
 (defvar eicq-password-icon
   (toolbar-make-button-list
@@ -213,19 +228,6 @@ Argument EMAIL is the email address of the person you're searching for."
     [eicq-disconnect-icon
      eicq-toolbar-disconnect t "Disconnect"])
   "A clickety click Eicq log buffer toolbar.")
-
-(defcustom eicq-use-toolbar (if (featurep 'toolbar)
-				'default-toolbar
-			      nil)
-  "*If nil, do not use a toolbar.
-If it is non-nil, it must be a toolbar.  The five valid values are
-`default-toolbar', `top-toolbar', `bottom-toolbar',
-`right-toolbar', and `left-toolbar'."
-  :type '(choice (const default-toolbar)
-		 (const top-toolbar) (const bottom-toolbar)
-		 (const left-toolbar) (const right-toolbar)
-		 (const :tag "no toolbar" nil))
-  :group 'eicq-option)
 
 (defun eicq-install-buddy-toolbar ()
   "Install the toolbar for `eicq-buddy-mode' in Eicq."
