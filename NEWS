@@ -10,6 +10,11 @@
 	in the current buffer at point.
 - Added type boolean to all the 'on/off' defcustoms.
 - Removed some obsolete v2 stuff.
+- Renamed udp2tcp.cc to icq2tcp.cc
+- Added new target "pkg" to Makefile
+	It builds Eicq and creates a tarball that can be used to
+	install Eicq simply by unpacking the tarball into the 
+	appropriate directory.
 	
 
 * 0.2.12 to 0.2.13

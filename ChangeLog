@@ -1,3 +1,42 @@
+2001-07-22  Steve Youngs  <youngs@xemacs.org>
+
+	* Version 0.2.14 released.
+
+	* eicq-toolbar.el (eicq-help-icon): New.
+	(eicq-toolbar-help): New.
+	(eicq-log-toolbar): Use them.
+
+	* eicq.texi: Still not finished, but some progress has been
+	made. :-)
+
+2001-07-19  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-disconnect): Update doc string.
+
+2001-07-16  Steve Youngs  <youngs@xemacs.org>
+
+	* Makefile (BIN): Rename udp2tcp to icq2tcp.
+	(BIN_DIR): Change to lib-src.
+	(STAGING): New.
+	(BIN_STAGING): New.
+	(DATA_STAGING): New.
+	(INFO_STAGING): New.
+	(LISP_STAGING): New.
+	(TAR): New.
+	(TAR_FLAGS): New.
+	(VER): New.
+	(pkg): New target.
+
+	* udp2tcp.cc: Removed.
+
+	* icq2tcp.cc: New file, at this stage it is a direct copy
+	of udp2tcp.cc.
+
+	* eicq.el: Use icq2tcp throughout instead of udp2tcp.
+	(eicq-bridge-filename): Don't use a path, XEmacs can find it providing
+	it's in the XEmacs exec path.
+	
+
 2001-06-06  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq-report.el (eicq-report-debug): New.

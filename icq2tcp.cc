@@ -1,53 +1,47 @@
-/** udp2tcp.cc   -*-C-*-
- ** 
- ** Copyright (C) 1999 by Stephen Tse
- ** Copyright (C) 2000, 2001 Steve Youngs
- ** 
- ** 
- ** Eicq is free software; you can redistribute it and/or modify
- ** it under the terms of the GNU General Public License as published by
- ** the Free Software Foundation; either version 2 of the License, or
- ** (at your option) any later version.
- ** 
- ** Eicq is distributed in the hope that it will be useful,
- ** but WITHOUT ANY WARRANTY; without even the implied warranty of
- ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- ** GNU General Public License for more details.
- ** 
- ** You should have received a copy of the GNU General Public License
- ** along with this program; if not, write to the Free Software
- ** Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA 
- **/
+/// icq2tcp.cc   -*-C++-*-
+
+/// Copyright (C) 2001 Steve Youngs
 
 
+/// This program is free software; you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation; either version 2 of the License, or
+/// (at your option) any later version.
 
-/* --------------------------------------------------------------- */
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
 
-/* TCP <-> UDP bridge program
- * 
- * 
- * 
- * Original Author: Stephen Tse <stephent@sfu.ca>
- * Maintainer: Steve Youngs <youngs@xemacs.org>
- * License: GPL
- * Created: Aug 08, 1998
- * Version: 0.2.13
- * Where: http://eicq.sourceforge.net/
- * Keywords: udp, tcp, network, bridge, icq, emacs
- * 
- * 
- * Description:
- *   A network bridge program that receives TCP packets from one host
- *   and send them to second host as UDP packets and vice versa.
- * 
- *   Initially developed to solve the deficiency of no UDP support in
- *   Emacs, in order to connect ICQ server with UDP packets. However,
- *   only the function send_v5() is Eicq (an XEmacs ICQ client) dependent,
- *   you can easily modify it for other general use.
- * 
- *   thost: TCP-speaking host
- *   uhost: UDP-speaking host
- */
+/// You should have received a copy of the GNU General Public License
+/// along with this program; if not, write to the Free Software
+/// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+
+// Based on udp2tcp.cc by Stephen Tse <stephent@sfu.ca>
+
+//     Author: Steve Youngs <youngs@xemacs.org>
+// Maintainer: Steve Youngs <youngs@xemacs.org>
+//    License: GPL
+//    Created: Jul 16, 2001
+//    Version: 0.1.0
+//      Where: http://eicq.sourceforge.net/
+//   Keywords: udp, tcp, network, bridge, icq, emacs
+ 
+ 
+// Description:
+//    A network bridge program that receives TCP packets from one host
+//    and send them to second host as UDP packets and vice versa.  It
+//    doesn't have much use outside of ICQ without modification.
+ 
+//    Initially developed to solve the deficiency of no UDP support in
+//    Emacs, in order to connect ICQ server with UDP packets. However,
+//    only the function send_v5() is Eicq (an XEmacs ICQ client) dependent,
+//    you can easily modify it for other general use.
+ 
+//    thost: TCP-speaking host
+//    uhost: UDP-speaking host
+
 
 
 #include <stdio.h>
@@ -257,7 +251,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in udp_local_addr, udp_remote_addr, 
         tcp_local_addr, tcp_remote_addr;
 
-    printf("UDP <-> TCP bridge v0.2.13\n\
+    printf("ICQ <-> TCP bridge v0.1.0\n\
 \n\
 http://eicq.sourceforge.net/\n\n");
   

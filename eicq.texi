@@ -1,7 +1,7 @@
 \input texinfo @c eicq.texi   -*-TeXinfo-*-
 @c $Id$
 @c Copyright (C) 2000, 2001 Steve Youngs
-@c Last-Modified: <2001-6-6 18:53:58 (steve)>
+@c Last-Modified: <2001-7-22 10:53:59 (steve)>
 @c %**start of header
 @setfilename eicq.info
 @settitle A Mirabilis ICQ clone for XEmacs
@@ -10,7 +10,7 @@
 @c %**end of header
 @set EDITION 1.1
 @set VERSION 0.2.14
-@set UPDATED May 20, 2001
+@set UPDATED Jul 22, 2001
 
 @dircategory Lisp
 @direntry
@@ -18,9 +18,10 @@
 @end direntry
 
 @ifinfo
+This manual documents Eicq, a Mirabilis ICQ clone for XEmacs.
+It corresponds to Eicq version @value{VERSION}.  
 
-This file documents Eicq, a Mirabilis ICQ clone for XEmacs
-
+The manual was last updated @value{UPDATED}.
 @end ifinfo
 
 @titlepage
@@ -54,10 +55,17 @@ into another language, under the above conditions for modified versions.
 @node Top, Overview, (dir), (dir)
 
 @ifinfo 
-This file documents the @code{Eicq} elisp package.
+This manual documents Eicq, a Mirabilis ICQ client for XEmacs.
+It corresponds to Eicq version @value{VERSION}.  
 
-It corresponds with @code{Eicq} @value{VERSION}.
+The manual was last updated @value{UPDATED}.
 @end ifinfo
+
+This manual is far from finished and at this stage you would be better
+off looking at the source .el files to answer your questions.  You are
+very welcome to direct any questions to either
+@email{eicq-users@@lists.sf.net, the Eicq Users mailing list} or to me
+at @email{youngs@@xemacs.org, Steve Youngs}.
 
 
 @menu
@@ -126,8 +134,9 @@ Hang on a minute, Eicq isn't gonna do much for you until you set up a
 couple of things.  To make it easier for you there is a "user setup
 script" provided.
 
-Just run @code{eicq-user-setup.sh} as the user that will be using
-@code{Eicq}. 
+Just run
+@file{/usr/local/lib/xemacs/site-packages/lib-src/eicq-user-setup.sh} as
+the user that will be using Eicq.
 
 @cindex world
 That will setup the user directory, @samp{~/.eicq/}, placing in it a
@@ -148,18 +157,175 @@ enter your password and away you go.
 
 @menu
 * User Commands::               M-xerie things you can do.
+* User Variables::              All the stuff you can setq.
 * Global Key Bindings::         Key bindings common througout Eicq.
 @end menu
 
-@node User Commands, Global Key Bindings, Invoking, Invoking
+@node User Commands, User Variables, Invoking, Invoking
 @chapter User Commands
 @cindex User Commands
 @cindex commands
 
 @cindex alias
 @cindex uin
-@code{eicq-alias-around}
+@cindex eicq-alias-around
+@table @code
+@item eicq-alias-around
 
+Return an alias/uin on current line or lines before.  If called
+interactively, display and push alias into `kill-ring'.
+
+@cindex alias
+@cindex uin
+@cindex eicq-alias-here
+@item eicq-alias-here
+
+The same as @code{eicq-alias-around}, except it only works on the current
+line.
+
+@cindex alias
+@cindex uin
+@cindex eicq-alias-uin
+@item eicq-alias-uin
+
+Return a uin from an ALIAS in @file{~/.eicq/world}.  Return uin if ALIAS
+is already an uin.  Return 0 if no corresponding uin or invalid uin.  If
+called interactively, display and push uin into `kill-ring'.
+
+@cindex alias
+@cindex authorize
+@cindex eicq-authorize
+@item eicq-authorize
+
+Send an @samp{authorize} packet to allow others to add you to their
+contact list.  Only those poor soles using the Windoze Mirabilis ICQ
+clients think that they need this.
+
+@cindex alias
+@cindex authorize
+@cindex eicq-authorize
+@cindex eicq-authorize-alias-around
+@item eicq-authorize-alias-around
+
+Have a look at @code{eicq-authorize} and @code{eicq-alias-around}.  This
+is sort of a combination of these two.
+
+@cindex alias
+@cindex authorize
+@cindex eicq-authorize
+@cindex eicq-authorize-alias-here
+@item eicq-authorize-alias-here
+
+Have a look at @code{eicq-authorize} and @code{eicq-alias-here}.  This
+is sort of a combination of these two.
+
+@cindex bridge
+@cindex eicq-bridge
+@cindex eicq-bridge-buffer
+@cindex eicq-bridge-show-buffer
+@item eicq-bridge-show-buffer
+
+Switch to the @code{eicq-bridge-buffer} to view debugging info.  You're
+fluent in hex aren't you?
+
+@cindex homepage
+@cindex eicq-browse-homepage
+@item eicq-browse-homepage
+
+Go to the Eicq homepage (you never know, there may be a newer version
+that you can download).
+
+@cindex buddy
+@item eicq-buddy-select-all-in-view-by-regexp
+
+Toggle selection of all aliases matching REGEXP in current view.
+
+@cindex buddy
+@item eicq-buddy-select-all-in-view-by-status
+
+Similar to @code{eicq-buddy-select-all-in-view-by-regexp}, except select
+by status.
+
+@cindex eicq-buddy-buffer
+@item eicq-buddy-show-buffer
+
+Switch to the @code{eicq-buddy-buffer}.
+
+@cindex buddy
+@cindex eicq-buddy-buffer
+@item eicq-buddy-view-active
+
+Change the view of the buddy buffer to show just the buddies that you
+have exchanged messages with in this session.
+
+@cindex buddy
+@cindex eicq-buddy-buffer
+@item eicq-buddy-view-all
+
+Change the view of the buddy buffer to show all buddies in your contact
+list. 
+
+@cindex buddy
+@cindex eicq-buddy-buffer
+@item eicq-buddy-view-connected
+
+Change the view of the buddy buffer to show only those buddies in your
+contact list that are currently connected to ICQ.
+
+@cindex password
+@item eicq-change-password
+
+Change the password that you use to log into the ICQ server with.
+
+@cindex status
+@item eicq-change-status
+
+Change your status.  It will prompt you for a status which can be one
+of: @samp{online}, @samp{ffc}, @samp{na}, @samp{dnd}, @samp{invisible}
+or @samp{offline}.
+
+@cindex user
+@cindex username
+@cindex password
+@item eicq-change-user
+
+Change your alias/nick.  It will prompt you for a new alias and you
+password.  You will need to log off the ICQ server and back on again
+before this takes affect.
+
+@cindex customize
+@item eicq-customize
+
+Wanna change something?  Go here.
+
+@cindex logout
+@cindex disconnect
+@item eicq-disconnect
+
+This will log you off the ICQ server and close all the Eicq buffers.
+
+@cindex forward
+@item eicq-forward-message-around
+
+Forward the message around point to somebody else.  It includes a header
+of the original message author's details.
+
+@cindex forward
+@item eicq-forward-message-around-without-header
+
+The same as @code{eicq-forward-message-around} except that it doesn't
+include the header of the original message author's details.
+
+@item eicq-hex-bin
+
+Return a binary string from a hex string HEX.  It ignores all non-lower
+letter hex characters, which makes reading string from
+@code{eicq-bin-pretty-hex} and network debug convenient.  If the length
+of HEX is odd, ?0 is appended to its end.
+
+
+
+@end table
 
 @node Buddy Buffer, Log Buffer, Invoking, Top
 @chapter Buddy Buffer

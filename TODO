@@ -1,6 +1,6 @@
 -*- outline -*-
 
-* Last Updated: Mar 2, 2001
+* Last Updated: July 22, 2001
 
 Here's a list of things I may or may not get around to putting
 into Eicq.
@@ -45,7 +45,7 @@ Feel free to do any of these things and send a patch to
 	avoid spoofing. licq seems to be able to achieve that. Is
 	spoofing only allowed in TCP mode?
 
-** implement ack'ing in udp2tcp
+** implement ack'ing in icq2tcp
 
 	sometimes loading gnus/w3 makes single-threaded emacs crawl
 	and get kicked out of icq server because of failures of
@@ -61,7 +61,10 @@ Feel free to do any of these things and send a patch to
 
 ** openssl support
 
-** port udp2tcp to other platforms
+** port icq2tcp to other platforms
 
 	not necessary once Eicq is totally Lisp.
 
+** toolbar
+	
+	move the help icon to the right hand edge of frame ala w3

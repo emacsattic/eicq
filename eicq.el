@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-6-7 00:09:40 (steve)>
+;; Last-Modified: <2001-7-19 14:55:55 (steve)>
 ;; Version: 0.2.14
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
@@ -389,7 +389,7 @@ See `list-coding-systems'."
                (coding-system-list)))))
 
 (defcustom eicq-bridge-filename 
-  "/usr/local/bin/udp2tcp"
+  "icq2tcp"
   "*Filename for `eicq-bridge' program."
   :group 'eicq-option)
 
@@ -1128,10 +1128,10 @@ COUNT means how many time this packets has been resent. Default is 0."
 ;;; Code - network:
 
 (defvar eicq-network nil
-  "TCP network between Emacs and `udp2tcp'.")
+  "TCP network between Emacs and `icq2tcp'.")
 
 (defvar eicq-bridge nil
-  "Process `udp2tcp'.
+  "Process `icq2tcp'.
 It bridges UDP (ICQ server) and TCP (Emacs).")
 
 (defun eicq-bridge-show-buffer ()
@@ -1172,10 +1172,10 @@ this may allow central bridge servers in future."
     ;; should we implement using filter and accept-process-output?
 
     (message "Starting up bridge...")
-    ;; wait for `udp2tcp' to execute
+    ;; wait for `icq2tcp' to execute
     (accept-process-output eicq-bridge 5)
     (message "Starting up network...")
-    ;; wait for `udp2tcp' to setup sockets
+    ;; wait for `icq2tcp' to setup sockets
     (sleep-for 2))
 
 
@@ -1300,9 +1300,7 @@ PROCESS and CHANGE is for `set-process-sentinel'."
       (setq eicq-bridge-port nil)))
 
 (defun eicq-disconnect ()
-  "Close `eicq-bridge' and `eicq-network'.
-It does not first logout ICQ server.
-Normally should use `eicq-logout' to logout first."
+  "Log out of ICQ and close all Eicq buffers."
   (interactive)
   (eicq-logout 'kill)
   (eicq-network-kill)
@@ -1752,7 +1750,7 @@ with 'authorized' status to my contact list."
 
 (defun eicq-redo-hex (hex)
   "Debug packet HEX.
-Copy hex debug output from `udp2tcp' and use this function to re-do the
+Copy hex debug output from `icq2tcp' and use this function to re-do the
 packet to simulate a server reply."
   (interactive "sHex: ")
   (let ((bin (eicq-hex-bin hex)))

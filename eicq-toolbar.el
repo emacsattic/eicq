@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2001-6-5 21:56:16 (steve)>
+;; Last-Modified: <2001-7-22 11:46:59 (steve)>
 ;; Keywords: eicq, toolbar, comm
 
 ;; Eicq is free software; you can redistribute it and/or modify it
@@ -122,6 +122,11 @@ If it is non-nil, it must be a toolbar.  The five valid values are
    (expand-file-name "new-log.xpm" eicq-icon-directory))
   "New log file toolbar icon.")
 
+(defvar eicq-help-icon
+  (toolbar-make-button-list
+   (expand-file-name "help.xpm" eicq-icon-directory))
+  "A help toolbar icon.")
+
 ;; Define the functions for the toolbar
 
 (defun eicq-toolbar-change-password (password)
@@ -199,6 +204,11 @@ Argument EMAIL is the email address of the person you're searching for."
   (interactive)
   (eicq-log-new-file))
 
+(defun eicq-toolbar-help ()
+  "Display the Eicq info documentation."
+  (interactive)
+  (Info-goto-node "(eicq.info)Top"))
+
 ;; Now define the toolbar
 (defvar eicq-log-toolbar
   '([eicq-password-icon
@@ -226,7 +236,9 @@ Argument EMAIL is the email address of the person you're searching for."
     [eicq-logout-icon
      eicq-toolbar-logout t "Logout"]
     [eicq-disconnect-icon
-     eicq-toolbar-disconnect t "Disconnect"])
+     eicq-toolbar-disconnect t "Disconnect"]
+    [eicq-help-icon
+     eicq-toolbar-help t "Help"])
   "A clickety click Eicq log buffer toolbar.")
 
 (defun eicq-install-buddy-toolbar ()
