@@ -336,7 +336,11 @@ For example, %s icq.mirabilis.com 4000 4001\n\n", argv[0], argv[0]);
     udp_host = gethostbyname(udp_remote_host);
 
     if (udp_host == NULL) {
+#ifdef sun
+        perror("gethostbyname");
+#else
         herror("gethostbyname"); /* instead of perror */
+#endif /* sun */
         close(udp_sock);
         close(tcp_sock);
         exit(1);

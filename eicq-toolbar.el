@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last-Modified: <2001-7-22 11:46:59 (steve)>
+;; Last-Modified: <2001-8-11 15:45:44 (steve)>
 ;; Keywords: eicq, toolbar, comm
 
 ;; Eicq is free software; you can redistribute it and/or modify it
@@ -48,7 +48,7 @@ If it is non-nil, it must be a toolbar.  The five valid values are
 		 (const top-toolbar) (const bottom-toolbar)
 		 (const left-toolbar) (const right-toolbar)
 		 (const :tag "no toolbar" nil))
-  :group 'eicq-option)
+  :group 'eicq-interface)
 
 ;;; Internal variables
 

@@ -25,13 +25,16 @@
 #----------------------------------------------------------------
 
 # Variables and constants
+
 MKDIR=/bin/mkdir
-# for Windows/Cygwin comment out line above and uncomment the
+# Cygwin # Comment out line above and uncomment the
 # following line
 # MKDIR=/usr/bin/mkdir
+
 INSTALL=/usr/bin/install
+
 RCFILE=/usr/local/lib/xemacs/site-packages/etc/eicq/world
-# for Windows/Cygwin comment out the line above and uncomment the
+# Cygwin # Comment out the line above and uncomment the
 # following line (/cygdrive/c is Cygwin notation for C:\ !!!)
 # RCFILE=/cygdrive/c/Program\ Files/XEmacs/site-packages/etc/eicq/world
 RCDIR=${HOME}/.eicq

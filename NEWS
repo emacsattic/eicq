@@ -3,8 +3,8 @@
 * 0.2.14 to 0.2.15
 
 - Cygwin builds (Thorsten Bonow)
-	- Add cygwin related comments to Makefile, INSTALL,
-	  eicq-user-install.sh 
+	Add cygwin related comments to Makefile, INSTALL,
+	eicq-user-install.sh 
 - New file 'eicq-convert.el' (Erik Arneson)
 	Convert Licq and Micq contact lists to Eicq 'world' format.
 - Makefile improvements (Erik Arneson).
@@ -14,7 +14,8 @@
 - Optionally start Eicq in its own frame (Erik Arneson).
 - Implement auto-response messages (Me).
 - Update URLs to reflect SourceForge's new domain 'sf.net'(Me).
-
+- Solaris builds (Jack Twilley)
+	Add needed changes to Makefile to build on Solaris.
 
 * 0.2.13 to 0.2.14
 

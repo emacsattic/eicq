@@ -18,16 +18,18 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 PACKAGE = eicq
-VER = 0.2.14
+VER = 0.2.15
 
 # csh... yell no, we won't go!
+
 SHELL = /bin/sh
-# for Windows/Cygwin comment out line above and uncomment the following line
+# Cygwin # Comment out line above and uncomment the following line
 # SHELL = /usr/bin/sh
 
 # Everything hangs off this.  
+
 PREFIX = /usr/local/lib/xemacs/site-packages
-# for Windows/Cygwin comment out the line above and uncomment the
+# Cygwin # Comment out the line above and uncomment the
 # following line (/cygdrive/c is Cygwin notation for C:\ !!!)
 # PREFIX = /cygdrive/c/Program\ Files/XEmacs/site-packages
 
@@ -57,7 +59,11 @@ EMACS = xemacs
 EMACS_FLAGS = -batch
 CC = gcc
 CFLAGS = -O2 -Wall
+
 INSTALL = install -o 0 -g 0
+# Solaris #  Comment out above line and uncomment the line below
+# INSTALL = install -u 0 -g 0
+
 PKG_INSTALL = install
 TAR = /bin/tar
 TAR_FLAGS = czf
@@ -87,6 +93,9 @@ all:: $(BIN) autoloads $(OBJECTS) customloads texinfo
 
 $(BIN): $(BIN).c
 	$(CC) $(CFLAGS) -o $(BIN) $(BIN).c
+# Solaris # Comment out the above and uncomment the following.
+# $(BIN): $(BIN).c
+# 	$(CC) $(CFLAGS) -o $(BIN) $(BIN).c -lsocket -lnsl
 
 bin: $(BIN)
 
@@ -118,6 +127,25 @@ install: all
 	$(INSTALL) -m 644 $(INFO_FILES) $(INFO_DIR)
 	$(INSTALL) -m 644 $(SOURCES) $(EXTRA_SRC) $(OBJECTS) $(EXTRA_OBJ) \
 		$(LISP_DIR)
+
+# Solaris # Comment out the above and uncomment the following.
+# install: all
+# 	for file in $(BIN_DIR) $(DATA_DIR) $(INFO_DIR) $(LISP_DIR); \
+# 	  do $(INSTALL) -d $$file; \
+# 	done
+# 	for file in $(USERSH) $(BIN); \
+# 	  do $(INSTALL) -f $(BIN_DIR) -m 755 $$file; \
+# 	done
+# 	for file in $(DATA_FILES); \
+# 	  do $(INSTALL) -f $(DATA_DIR) -m 644 $$file; \
+# 	done
+# 	for file in $(INFO_FILES); \
+# 	  do $(INSTALL) -f $(INFO_DIR) -m 644 $$file; \
+# 	done
+# 	for file in $(SOURCES) $(EXTRA_SRC) $(OBJECTS) $(EXTRA_OBJ); \
+# 	  do $(INSTALL) -f $(LISP_DIR) -m 644 $$file; \
+# 	done
+
 
 pkg: all
 	$(PKG_INSTALL) -d $(STAGING) $(BIN_STAGING) $(DATA_STAGING) \

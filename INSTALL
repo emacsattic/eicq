@@ -20,13 +20,21 @@ This installation is definitely a 'no-brainer'
    your autoexec.bat, add 'set HOME=C:\' before installation. You
    should have set HOME for Cygwin anyway). Reboot if necessary before
    installing eicq!
+
+   For Cygwin, search for '# Cygwin #' in the Makefile and
+   eicq-user-install.sh  to see what you need to change to build on
+   Cygwin.
+
+   For Solaris, search for '# Solaris #' in the Makefile to see what
+   you need to change to build on Solaris.
+
 2) 'make'
 3) become 'root' and then 'make install'. On Windows just type
    'make install'
 
 Hold it, you're not finished yet...
 
-Add the following to your ~/.emacs 
+Add the following to your ~/.emacs or ~/.xemacs/init.el
 ---------- cut ----------
 
 (require 'eicq)

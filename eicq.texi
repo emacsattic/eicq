@@ -1,7 +1,7 @@
 \input texinfo @c eicq.texi   -*-TeXinfo-*-
 @c $Id$
 @c Copyright (C) 2000, 2001 Steve Youngs
-@c Last-Modified: <2001-7-22 10:53:59 (steve)>
+@c Last-Modified: <2001-8-11 15:48:37 (steve)>
 @c %**start of header
 @setfilename eicq.info
 @settitle A Mirabilis ICQ clone for XEmacs
@@ -9,7 +9,7 @@
 @setchapternewpage odd
 @c %**end of header
 @set EDITION 1.1
-@set VERSION 0.2.14
+@set VERSION 0.2.15
 @set UPDATED Jul 22, 2001
 
 @dircategory Lisp

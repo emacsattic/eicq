@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-10 09:47:23 (erik)>
-;; Version: 0.2.15pre6
+;; Last-Modified: <2001-8-12 02:14:21 (steve)>
+;; Version: 0.2.15
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.15pre6"
+(defconst eicq-version "0.2.15"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -635,7 +635,7 @@ See `eicq-buddy-view-all', `eicq-buddy-view-connected', and
 
 (defcustom eicq-start-in-new-frame nil
   "*If non-NIL, Eicq will start in its own frame."
-  :group 'eicq-option
+  :group 'eicq-interface
   :type 'boolean)
 
 (defvar eicq-user-status "offline"

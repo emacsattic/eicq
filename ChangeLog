@@ -1,3 +1,22 @@
+2001-08-11  Steve Youngs  <youngs@xemacs.org>
+
+	* Version 0.2.15 released.
+
+	* eicq-toolbar.el (eicq-use-toolbar): Change to customize group
+	'eicq-interface'.
+
+	* eicq.el (eicq-start-in-new-frame): Change to customize group
+	'eicq-interface'.
+
+	* INSTALL:  Add comments about building on Solaris.
+
+2001-08-11  Jack Twilley  <jmt@tbe.net>
+
+	* icq2tcp.c (main): Use 'perror' instead of 'herror' for Solaris
+	builds.
+
+	* Makefile: Make necessary changes for Solaris builds.
+	
 2001-08-10  Erik Arneson  <erik@aarg.net>
 
 	* eicq.el (eicq-show-window): Minor fix.  Changed `framep' to
