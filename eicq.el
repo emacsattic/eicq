@@ -487,6 +487,11 @@ messages again next time you login."
   :group 'eicq-option
   :type '(choice (item t) (item ask) (item nil)))
 
+(defcustom eicq-smiley nil
+  "*Non-nil means smileys are enabled."
+  :group 'eicq-interface
+  :type '(choice (item t) (item nil)))
+
 (defcustom eicq-buddy-window-width 20
   "*Width of window for `eicq-buddy-buffer'."
   :group 'eicq-interface)
@@ -3585,7 +3590,8 @@ MESSAGES is an argument list for `format' to be inserted."
 	    eicq-log-buddy-message-flag eicq-log-buddy-message-mark)
   (save-excursion
     (set-buffer eicq-log-buffer)
-    (smiley-buffer)
+    (if eicq-smiley
+        (smiley-buffer))
     (goto-address)))
 
 (defvar eicq-url-map

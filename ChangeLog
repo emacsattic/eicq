@@ -1,3 +1,12 @@
+2002-06-16  Jack Twilley  <jmt@tbe.net>
+
+        * eicq.el (eicq-log-buddy-message): Made smileys optional.
+          (eicq-smiley): Created a configure variable in the 
+          'eicq-interface' group.
+
+2002-05-16  Steve Youngs  <youngs@xemacs.org>
+
+
 2002-05-16  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el (eicq-world-rc-regexp): Update regexp so we don't gobble
