@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-9 10:12:42 (erik)>
+;; Last-Modified: <2001-8-10 10:57:24 (steve)>
 ;; Version: 0.2.15pre4
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
@@ -1152,15 +1152,11 @@ be set to nil; then `eicq-bridge-hostname' will be set to \"127.0.0.1\" and
 Running externally means no convenient debug network dump inside Emacs, but
 this may allow central bridge servers in future."
 
-  ;; We only want to do this stuff if we're running a local bridge.
-  (unless (or eicq-bridge-hostname
-              (not (string= eicq-bridge-hostname "127.0.0.1")))
-    (setq eicq-bridge-hostname "127.0.0.1")
-    (setq eicq-bridge-port (+ 4000 (random 1000))))
-
   (unless (or (and (processp eicq-bridge) ; running already
                    (eq (process-status eicq-network) 'run))
               eicq-bridge-port)         ; remote bridge
+    (setq eicq-bridge-hostname "127.0.0.1")
+    (setq eicq-bridge-port (+ 4000 (random 1000)))
     (eicq-log-system
      "Trying to run a local bridge %s at port %s..."
      eicq-bridge-hostname eicq-bridge-port)
@@ -1194,17 +1190,17 @@ this may allow central bridge servers in future."
                "eicq network" nil eicq-bridge-hostname eicq-bridge-port)
             (file-error nil))))         ; eicq-network = nil if fails
 
-  (cond ((eicq-connected-p)
-         (set-process-sentinel eicq-network 'eicq-network-kill)
-         (set-process-filter eicq-network 'eicq-network-filter)
-         (if (processp eicq-bridge)
-             (progn
-               (set-process-sentinel eicq-bridge 'eicq-bridge-kill)
-               (with-current-buffer eicq-bridge-buffer
-                 (eicq-bridge-mode))))
-         (eicq-log-system "....connection successful"))
-        (t
-         (eicq-log-system "....connection failed"))))
+  (cond
+   ((eicq-connected-p)
+    (set-process-sentinel eicq-bridge 'eicq-bridge-kill)
+    (set-process-sentinel eicq-network 'eicq-network-kill)
+    (set-process-filter eicq-network 'eicq-network-filter)
+    (with-current-buffer eicq-bridge-buffer
+      (eicq-bridge-mode)))
+   (t
+    (eicq-log-system "....connection failed"))))
+
+
 
 (defvar eicq-main-map
   (let ((map (make-keymap 'eicq-main-map)))
@@ -1295,8 +1291,7 @@ Commands: \\{eicq-main-mode}"
 (defun eicq-network-kill (&optional process change)
   "Kill `eicq-network'.
 PROCESS and CHANGE is for `set-process-sentinel'."
-  (if (processp eicq-network)
-      (delete-process eicq-network))
+  (if (processp eicq-network) (delete-process eicq-network))
   (setq eicq-network nil))
 
 (defun eicq-bridge-kill  (&optional process change)
