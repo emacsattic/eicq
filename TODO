@@ -70,3 +70,5 @@ Feel free to do any of these things and send me a patch
 ** port udp2tcp to other platforms
 
 	maybe not necessary if written as a module??
+
+** test cvs update
