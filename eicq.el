@@ -4,7 +4,7 @@
 ;; Copyright (C) 2000 Steve Youngs
 
 ;; Original Author: Stephen Tse <stephent@sfu.ca>
-;; Maintainer: Steve Youngs <youngs_s@ozlinx.com.au>
+;; Maintainer: Steve Youngs <youngs@xemacs.org>
 
 ;; This file is part of XEmacs.
 
@@ -25,9 +25,9 @@
 
 
 ;; Created: Aug 08, 1998
-;; Updated: July 18, 2000
+;; Updated: Aug 16, 2000
 
-;; Version: 0.2.5
+;; Version: 0.2.7
 ;; Homepage: http://users.ozlinx.com.au/~youngs_s/eicq/
 ;; Keywords: comm ICQ
 
@@ -50,14 +50,13 @@
 
 ;;; Code:
 
-;;; Code - header:
-
-;; misc info, custom groups
-
 (eval-when-compile
   (require 'browse-url)
   (require 'reporter)
   (require 'outline))
+
+(defconst eicq-version "0.2.7"
+  "Version of eicq you are currently using.")
 
 (defgroup eicq nil
   "Mirabilis ICQ communication client."
@@ -87,9 +86,6 @@ Run `eicq-update-meta-info' after changing any of these variables."
 (defgroup eicq-sound nil
   "Sound preferences."
   :group 'eicq)
-
-(defconst eicq-version "0.2.5"
-  "Version of eicq you are currently using.")
 
 (defun eicq-version ()
   "Return the version of eicq you are currently using."
@@ -383,7 +379,7 @@ Run `eicq-update-meta-info' after modifying this variable."
 (defun eicq-hex-bin (hex)
   "Return a binary string from a hex string HEX.
 It ignores all non-lower letter hex characters, which makes reading string
-from `eicq-bin-pretty-hex' and netwrok debug convenient.  If the length of
+from `eicq-bin-pretty-hex' and network debug convenient.  If the length of
 HEX is odd, ?0 is appended to its end."
   (interactive "sHex: ")
   (setq hex (downcase hex))
@@ -510,7 +506,7 @@ Same as `completing-read' but accepts strings as well as obarray."
        table (mapcar 'list table))
    predicate require-match initial-contents history))
 
-;;;### autoload
+;;;###autoload
 
 (defun eicq-customize ()
   "Interactively customize settings and preferences."
@@ -532,7 +528,7 @@ Same as `completing-read' but accepts strings as well as obarray."
 Dear Steve,
 "))
     (reporter-submit-bug-report
-     "youngs_s@ozlinx.com.au"
+     "youngs@xemacs.org"
      (format "eicq v%s" eicq-version) nil nil nil salutation)))
 
 (defun eicq-browse-homepage ()
@@ -1036,8 +1032,8 @@ BIN is a binary string from process."
 (defvar eicq-trimmed-packet nil
   "*Last incomplete packet.
 Due to limited buffer size of Emacs network buffer, packets can be trimmed
-and attached at the begining of next callback.  Use this in
-`eicq-network-separator' to concatenate a packet arcoss two callbacks.
+and attached at the beginning of next callback.  Use this in
+`eicq-network-separator' to concatenate a packet across two callbacks.
 Usually only one per 1000 packets needs this.")
 
 (defvar eicq-trimmed-packet-counter 0
@@ -1131,7 +1127,7 @@ Use `eicq-send' to send the string."
 
 (defun eicq-pack-keep-alive-1 ()
   "Pack another keep alive packet 051e.
-Obseleted. Not used in v5."
+Obsoleted. Not used in v5."
   (eicq-pack "\x1e\x05"))
 
 (defun eicq-pack-logout ()
@@ -1335,7 +1331,7 @@ ALIAS is the alias/uin to query info for."
 (defun eicq-pack-info-request (alias)
   "Pack info request packet 0460.
 ALIAS is the alias/uin to query info for.
-Obseleted. Use meta user instead."
+Obsoleted. Use meta user instead."
   (eicq-pack
    "\x60\x04"
    (eicq-alias-bin alias)))
@@ -1343,7 +1339,7 @@ Obseleted. Use meta user instead."
 (defun eicq-pack-info-ext-request (alias)
   "Pack extended info request packet 046a.
 ALIAS is the alias/uin to query info for.
-Obseleted. Use meta user instead."
+Obsoleted. Use meta user instead."
   (eicq-pack
    "\x6a\x04"
    (eicq-alias-bin alias)))
@@ -1370,7 +1366,7 @@ Obseleted. Use meta user instead."
 
 (defun eicq-pack-update-info (nick-name first-name last-name email)
   "Pack update info packet 050a.
-Obselete. Use meta user command instead."
+Obsolete. Use meta user command instead."
   (eicq-pack
    "\x0a\x05"
    (eicq-int-bin (1+ (length nick-name)))
@@ -1385,7 +1381,7 @@ Obselete. Use meta user command instead."
 (defun eicq-pack-update-info-ext
   (city country-code state age sex phone homepage about)
   "Pack update extended info packet 04b0.
-Obselete. Use meta user command instead."
+Obsolete. Use meta user command instead."
   (eicq-pack
    "\xb0\x04"
    (eicq-int-bin (1+ (length city)))
@@ -1473,12 +1469,12 @@ Obselete. Use meta user command instead."
 
 (defun eicq-pack-send-message-to-foreigner ()
   "Pack send message to foreigner packet 0456.
-Foreginer is someone not on my contact list.
+Foreigner is someone not on my contact list.
 Also used to request permission to add someone
 with 'authorized' status to my contact list."
   (eicq-pack "\x56\x04"))
 
-;; protocol v2-specific (obseleted)
+;; protocol v2-specific (obsoleted)
 ;; - update info 04a6 \xa6\x04
 ;; - update extended info 04b0 \xb0\x04
 ;; - login 1 044c \x4c\x04
@@ -1543,7 +1539,7 @@ See `eicq-do-*'")
   "Dispatch server packet to registered handler.
 See `eicq-do-alist'.
 PACKET is a binary string.
-Non-nil NO-ACK means no acknowlegement packet will be sent."
+Non-nil NO-ACK means no acknowledgement packet will be sent."
   (let* ((void-ack-commands '("\x0a\x00" "\xf0\x00" "\x28\x00"))
          (version (if (> (length packet) 2) (substring packet 0 2)))
          command seq-num handler)
@@ -2262,7 +2258,7 @@ white spaces is alias.  For example,
 :icq 123456 the hatter :unreal")
 
 (defun eicq-world-update ()
-  "Read `eicq-world-rc-filename' and update various user varibales.
+  "Read `eicq-world-rc-filename' and update various user variables.
 Need to call this whenever RC is modified and to be updated.
 RC file is not closed if it is the buffer of current window or it is modified."
   (interactive)
@@ -2829,7 +2825,7 @@ See `eicq-process-alias-input'."
                  (not (y-or-n-p "Send a blank message? ")))
       (eicq-process-alias-input 'aliases)
 
-      ;; appply encode only TEXT portion of packet
+      ;; apply encode only TEXT portion of packet
       (loop for x in (eicq-spliter message)
         do (eicq-send-message-helper
             ;; encoding outgoing but not that to be insert in log buffer
@@ -2937,7 +2933,7 @@ variable and modeline."
   (eicq-send (eicq-pack-search-random-user group)))
 
 (defun eicq-set-random-group (group)
-  "Set ranodm user GROUP."
+  "Set random user GROUP."
   (interactive
    (list (eicq-completing-read
           "Random group: "
@@ -3321,7 +3317,7 @@ MARK is any mark in `eicq-log-mark'."
 
 (defun eicq-log-mark-unread (&optional mark-region)
   "Mark log message around point as unread.
-Non-nil MARK-REGION or prefix arugment means marks all log in the region."
+Non-nil MARK-REGION or prefix argument means marks all log in the region."
   (interactive "P")
   (if mark-region
       (eicq-log-mark-region (region-beginning) (region-end) 'unread)
@@ -3329,7 +3325,7 @@ Non-nil MARK-REGION or prefix arugment means marks all log in the region."
 
 (defun eicq-log-mark-read (&optional mark-region)
   "Mark log message around point as read.
-Non-nil MARK-REGION or prefix arugment means marks all log in the region."
+Non-nil MARK-REGION or prefix argument means marks all log in the region."
   (interactive "P")
   (if mark-region
       (eicq-log-mark-region (region-beginning) (region-end) 'read)
@@ -3370,7 +3366,7 @@ If called interactively, display and push log into `kill-ring'."
 
 (defun eicq-forward-message-around (&optional no-header)
   "Forward message around
-Non-nil NO-HEADER means avoid perfixing message with original sender's
+Non-nil NO-HEADER means avoid prefixing message with original sender's
 info.
 ALIASES is a list of aliases/uin to send to.
 

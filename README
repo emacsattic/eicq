@@ -2,17 +2,17 @@
 
 * Introduction
 
-http://users.ozlinx.com.au/~youngs_s/eicq/README (version 0.2.3)
+http://users.ozlinx.com.au/~youngs_s/eicq/README (version 0.2.5)
 
-This file is best viewed under Emacs. Press C-c C-o now to
-see the outline of topics. You can use Emacs menu to
+This file is best viewed under XEmacs. Press C-c C-o now to
+see the outline of topics. You can use XEmacs menu to
 navigate and hide/show different topics. (C-c means Control
 and c; M-x means Meta and x.)
 
 I publish this package in the hope of making more people
-appreciate Emacs and Lisp.
+appreciate XEmacs and Lisp.
 
-You can contact me for anything at <stephent@sfu.ca>.
+You can contact me for anything at <youngs@xemacs.org>.
 
 * Feature list
 
@@ -24,25 +24,20 @@ eicq uses version 5 protocol and it can:
 - register new user, change password
 
 eicq cannot yet transfer files, chat, or anything that need
-direct TCP connection. Of course, with Emacs behind you'll
+direct TCP connection. Of course, with XEmacs behind you'll
 also get:
 
-- interactive customization through Emacs Custom widgets
+- interactive customization through XEmacs Custom widgets
 - key binding, "scripting" in elisp
   (the language eicq is written in)
-- send/receive multi-lingual languages (with Emacs MULE)
+- send/receive multi-lingual languages (with XEmacs MULE)
 - a way of life
-
-"Give a man a new Emacs command,
-   and he can hack for a night;
- Teach a man to make new Emacs commands,
-   and he can hack for a life time."
 
 * Installation
 See the file 'INSTALL' in this directory.
 
 You can also subscribe to eicq mailing list by sending an
-email to Majordomo@aarg.net with "subscribe eicq" in the
+email to majordomo@aarg.net with "subscribe eicq" in the
 body.
 
 Have fun!
@@ -65,7 +60,7 @@ example, "m" inside an incoming message acts like a reply.
 
 ** alias vs uin
 
-"eicq" is my alias while "409533" is my uin. In all prompts
+"SteveY" is my alias while "34307457" is my uin. In all prompts
 of entering an icq person, you can enter either an alias or
 an uin, although only alias completing read is provided. 
 (Press TAB when entering an alias!)
@@ -98,8 +93,9 @@ control-Q 12 "world", to get:
 
 Hello
 world
-		
 
 ** ~/.emacs tips
 
 (resize-minibuffer-mode 1)
+
+

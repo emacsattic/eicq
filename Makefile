@@ -1,4 +1,4 @@
-# Makefile for eicq
+# Makefile for eicq code
 
 # This file is part of XEmacs.
 
@@ -17,30 +17,35 @@
 # the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 # Boston, MA 02111-1307, USA.
 
-VERSION = 1.00
-AUTHOR_VERSION = 0.2.5
-MAINTAINER = Steve Youngs <youngs_s@ozlinx.com.au>
+VERSION = 1.02
+AUTHOR_VERSION = 0.2.7
+MAINTAINER = Steve Youngs <youngs@xemacs.org>
 PACKAGE = eicq
 PKG_TYPE = regular
-REQUIRES = mail-lib xemacs-base 
+REQUIRES = xemacs-base mail-lib
 CATEGORY = comm
 
-BIN = udp2tcp
-ELCS = $(PACKAGE).elc $(PACKAGE)-toolbar.elc
+ELCS = eicq.elc eicq-toolbar.elc
 
-EXTRA_SOURCES = INSTALL NEWS README TODO
-
-DATA_FILES = $(wildcard etc/*)
+DATA_FILES = $(wildcard etc/*.xpm) etc/world
+DATA_DEST = $(PACKAGE)
 
 INFO_FILES = $(PACKAGE).info
 TEXI_FILES = $(PACKAGE).texi
 MANUALS = $(PACKAGE)
 
-LIBSRC_FILES = $(BIN) $(PACKAGE)-user-install.sh
-
 CC = g++
-CFLAGS = -O2 -Wall
-STRIP = strip
+CFLAGS = -O2 -Wall -static
+STRIP = /usr/bin/strip
+
+BIN = udp2tcp
+USERSH = eicq-user-install.sh
+
+LIBSRC_FILES = $(BIN) $(USERSH)
+
+EXTRA_SOURCES = README NEWS INSTALL TODO $(BIN).cc
+
+EXTRA_OBJS = $(BIN)
 
 include ../../XEmacs.rules
 
@@ -48,11 +53,12 @@ GENERATED += custom-load.elc
 
 all:: $(BIN) $(ELCS) auto-autoloads.elc custom-load.elc $(INFO_FILES)
 
-udp2tcp: udp2tcp.cc
-	${CC} -o $(BIN) udp2tcp.cc ${CFLAGS}
-	$(STRIP) $(BIN)
+udp2tcp: $(BIN).cc
+	${CC} -o $(BIN) $(BIN).cc ${CFLAGS}
+	${STRIP} $(BIN)
 
 srckit: srckit-std
 
 binkit: binkit-common
+
 

@@ -9,7 +9,7 @@
    priority low
    category CATEGORY
    dump nil
-   description "A Mirabilis ICQ clone for XEmacs"
+   description "ICQ Client developed and tested on Linux x86; only supported on that platform"
    filename FILENAME
    md5sum MD5SUM
    size SIZE

@@ -27,10 +27,10 @@
  * 
  * 
  * Original Author: Stephen Tse <stephent@sfu.ca>
- * Maintainer: Steve Youngs <youngs_s@ozlinx.com.au>
+ * Maintainer: Steve Youngs <youngs@xemacs.org>
  * License: GPL
  * Created: Aug 08, 1998
- * Version: 0.2.4
+ * Version: 0.2.6
  * Where: http://users.ozlinx.com.au/~youngs_s/eicq/
  * Keywords: udp, tcp, network, bridge, icq, emacs
  * 
@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in udp_local_addr, udp_remote_addr, 
 	tcp_local_addr, tcp_remote_addr;
 
-    printf("UDP <-> TCP bridge v0.1\n\
+    printf("UDP <-> TCP bridge v0.2.6\n\
 \n\
 http://users.ozlinx.com.au/~youngs_s/eicq/\n\n");
   

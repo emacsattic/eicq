@@ -8,8 +8,8 @@
 @setchapternewpage odd
 @c %**end of header
 @set EDITION 1.0
-@set VERSION 0.2.5
-@set UPDATED 18 July 2000
+@set VERSION 0.2.6
+@set UPDATED Aug 16, 2000
 
 @dircategory Lisp
 @direntry
@@ -53,6 +53,8 @@ into another language, under the above conditions for modified versions.
 @node Top, Licenses, (dir), (dir)
 
 @ifinfo 
+This file documents the @code{eicq} elisp package.
+
 This manual corresponds with @code{eicq} @value{VERSION}.
 @end ifinfo
 
