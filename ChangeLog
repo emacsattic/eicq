@@ -1,5 +1,9 @@
 2001-03-06  Steve Youngs  <youngs@xemacs.org>
 
+	* eicq.el: (eicq-delete-offline-messages-flag): Change default to 'ask.
+
+2001-03-06  Steve Youngs  <youngs@xemacs.org>
+
 	* Version 0.2.10 released.
 
 	* eicq.el: Re-arrange variables and constants for a clean build.

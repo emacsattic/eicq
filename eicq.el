@@ -3055,12 +3055,14 @@ See `eicq-auto-away'."
   :group 'eicq-option
   :set 'eicq-auto-away-timeout-set)
 
-(defcustom eicq-delete-offline-messages-flag t
+(defcustom eicq-delete-offline-messages-flag 'ask
   "*Non-nil means delete all offline messages from server.
 'ask means to ask user every time.
 Nil means leave messages on server and you will receive the same offline
 messages again next time you login."
-  :group 'eicq-option)
+  :group 'eicq-option
+  :type (choice (item t) (item ask) (item nil)))
+
 
 (defun eicq-delete-offline-messages ()
   "Delete offline messages from ICQ server.
