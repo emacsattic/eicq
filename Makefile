@@ -22,7 +22,7 @@ AUTHOR_VERSION = 0.2.8
 MAINTAINER = Steve Youngs <youngs@xemacs.org>
 PACKAGE = eicq
 PKG_TYPE = regular
-REQUIRES = xemacs-base mail-lib
+REQUIRES = xemacs-base mail-lib eicq
 CATEGORY = comm
 
 ELCS = eicq.elc eicq-toolbar.elc

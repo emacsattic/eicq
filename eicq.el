@@ -27,7 +27,7 @@
 ;; Created: Aug 08, 1998
 ;; Updated: Feb 17, 2001
 
-;; Version: 0.2.8
+;; Version: 0.2.9
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
 
@@ -51,10 +51,9 @@
 
 (eval-when-compile
   (require 'browse-url)
-  (require 'eicq-report)
   (require 'outline))
 
-(defconst eicq-version "0.2.8"
+(defconst eicq-version "0.2.9"
   "Version of eicq you are currently using.")
 
 (defgroup eicq nil
@@ -2699,6 +2698,17 @@ I'll come back to you soon."
 
 ;;; Code - system main:
 
+(defvar eicq-blurb 
+  "`eicq-report-bug' is not yet fully implemented, so some stuff may
+be missing from this report.  Please send your bug report anyway.\n
+As succinctly as possible, tell us:-\n
+\tWhat happened.
+\tWhat you thought should happen.
+\tAnything else that you think is relevant.\n
+*** Please delete these instructions before submit the report. ***
+======================================================================\n"
+  "Preamble to the bug report.")
+
 (defvar eicq-main-menu
   '("Eicq"
     ["Show Window" eicq-show-window t]
@@ -2726,12 +2736,12 @@ I'll come back to you soon."
     ["Bridge Buffer" eicq-bridge-show-buffer t]
     "---"
     ["Email Author" eicq-email-author t]
-    ["Submit Bug Report" eicq-report-bug t]
+    ["Submit Bug Report" (eicq-report-bug eicq-blurb) t]
     ["Customize" eicq-customize t])
   "Menu for both `eicq-log-mode' and `eicq-buddy-mode'.")
 
 (easy-menu-define
- eicq-main-easymenu nil "eicq main" eicq-main-menu)
+ eicq-main-easymenu nil "Eicq Main" eicq-main-menu)
 
 ;;;###autoload
 
@@ -3084,7 +3094,7 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
   "Menu for `eicq-log-mode'.")
 
 (easy-menu-define
- eicq-buddy-easymenu nil "eicq buddy" eicq-log-menu)
+ eicq-buddy-easymenu nil "Eicq Buddy" eicq-log-menu)
 
 (defvar eicq-log-outline-regexp "^...:.. "
   "Regexp for log header.
@@ -3453,7 +3463,7 @@ See `eicq-process-alias-input'."
   "Buffer for contact list.")
 
 (defvar eicq-buddy-menu
-  '("e-buddy"
+  '("Eicq-Buddy"
     ["Select Here" eicq-select-alias-here t]
     ["Select By Status" eicq-buddy-select-all-in-view-by-status t]
     ["Select By Regexp" eicq-buddy-select-all-in-view-by-regexp t]
@@ -3468,7 +3478,7 @@ See `eicq-process-alias-input'."
   "Menu for `eicq-buddy-mode'.")
 
 (easy-menu-define
- eicq-log-easymenu nil "eicq log" eicq-buddy-menu)
+ eicq-log-easymenu nil "Eicq Log" eicq-buddy-menu)
 
 (defadvice display-buffer
   (after eicq-buddy-avoid-window-select last activate)

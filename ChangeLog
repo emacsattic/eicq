@@ -1,5 +1,10 @@
 2001-03-01  Steve Youngs  <youngs@xemacs.org>
 
+	* Makefile (REQUIRES): Add eicq.
+
+	* eicq.el (eicq-blurb): New
+	(eval-when-compile): Remove require 'eicq-report.
+
 	* udp2tcp.cc (main): Update URL.
 
 2001-02-28  Ben Wing  <ben@xemacs.org>
@@ -7,7 +12,6 @@
 	* udp2tcp.cc (main): Conditionalize change to third arg to accept
 	on __CYGWIN__, so that all other systems keep size_t -- simply
 	changing the arg makes this not compile under Linux.
-	
 
 2001-02-24  Ben Wing  <ben@xemacs.org>
 

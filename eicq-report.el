@@ -61,7 +61,6 @@
   "A list of variables we don't want to see in the bug report.")
 
 (defvar eicq-report-blurb nil)
-
 ;;; Functions
 
 (defun eicq-report-get-versions ()
