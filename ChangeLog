@@ -1,3 +1,10 @@
+2001-09-16  Steve Youngs  <youngs@xemacs.org>
+
+	* eicq.el (eicq-show-window): Emergency fix - I left out a
+	'select-frame'. 
+	(eicq-disconnect): Emergency fix - Uncomment something I'd
+	commented out for debugging purposes.
+
 2001-09-15  Steve Youngs  <youngs@xemacs.org>
 
 	* Version 0.2.16 released.

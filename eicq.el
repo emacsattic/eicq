@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-9-15 20:21:38 (steve)>
-;; Version: 0.2.16
+;; Last-Modified: <2001-9-16 03:39:20 (steve)>
+;; Version: 0.2.17pre1
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
 
@@ -51,7 +51,7 @@
 (require 'goto-addr)
 (require 'smiley)
 
-(defconst eicq-version "0.2.16"
+(defconst eicq-version "0.2.17pre1"
   "Version of eicq you are currently using.")
 
 ;; Customize Groups.
@@ -1356,8 +1356,7 @@ Commands: \\{eicq-main-mode}"
   (add-to-list
    'kill-buffer-query-functions
    (lambda ()
-     (if (y-or-n-p "Terminate ICQ? ")
-         (eicq-logout 'kill))))
+     (eicq-logout 'kill)))
   (make-local-variable 'kill-buffer-hook)
   (add-hook
    'kill-buffer-hook
@@ -1410,8 +1409,8 @@ PROCESS and CHANGE is for `set-process-sentinel'."
   (eicq-bridge-kill)
   (loop for each in '(eicq-log-buffer 
 		      eicq-buddy-buffer 
-		      eicq-status-buffer)
-		      ;eicq-bridge-buffer)
+		      eicq-status-buffer
+		      eicq-bridge-buffer)
     do (kill-buffer (symbol-value each)))
   (delete-other-windows)
   (if (and eicq-start-in-new-frame
@@ -3402,6 +3401,7 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
 	  (if eicq-start-in-new-frame
 	      (new-frame)
 	    (selected-frame))))
+  (select-frame eicq-frame)
   (eicq-buddy-show-buffer)
   (eicq-status-show-buffer)
   (eicq-log-show-buffer)
@@ -3418,8 +3418,6 @@ See `eicq-buddy-buffer' and `eicq-log-buffer'."
 	(if eicq-wharf-frame-use-p
 	    (eicq-wharf-new-frame))))
   (focus-frame eicq-frame))
-
-
 
 (defun eicq-hide-window ()
   "Hide windows of eicq buffers."
