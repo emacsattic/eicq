@@ -1,3 +1,25 @@
+2001-03-09  Steve Youngs  <youngs@xemacs.org>
+
+	* Version 0.2.11 released.
+
+	* eicq.el (eicq-blurb): Update.
+	(eicq-do-offline-message): Remove require 'timezone and move
+	it to top of file.
+
+	* eicq-report.el (eicq-prepare-report): New.
+	(reporter-version): Remove.
+	(vars): Ditto.
+	(reporter-confirm-p): Ditto.
+	(reporter-package-abbrev): Ditto.
+	(eicq-report-other-vars): Ditto.
+	(eicq-report-avoid-vars): Ditto.
+	(eicq-report-get-versions): Ditto.
+	(eicq-report-get-user-vars): Ditto.
+	(eicq-gnus-submit-report): Ditto.
+	(eicq-report-bug): Don't use reporter.el.
+
+	* eicq-toolbar.el (eicq-icon-directory): Make it customizable.
+
 2001-03-06  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq.el: (eicq-delete-offline-messages-flag): Change default to 'ask.

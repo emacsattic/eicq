@@ -2,13 +2,10 @@
 
 ;; Copyright (C) 2001 Steve Youngs
 
-;; Based heavily on efs-report.el by Andy Norman
-;; EFS is currently maintained by Mike Sperber <sperber@informatik.uni-tuebingen.de>
-
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last Modified: Mar 6, 2001
+;; Last Modified: Mar 9, 2001
 ;; Keywords: bug-report
 
 ;; Eicq is free software; you can redistribute it and/or modify
@@ -32,16 +29,11 @@
 
 ;;; Code:
 (require 'eicq)
-(require 'reporter)
 (require 'gnus)
 
 ;; To keep the byte-compiler from spewing out warnings.
-(defvar reporter-version)
 (defvar after-sep-pos)
 (defvar final-resting-place)
-(defvar vars)
-(defvar reporter-confirm-p)
-(defvar reporter-package-abbrev)
 
 ;;; Variables
 
@@ -61,45 +53,9 @@
   "Eicq Bugs <eicq-bugs@lists.sourceforge.net>"
   "The address used for submitting bug reports.")
 
-(defconst eicq-report-other-vars
-  '(reporter-version
-    features)
-  "A list of variables that aren't generated below.")
-
-(defconst eicq-report-avoid-vars
-  '(eicq-user-password
-    eicq-auto-away-timeout
-    eicq-world-rc-regexp
-    eicq-global-key-prefix)
-  "A list of variables we don't want to see in the bug report.")
-
 (defvar eicq-report-blurb nil)
+
 ;;; Functions
-
-(defun eicq-report-get-versions ()
-  "Return a list of eicq versions variables."
-  (mapcar
-   'intern
-   (sort
-    (let (completion-ignore-case)
-      (all-completions
-       "eicq-" obarray
-       (function
-	(lambda (sym)
-	  (and (boundp sym)
-	       (let ((name (symbol-name sym)))
-		 (and (>= (length name) 8)
-		      (string-equal (substring name -8) "-version"))))))))
-    'string-lessp)))
-
-(defun eicq-report-get-user-vars ()
-  "Return a list of eicq user variables."
-  (mapcar
-   'intern
-   (sort
-    (let (completion-ignore-case)
-      (all-completions "eicq-" obarray 'user-variable-p))
-    'string-lessp)))
 
 (defun eicq-report-pre-hook ()
   "Pre hook run by report-submit-bug-report."
@@ -126,22 +82,51 @@
 	   ?\n ?\ )
 	(insert subj)))))
 
-(defun eicq-gnus-submit-report ()
-  "Mimic `reporter-submit-bug-report', but use Gnus."
-  (unless (gnus-alive-p)
-    (gnus))
-  (gnus-group-mail 1)
+(defun eicq-prepare-report ()
+  "Grabs the variables, features to include in bug report.
+Then put it all into a mail buffer, nicely formatted."
   (message-goto-to)
   (insert eicq-bug-address)
   (message-goto-body)
   (forward-line 1)
   (setq after-sep-pos (point))
   (setq final-resting-place (point-marker))
-  (insert "\n\n")
-  (reporter-dump-state
-   "eicq"
-   vars
-   nil nil)
+  (insert "\n\n"
+	  (emacs-version) "\n\n"
+	  "Current State:\n==============\n"
+	  (format "(setq\n eicq-version %s\n" eicq-version)
+	  (format " eicq-world-rc-filename %s\n" (symbol-value
+						  'eicq-world-rc-filename))
+	  (format " eicq-log-filename %s\n" (symbol-value
+					     'eicq-log-filename))
+	  (format " eicq-sound-directory %s\n" (symbol-value 
+						'eicq-sound-directory))
+	  (format " eicq-bridge-filename %s\n" (symbol-value
+						'eicq-bridge-filename))
+	  (format " eicq-bridge-hostname %s\n" (symbol-value
+						'eicq-bridge-hostname))
+	  (format " eicq-bridge-port %s\n" (symbol-value 
+					    'eicq-bridge-port))
+	  (format " eicq-server-hostname %s\n" (symbol-value 
+						'eicq-server-hostname))
+	  (format " eicq-server-port %s\n" (symbol-value 
+					    'eicq-server-port))
+	  (format " eicq-dropped-packet-counter %s\n" (symbol-value
+						       'eicq-dropped-packet-counter))
+	  (format " eicq-resend-packet-counter %s\n" (symbol-value
+						      'eicq-resend-packet-counter))
+	  (format " eicq-trimmed-packet-counter %s\n" (symbol-value
+						       'eicq-trimmed-packet-counter))
+	  (format " eicq-error-packets %s\n" (symbol-value
+					      'eicq-error-packets))
+	  (format " eicq-buddy-view %s\n" (symbol-value
+					   'eicq-buddy-view))
+	  (format " eicq-delete-offline-messages-flag %s)\n" 
+		  (symbol-value
+		   'eicq-delete-offline-messages-flag))
+	  (format "\nFeatures:\n\t%s" (symbol-value 'features)))
+  (message "Formatting output so the bug team can read it.  Please wait...")
+  (fill-paragraph t)
   (insert "\n\n")
   (eicq-report-pre-hook)
   (eicq-report-post-hook)
@@ -158,36 +143,26 @@
 (defun eicq-report-bug (&optional blurb no-confirm)
   "Submit a bug report for eicq.
 Optional argument BLURB is a string that adds a preamble to the bug report.
-Optional argument NO-CONFIRM if 't' will not ask for confirmation."
+Optional argument NO-CONFIRM if 't' will not ask for confirmation.
+
+If you have Gnus it will be used, otherwise the standard XEmacs mail
+command is used.
+
+Yes, it's all part of a secret plot to make more people use 
+the MUA of Gods.  Bwahahaha."
   (interactive)
-  (let ((reporter-confirm-p nil)
-	(reporter-prompt-for-summary-p nil)
-	(reporter-package-abbrev "eicq"))
-    ;; Look out for old reporter versions.
-    (or (boundp 'reporter-version)
-	(setq reporter-version
-	      "Your version of reporter is obsolete.  Please upgrade."))
-    (if (or no-confirm
-	    (y-or-n-p "Do you want to submit a bug report on Eicq? "))
-	(let ((eicq-report-blurb blurb)
-	      (vars (nconc (eicq-report-get-versions)
-			   (eicq-report-get-user-vars)
-			   eicq-report-other-vars))
-	      (avoids eicq-report-avoid-vars))
-	  (while avoids
-	    (setq vars (delq (car avoids) vars))
-	    (setq avoids (cdr avoids)))
-	  (if (featurep 'gnus)
-	      (eicq-gnus-submit-report)
-	    (reporter-submit-bug-report
-	     eicq-bug-address
-	     "eicq"
-	     vars
-	     (function eicq-report-pre-hook)
-	     (function eicq-report-post-hook)
-	     (aref eicq-report-salutations
-		   (% (+ (% (random) 1000) 1000)
-		      (length eicq-report-salutations)))))))))
+  (if (or no-confirm
+	  (y-or-n-p "Do you want to submit a bug report on Eicq? "))
+      (progn
+	(setq eicq-report-blurb blurb)
+	(if (featurep 'gnus)
+	    (progn
+	      (unless (gnus-alive-p)
+		(gnus))
+	      (gnus-group-mail 1)
+	      (eicq-prepare-report))
+	  (mail)
+	  (eicq-prepare-report)))))
 
 ;;; email-author code
 
@@ -235,7 +210,9 @@ Optional argument NO-CONFIRM if 't' will not ask for confirmation."
 
 ;;;###autoload
 (defun eicq-email-author ()
-  "Email comments or money to author."
+  "Email comments or money to author.
+
+Uses Gnus if available, otherwise standard mail command."
   (interactive)
   (if (y-or-n-p "Do you want to send comments to the Eicq author? ")
       (progn

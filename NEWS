@@ -1,5 +1,9 @@
 -*- outline -*-
 
+* from 0.2.10 to 0.2.11
+
+** 'eicq-report-bug' now working.
+
 * from 0.2.9 to 0.2.10
 
 ** No longer distributed as an XEmacs package (due to compatibility issues)

@@ -8,8 +8,8 @@
 @setchapternewpage odd
 @c %**end of header
 @set EDITION 1.0
-@set VERSION 0.2.10
-@set UPDATED Mar 6, 2001
+@set VERSION 0.2.11
+@set UPDATED Mar 9, 2001
 
 @dircategory Lisp
 @direntry

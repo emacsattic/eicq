@@ -71,6 +71,6 @@ Feel free to do any of these things and send me a patch
 
 	not necessary once Eicq is totally Lisp.
 
-** eicq-report-bug
+** change status via mouse
 
-	Use Gnus if available (partially implemented already)
+	the statuses are listed in the buddy buffer, why not use them

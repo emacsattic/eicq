@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last Modified: Mar 6, 2001
-;; Version: 0.2.10
+;; Last Modified: Mar 9, 2001
+;; Version: 0.2.11
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
 
@@ -44,11 +44,11 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'browse-url)
-  (require 'outline))
+(require 'browse-url)
+(require 'outline)
+(require 'timezone)
 
-(defconst eicq-version "0.2.10"
+(defconst eicq-version "0.2.11"
   "Version of eicq you are currently using.")
 
 (defgroup eicq nil
@@ -1731,8 +1731,6 @@ Remove acknowledged packets from `eicq-outgoing-queue'."
 
 (defun eicq-do-offline-message (packet)
   "Handle server command 00dc in PACKET."
-  (eval-when-compile
-    (require 'timezone))
   (let* ((year (eicq-bin-int packet 25))
          (month (eicq-byte-int packet 27))
          (day (eicq-byte-int packet 28))
@@ -2776,14 +2774,12 @@ I'll come back to you soon."
 ;;; Code - system main:
 
 (defvar eicq-blurb 
-  "`eicq-report-bug' is not yet fully implemented, so some stuff may
-be missing from this report.  Please send your bug report anyway.\n
-As succinctly as possible, tell us:-\n
+  "As succinctly as possible, tell us:-\n
 \tWhat happened.
 \tWhat you thought should happen.
 \tAnything else that you think is relevant.\n
 *** Please delete these instructions before submit the report. ***
-======================================================================\n"
+==================================================================\n"
   "Preamble to the bug report.")
 
 ;;;###autoload

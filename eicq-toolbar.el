@@ -30,9 +30,12 @@
 (require 'eicq)
 
 ;;; Code:
-(defvar eicq-icon-directory
+(defcustom eicq-icon-directory
   "/usr/local/lib/xemacs/site-packages/etc/eicq/"
-  "The directory where the icon data files for eicq are installed.")
+  "*The directory where the icon files for Eicq are installed."
+  :group 'eicq-option
+  :type 'directory
+  :tag "Toolbar Directory")
 
 (defvar eicq-password-icon
   (toolbar-make-button-list
