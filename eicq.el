@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-9 10:00:44 (erik)>
+;; Last-Modified: <2001-8-9 10:12:42 (erik)>
 ;; Version: 0.2.15pre4
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
@@ -1318,8 +1318,7 @@ PROCESS and CHANGE is for `set-process-sentinel'."
 		      eicq-status-buffer
 		      eicq-bridge-buffer)
     do (kill-buffer (symbol-value each)))
-  (delete-other-windows)
-  (setq eicq-frame nil))
+  (delete-other-windows))
 
 (defun eicq-connected-p ()
   "Return non-nil if the network is ready for sending string."
@@ -3247,18 +3246,12 @@ ALIAS is an alias/uin."
 (defvar eicq-log-buffer nil
   "Buffer for log.")
 
-(defvar eicq-frame nil
-  "The frame where EICQ is displayed.")
-
 ;;;###autoload
 (defun eicq-show-window ()
   "Show windows of eicq buffers.
 Make them if not yet done.
 See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (interactive)
-  (unless (framep eicq-frame)
-    (setq eicq-frame (selected-frame)))
-  (select-frame eicq-frame)
   (eicq-buddy-show-buffer)
   (eicq-status-show-buffer)
   (eicq-log-show-buffer)
