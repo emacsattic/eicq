@@ -6,7 +6,7 @@
 ;; OriginalAuthor: Erik Arneson <erik@aarg.net>
 ;; Maintainer: Erik Arneson <erik@aarg.net>
 ;; Created: Aug 06, 2001
-;; Last-Modified: <2001-8-7 03:58:47 (steve)>
+;; Last-Modified: <2001-8-6 15:57:29 (erik)>
 ;; Version: 0.2.14
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
@@ -60,7 +60,32 @@
     (goto-char (point-max))
     (insert "\n\nThe following entries were imported from your LICQ configuration.\n\n")
     (loop for udat in user-alist
-      do (insert (format ":icq %s %s\n" (car udat) (cdr udat))))
+      do (insert (format ":icq %s %s :licq\n" (car udat) (cdr udat))))
+    (save-buffer (current-buffer))
+    (kill-buffer (current-buffer))))
+
+(defun eicq-import-from-micq ()
+  "Import ICQ contact data from a .micqrc file."
+  (interactive)
+  (let (user-alist
+        unode me)
+    (set-buffer (find-file-noselect (expand-file-name "~/.micqrc")))
+    (goto-char (point-min))
+    (if (re-search-forward "^UIN \\([0-9]+\\)$" nil t)
+        (setq me (match-string 1)))
+    (if (re-search-forward "^Contacts$" nil t)
+        (setq user-alist
+              (loop while (re-search-forward "^[ \t]*\\*?\\([0-9]+\\)[ \t]+\\(.*\\)$" nil t)
+                do (setq unode (cons (match-string 1) (match-string 2)))
+                collect unode)))
+    (kill-buffer (current-buffer))
+    (set-buffer (find-file-noselect (expand-file-name eicq-world-rc-filename)))
+    (goto-char (point-max))
+    (insert "\n\nThe following information was imported from your MICQ configuration.\n\n")
+    (if me
+        (insert (format ":icq %s me\n\n" me)))
+    (loop for unode in user-alist
+      do (insert (format ":icq %s %s :micq\n" (car unode) (cdr unode))))
     (save-buffer (current-buffer))
     (kill-buffer (current-buffer))))
 

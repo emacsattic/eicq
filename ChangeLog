@@ -1,3 +1,11 @@
+2001-08-06  Erik Arneson  <erik@aarg.net>
+
+	* eicq-convert.el (eicq-import-from-micq): Converts an MICQ
+	configuration to an EICQ 'world' file.  I tried to get less
+	carried away -- this one has fewer lines!  Imports these users
+	into the `micq' group.
+	(eicq-import-from-licq): Users are imported into the `licq' group.
+
 2001-08-07  Steve Youngs  <youngs@xemacs.org>
 
 	* eicq-convert.el: require 'eicq.
