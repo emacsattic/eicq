@@ -96,3 +96,15 @@ Feel free to do any of these things and send a patch to
 	There are definitely times when you'd rather not hear what
 	someone has to say. Mwuahahah!
 
+** Triggers
+
+        Imagine running an elisp defun whenever an Eicq message matching
+	a particular regular expression comes in.  This functionality
+	will need to be documented carefully due to the security 
+	implications, of course.
+
+** Externally triggered messages
+
+	biff meets Eicq.  "Hey, you just got some email.  You better 
+	read it."  Or maybe "The power is out and your UPS just kicked 
+	on.".  The sky is the limit.
