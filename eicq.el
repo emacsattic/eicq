@@ -7,7 +7,7 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last-Modified: <2001-8-11 01:19:19 (steve)>
+;; Last-Modified: <2001-8-10 09:47:23 (erik)>
 ;; Version: 0.2.15pre6
 ;; Homepage: http://eicq.sf.net/
 ;; Keywords: comm ICQ
@@ -3296,7 +3296,7 @@ ALIAS is an alias/uin."
 Make them if not yet done.
 See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (interactive)
-  (unless (framep eicq-frame)
+  (unless (frame-live-p eicq-frame)
     (setq eicq-frame
           (if eicq-start-in-new-frame
               (new-frame)
