@@ -7,8 +7,8 @@
 ;; OriginalAuthor: Stephen Tse <stephent@sfu.ca>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
 ;; Created: Aug 08, 1998
-;; Last Modified: Mar 19, 2001
-;; Version: 0.2.12
+;; Last-Modified: <2001-4-28 16:48:43 (steve)>
+;; Version: 0.2.13
 ;; Homepage: http://eicq.sourceforge.net/
 ;; Keywords: comm ICQ
 
@@ -48,8 +48,10 @@
 (require 'outline)
 (require 'timezone)
 (require 'wid-edit)
+(require 'goto-addr)
+(require 'smiley)
 
-(defconst eicq-version "0.2.12"
+(defconst eicq-version "0.2.13"
   "Version of eicq you are currently using.")
 
 (defgroup eicq nil
@@ -349,6 +351,21 @@ Run `eicq-update-meta-info' after modifying this variable."
 Run `eicq-update-meta-info' after modifying this variable."
   :group 'eicq-meta)
 
+(defcustom eicq-use-sound-flag nil
+  "*Whether to use sound or not.
+SOUND-CARD - use the sound card.
+PC-SPEAKER - use the PC speaker.
+NIL - don't use sound.
+
+This is not yet fully implemented and setting this to anything
+other than SOUND-CARD will turn the sound off."
+  :group 'eicq-sound
+  :type '(choice
+	  (item sound-card) 
+	  (item pc-speaker) 
+	  (item nil)) 
+  :tag "Use Sound")
+
 (defcustom eicq-sound-directory 
   "/usr/local/lib/xemacs/xemacs-packages/etc/sounds/"
   "*Directory where sound files are kept."
@@ -356,47 +373,28 @@ Run `eicq-update-meta-info' after modifying this variable."
   :type 'directory 
   :tag "eicq-sound-directory")
 
-(defcustom eicq-message-sound nil
-  "*Incoming message sound."
+(defcustom eicq-sound-alist
+  '((message-sound . nil)
+    (chat-sound . nil)
+    (url-sound . nil)
+    (buddy-sound . nil)
+    (auth-sound . nil)
+    (emailx-sound . nil)
+    (pager-sound . nil))
+  "*Sound event to sound file alist.
+The possible sound events are:
+      \"message-sound\" - Incoming message sound.
+      \"chat-sound\"    - Incoming chat request sound.
+      \"url-sound\"     - Incoming url sound.
+      \"buddy-sound\"   - Online notify sound.
+      \"auth-sound\"    - Authorise sound.
+      \"emailx-sound\"  - Email express sound.
+      \"pager-sound\"   - Pager sound."
   :group 'eicq-sound
-  :type 'file
-  :tag "Message Sound")
-
-(defcustom eicq-chat-sound nil
-  "*Incoming chat request sound."
-  :group 'eicq-sound
-  :type 'file
-  :tag "Chat Request Sound")
-
-(defcustom eicq-url-sound nil
-  "*Incoming URL sound."
-  :group 'eicq-sound
-  :type 'file
-  :tag "Incoming URL Sound")
-
-(defcustom eicq-buddy-sound nil
-  "*Buddy online notify sound."
-  :group 'eicq-sound
-  :type 'file
-  :tag "Online Notify Sound")
-
-(defcustom eicq-auth-sound nil
-  "*Authorize sound."
-  :group 'eicq-sound
-  :type 'file
-  :tag "Authorize Sound")
-
-(defcustom eicq-emailx-sound nil
-  "*Email Express sound."
-  :group 'eicq-sound
-  :type 'file
-  :tag "Email Express Sound")
-
-(defcustom eicq-pager-sound nil
-  "*Pager sound."
-  :group 'eicq-sound
-  :type 'file
-  :tag "Pager Sound")
+  :type '(repeat 
+	  (cons (sexp :tag "Sound Event") 
+		(sexp :tag "Sound File")))
+  :tag "Sounds")
 
 ;; Load the toolbar
 (add-hook 'eicq-buddy-mode-hook 'eicq-install-buddy-toolbar)
@@ -1080,7 +1078,10 @@ Normally should use `eicq-logout' to logout first."
   (eicq-logout 'kill)
   (eicq-network-kill)
   (eicq-bridge-kill)
-  (loop for each in '(eicq-log-buffer eicq-buddy-buffer eicq-bridge-buffer)
+  (loop for each in '(eicq-log-buffer 
+		      eicq-buddy-buffer 
+		      eicq-status-buffer
+		      eicq-bridge-buffer)
     do (kill-buffer (symbol-value each)))
   (delete-other-windows))
 
@@ -1786,32 +1787,40 @@ Possible type: `eicq-message-types'."
     ;; (eicq-auto-reply alias)
 
     (run-hooks 'eicq-do-message-hook)
-
+    
     (case type
       (normal 
        (eicq-log-buddy-message 
 	alias (eicq-decode-string message))
-       (play-sound-file
-	(concat 
-	 eicq-sound-directory eicq-message-sound)))
+       (if (string= eicq-use-sound-flag "sound-card")
+	   (play-sound-file
+	    (concat 
+	     eicq-sound-directory 
+	     (cdr (assoc 'message-sound eicq-sound-alist))))))
       (chat-request 
        (eicq-log-buddy-message 
 	alias "Request chat")
-       (play-sound-file
-	(concat 
-	 eicq-sound-directory eicq-chat-sound)))
+       (if (string= eicq-use-sound-flag "sound-card")
+	   (play-sound-file
+	    (concat 
+	     eicq-sound-directory 
+	     (cdr (assoc 'chat-sound eicq-sound-alist))))))
       (url 
        (eicq-log-buddy-url 
 	alias message url)
-       (play-sound-file
-	(concat 
-	 eicq-sound-directory eicq-url-sound)))
+       (if (string= eicq-use-sound-flag "sound-card")
+	   (play-sound-file
+	    (concat 
+	     eicq-sound-directory 
+	     (cdr (assoc 'url-sound eicq-sound-alist))))))
       (authorize 
        (eicq-log-buddy-message 
 	alias "You are authorized")
-       (play-sound-file
-	(concat
-	 eicq-sound-directory eicq-auth-sound)))
+       (if (string= eicq-use-sound-flag "sound-card")
+	   (play-sound-file
+	    (concat
+	     eicq-sound-directory 
+	     (cdr (assoc 'auth-sound eicq-sound-alist))))))
       (request-auth
        (eicq-log-buddy-message
         alias "Request authorization =\n%s"
@@ -1823,17 +1832,21 @@ Possible type: `eicq-message-types'."
 	alias "Pager = %s"
 	(eicq-decode-string
 	 (replace-in-string message "[\xfe]+" "\n")))
-       (play-sound-file
-	(concat
-	 eicq-sound-directory eicq-pager-sound)))
+       (if (string= eicq-use-sound-flag "sound-card")
+	   (play-sound-file
+	    (concat
+	     eicq-sound-directory 
+	     (cdr (assoc 'pager-sound eicq-sound-alist))))))
       (email-express
        (eicq-log-buddy-message
         alias "Email express = %s"
         (eicq-decode-string
          (replace-in-string message "[\xfe]+" "\n")))
-       (play-sound-file
-	(concat
-	 eicq-sound-directory eicq-emailx-sound)))
+       (if (string= eicq-use-sound-flag "sound-card")
+	   (play-sound-file
+	    (concat
+	     eicq-sound-directory 
+	     (cdr (assoc 'emailx-sound eicq-sound-alist))))))
       (email-check (eicq-log-buddy-message alias "Email check"))
       (card
        (eicq-log-buddy-message
@@ -1881,9 +1894,11 @@ Dynamically ALIAS and STATUS are binded to be used in hooks.")
         (push (cons 'unknown-alias eicq-recent-packet)
               eicq-error-packets))
     (eicq-buddy-update-status alias status)
-    (play-sound-file
-     (concat 
-      eicq-sound-directory eicq-buddy-sound))
+    (if (string= eicq-use-sound-flag "sound-card")
+	(play-sound-file
+	 (concat 
+	  eicq-sound-directory 
+	  (cdr (assoc 'buddy-sound eicq-sound-alist)))))
     (eicq-world-putf alias 'ip ip)
     (eicq-world-putf alias 'port port)
     (eicq-world-putf alias 'real-ip real-ip)))
@@ -3108,6 +3123,16 @@ ALIAS is an alias/uin."
   "*Width of window for `eicq-buddy-buffer'."
   :group 'eicq-interface)
 
+(defcustom eicq-status-window-height 9
+  "*Height of window for `eicq-status-buffer'."
+  :group 'eicq-interface)
+
+;;;*** REMOVE ME when done
+(setq eicq-status-window-height 9)
+
+(defvar eicq-status-buffer nil
+  "Buffer for statuses.")
+
 (defvar eicq-log-buffer nil
   "Buffer for log.")
 
@@ -3118,12 +3143,16 @@ Make them if not yet done.
 See `eicq-buddy-buffer' and `eicq-log-buffer'."
   (interactive)
   (eicq-buddy-show-buffer)
+  (eicq-status-show-buffer)
   (eicq-log-show-buffer)
   (set-window-buffer nil eicq-buddy-buffer)
   (delete-other-windows)
   (set-window-buffer
    (split-window nil eicq-buddy-window-width t) eicq-log-buffer)
-  (other-window 1))
+  (set-window-buffer nil eicq-status-buffer)
+  (set-window-buffer
+   (split-window nil eicq-status-window-height) eicq-buddy-buffer)
+  (other-window 2))
 
 (defun eicq-hide-window ()
   "Hide windows of eicq buffers."
@@ -3168,6 +3197,12 @@ Normally frame width is 80 and window width of `eicq-buddy-buffer' is 20,
 therefore default value 50 will be nice."
   :group 'eicq-log)
 
+(defun eicq-switch-to-buddy-buffer ()
+  "Switches from the log buffer to the buddy buffer.
+Needed so we can by-pass the status buffer."
+  (interactive)
+  (other-window 2))
+
 (defvar eicq-log-mode-map
   (let ((map (make-sparse-keymap 'eicq-log-mode-map)))
     (set-keymap-parents map (list eicq-main-map))
@@ -3186,7 +3221,7 @@ therefore default value 50 will be nice."
     (define-key map [f] 'eicq-forward-message-around)
     (define-key map [n] 'eicq-log-next-unread)
     (define-key map [N] 'eicq-log-next)
-    (define-key map [o] 'other-window)
+    (define-key map [o] 'eicq-switch-to-buddy-buffer)
     (define-key map [p] 'eicq-log-previous-unread)
     (define-key map [P] 'eicq-log-previous)
     map)
@@ -3432,7 +3467,11 @@ MESSAGES is an argument list for `format' to be inserted."
   "See `eicq-log-buddy-message-flag'.
 ALIAS is an id to be logged under.
 MESSAGES is an argument list for `format' to be inserted."
-  (eicq-log alias (apply 'format messages) eicq-log-buddy-message-flag eicq-log-buddy-message-mark))
+  (eicq-log alias 
+	    (apply 'format messages) 
+	    eicq-log-buddy-message-flag eicq-log-buddy-message-mark)
+  (smiley-buffer)
+  (goto-address))
 
 (defvar eicq-url-map
   (let ((map (make-sparse-keymap 'eicq-url-map)))
@@ -3754,64 +3793,85 @@ See `eicq-buddy-view' and `eicq-buddy-status-color-hint-flag'."
     (setq eicq-buddy-buffer (get-buffer-create "*eicq buddy*"))
     (set-buffer eicq-buddy-buffer)
     (erase-buffer)
+    (insert "*** Contacts ***\n")
     (loop for alias in (symbol-value eicq-buddy-view)
       as status = (eicq-world-getf alias 'status)
       as face = (eicq-status-face status)
       do (insert-face (concat alias "\n") face))
-    (insert "----\n")
-    (widget-insert "\n")
+    (insert "*** End ***\n")
+    (eicq-buddy-mode))
+  (unless no-select
+    (switch-to-buffer eicq-buddy-buffer)))
+
+(defun eicq-status-show-buffer (&optional new no-select)
+  "Switch to `eicq-status-buffer'.
+Create buffer if buffer does not exists already or
+NEW is non-nil.
+Don't select status window if NO-SELECT is non-nil."
+  (interactive)
+  (when (or (not (buffer-live-p eicq-status-buffer))
+            new)
+    (setq eicq-status-buffer (get-buffer-create "*Statuses*"))
+    (set-buffer eicq-status-buffer)
+    (and (fboundp 'set-specifier)
+	 (set-specifier horizontal-scrollbar-visible-p nil 
+			(cons (current-buffer) nil)))
+    (and (fboundp 'set-specifier)
+	 (set-specifier vertical-scrollbar-visible-p nil
+			(cons (current-buffer) nil)))
+    (erase-buffer)
     (set (make-local-variable 'widget-button-face) 'eicq-face-online)
     (widget-create 'link
 		   :help-echo "Change status to \"Online\""
 		   :action (lambda (&rest ignore)
 			     (eicq-change-status "online"))
-		   "online")
+		   "Online")
     (widget-insert "\n")
     (set (make-local-variable 'widget-button-face) 'eicq-face-away)
     (widget-create 'link
 		   :help-echo "Change status to \"Away\""
 		   :action (lambda (&rest ignore)
 			     (eicq-change-status "away"))
-		   "away")
+		   "Away")
     (widget-insert "\n")
     (set (make-local-variable 'widget-button-face) 'eicq-face-occ)
     (widget-create 'link
 		   :help-echo "Change status to \"Occupied\""
 		   :action (lambda (&rest ignore)
 			     (eicq-change-status "occ"))
-		   "occ")
+		   "Occupied")
     (widget-insert "\n")
     (set (make-local-variable 'widget-button-face) 'eicq-face-dnd)
     (widget-create 'link
 		   :help-echo "Change status to \"Do Not Disturb\""
 		   :action (lambda (&rest ignore)
 			     (eicq-change-status "dnd"))
-		   "dnd")
-    (widget-insert "\n")
-    (set (make-local-variable 'widget-button-face) 'eicq-face-ffc)
-    (widget-create 'link
-		   :help-echo "Change status to \"Free For Chat\""
-		   :action (lambda (&rest ignore)
-			     (eicq-change-status "ffc"))
-		   "ffc")
+		   "Do Not Disturb")
     (widget-insert "\n")
     (set (make-local-variable 'widget-button-face) 'eicq-face-na)
     (widget-create 'link
 		   :help-echo "Change status to \"Not Available\""
 		   :action (lambda (&rest ignore)
 			     (eicq-change-status "na"))
-		   "na")
+		   "Not Available")
+    (widget-insert "\n")
+    (set (make-local-variable 'widget-button-face) 'eicq-face-ffc)
+    (widget-create 'link
+		   :help-echo "Change status to \"Free For Chat\""
+		   :action (lambda (&rest ignore)
+			     (eicq-change-status "ffc"))
+		   "Free For Chat")
     (widget-insert "\n")
     (set (make-local-variable 'widget-button-face) 'default)
     (widget-create 'link
 		   :help-echo "Change status to \"Invisible\""
 		   :action (lambda (&rest ignore)
 			     (eicq-change-status "invisible"))
-		   "invisible")
-    (widget-insert "\n")
-    (eicq-buddy-mode))
-  (unless no-select
-    (switch-to-buffer eicq-buddy-buffer)))
+		   "Invisible")
+    (toggle-read-only 1)
+    (setq modeline-format "%b")
+    (unless no-select
+      (switch-to-buffer eicq-status-buffer))))
 
 (defun eicq-buddy-view-all ()
   "Display all aliases in `eicq-world'.
@@ -4045,12 +4105,14 @@ WARNING: Bindings with old prefix is not deleted.  Fixable?"
 
 (provide 'eicq)
 
-;; Local Variables:
-;; fill-column: 75
-;; comment-column: 40
-;; End:
-
 ;;; eicq.el ends here
+
+;Local Variables:
+;time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
+;time-stamp-end: "\\\\?[\">]"
+;time-stamp-line-limit: 10
+;time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
+;End: 
 
 
 ;;::::::::::::::: Stuff I'm working on ::::::::::::::::::::::::::::::::::

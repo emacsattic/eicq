@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last Modified: Mar 9, 2001
+;; Last-Modified: <2001-4-24 16:06:29 (steve)>
 ;; Keywords: bug-report
 
 ;; Eicq is free software; you can redistribute it and/or modify
@@ -228,3 +228,11 @@ Uses Gnus if available, otherwise standard mail command."
 (provide 'eicq-report)
 
 ;;; eicq-report.el ends here
+
+
+;Local Variables:
+;time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
+;time-stamp-end: "\\\\?[\">]"
+;time-stamp-line-limit: 10
+;time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
+;End: 

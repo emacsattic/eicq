@@ -5,7 +5,7 @@
 ;; RCS: $Id$
 ;; Author: Steve Youngs <youngs@xemacs.org>
 ;; Maintainer: Steve Youngs <youngs@xemacs.org>
-;; Last Modified: Mar 6, 2001
+;; Last-Modified: <2001-4-24 16:08:33 (steve)>
 ;; Keywords: eicq, toolbar, comm
 
 ;; Eicq is free software; you can redistribute it and/or modify it
@@ -41,16 +41,6 @@
   (toolbar-make-button-list
    (expand-file-name "password.xpm" eicq-icon-directory))
   "A password toolbar icon.")
-
-(defvar eicq-show-log-icon
-  (toolbar-make-button-list
-   (expand-file-name "show.xpm" eicq-icon-directory))
-  "A show-window toolbar icon.")
-
-(defvar eicq-hide-log-icon
-  (toolbar-make-button-list
-   (expand-file-name "hide.xpm" eicq-icon-directory))
-  "A hide log toolbar icon.")
 
 (defvar eicq-send-message-here-icon
   (toolbar-make-button-list
@@ -97,11 +87,6 @@
    (expand-file-name "authorize-here.xpm" eicq-icon-directory))
   "A authorize toolbar icon.")
 
-(defvar eicq-authorize-around-icon
-  (toolbar-make-button-list
-   (expand-file-name "authorize-around.xpm" eicq-icon-directory))
-  "A authorize toolbar icon.")
-
 (defvar eicq-login-icon
   (toolbar-make-button-list
    (expand-file-name "login.xpm" eicq-icon-directory))
@@ -117,40 +102,10 @@
    (expand-file-name "disconnect.xpm" eicq-icon-directory))
   "A disconnect toolbar icon.")
 
-(defvar eicq-mark-log-read-icon
-  (toolbar-make-button-list
-   (expand-file-name "read.xpm" eicq-icon-directory))
-  "Mark log read toolbar icon.")
-
-(defvar eicq-mark-log-unread-icon
-  (toolbar-make-button-list
-   (expand-file-name "unread.xpm" eicq-icon-directory))
-  "Mark log unread toolbar icon.")
-
-(defvar eicq-next-log-icon
-  (toolbar-make-button-list
-   (expand-file-name "next.xpm" eicq-icon-directory))
-  "Next log item toolbar icon.")
-
-(defvar eicq-previous-log-icon
-  (toolbar-make-button-list
-   (expand-file-name "previous.xpm" eicq-icon-directory))
-  "Previous log item toolbar icon.")
-
 (defvar eicq-new-log-icon
   (toolbar-make-button-list
    (expand-file-name "new-log.xpm" eicq-icon-directory))
   "New log file toolbar icon.")
-
-(defvar eicq-contract-log-icon
-  (toolbar-make-button-list
-   (expand-file-name "contract.xpm" eicq-icon-directory))
-  "Contract the log toolbar icon.")
-
-(defvar eicq-expand-log-icon
-  (toolbar-make-button-list
-   (expand-file-name "expand.xpm" eicq-icon-directory))
-  "Expand the log toolbar icon.")
 
 ;; Define the functions for the toolbar
 
@@ -158,16 +113,6 @@
   "Change PASSWORD from the toolbar."
   (interactive (list (read-passwd "Password: " 'confirm)))
   (eicq-change-password password))
-
-(defun eicq-toolbar-show-log ()
-  "Show the log window from the toolbar."
-  (interactive)
-  (eicq-show-window))
-
-(defun eicq-toolbar-hide-log ()
-  "Hide the log window from the toolbar."
-  (interactive)
-  (eicq-hide-window))
 
 (defun eicq-toolbar-send-message-here ()
   "Send message from toolbar."
@@ -218,11 +163,6 @@ Argument EMAIL is the email address of the person you're searching for."
   (interactive)
   (eicq-authorize-alias-here))
 
-(defun eicq-toolbar-authorize-around ()
-  "Authorize from the toolbar."
-  (interactive)
-  (eicq-authorize))
-
 (defun eicq-toolbar-login ()
   "Login from the toolbar."
   (interactive)
@@ -239,40 +179,10 @@ Argument EMAIL is the email address of the person you're searching for."
   (eicq-logout)
   (eicq-disconnect))
 
-(defun eicq-toolbar-log-read ()
-  "Mark log item read from the toolbar."
-  (interactive)
-  (eicq-log-mark-read))
-
-(defun eicq-toolbar-log-unread ()
-  "Mark log item unread from the toolbar."
-  (interactive)
-  (eicq-log-mark-unread))
-
-(defun eicq-toolbar-next-log ()
-  "Next log item from the toolbar."
-  (interactive)
-  (eicq-log-next 1))
-
-(defun eicq-toolbar-previous-log ()
-  "Previous log item from the toolbar."
-  (interactive)
-  (eicq-log-previous 1))
-
 (defun eicq-toolbar-new-log ()
   "New log file from the toolbar."
   (interactive)
   (eicq-log-new-file))
-
-(defun eicq-toolbar-contract-log ()
-  "Contract the log from the toolbar."
-  (interactive)
-  (eicq-log-contract))
-
-(defun eicq-toolbar-expand-log ()
-  "Expand the log from the toolbar."
-  (interactive)
-  (eicq-log-expand))
 
 ;; Now define the toolbar
 (defvar eicq-log-toolbar
@@ -294,22 +204,8 @@ Argument EMAIL is the email address of the person you're searching for."
      eicq-toolbar-search t "Search"]
     [eicq-authorize-here-icon
      eicq-toolbar-authorize-here t "Authorize here"]
-    [eicq-authorize-around-icon
-     eicq-toolbar-authorize-around t "Authorize..."]
-    [eicq-mark-log-read-icon
-     eicq-toolbar-log-read t "Mark read"]
-    [eicq-mark-log-unread-icon
-     eicq-toolbar-log-unread t "Mark unread"]
-    [eicq-next-log-icon
-     eicq-toolbar-next-log t "Next"]
-    [eicq-previous-log-icon
-     eicq-toolbar-previous-log t "Previous"]
     [eicq-new-log-icon
      eicq-toolbar-new-log t "New log file"]
-    [eicq-contract-log-icon
-     eicq-toolbar-contract-log t "Contract log"]
-    [eicq-expand-log-icon
-     eicq-toolbar-expand-log t "Expand log"]
     [eicq-login-icon
      eicq-toolbar-login t "Login"]
     [eicq-logout-icon
@@ -348,3 +244,11 @@ If it is non-nil, it must be a toolbar.  The five valid values are
 (provide 'eicq-toolbar)
 
 ;;; eicq-toolbar.el ends here
+
+
+;Local Variables:
+;time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
+;time-stamp-end: "\\\\?[\">]"
+;time-stamp-line-limit: 10
+;time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
+;End: 

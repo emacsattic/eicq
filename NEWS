@@ -1,5 +1,13 @@
 -*- Outline -*-
 
+* from 0.2.12 to 0.2.13
+
+** The number of tools on toolbar reduced.
+** Statuses moved from buddy buffer to their own read-only buffer.
+** Smilies 
+** URL/email highlighting in normal messages.
+** Can turn sounds off/on.
+
 * from 0.2.11 to 0.2.12
 
 ** Change status via widgets in the buddy buffer.

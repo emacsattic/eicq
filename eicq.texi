@@ -1,6 +1,7 @@
 \input texinfo @c eicq.texi   -*-TeXinfo-*-
 @c $Id$
 @c Copyright (C) 2000 Steve Youngs
+@c Last-Modified: <2001-4-24 16:13:57 (steve)>
 @c %**start of header
 @setfilename eicq.info
 @settitle A Mirabilis ICQ clone for XEmacs
@@ -8,7 +9,7 @@
 @setchapternewpage odd
 @c %**end of header
 @set EDITION 1.0
-@set VERSION 0.2.12
+@set VERSION 0.2.13
 @set UPDATED Mar 19, 2001
 
 @dircategory Lisp
@@ -486,4 +487,9 @@ to permit their use in free software.
 
 @bye
 
-
+@c Local Variables:
+@c time-stamp-start: "Last-Modified:[ 	]+\\\\?[\"<]+"
+@c time-stamp-end: "\\\\?[\">]"
+@c time-stamp-line-limit: 10
+@c time-stamp-format: "%4y-%m-%d %02H:%02M:%02S (%u)"
+@c End: 
