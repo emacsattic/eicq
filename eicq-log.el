@@ -6,7 +6,7 @@
 ;; Author:        Steve Youngs <steve@youngs.au.com>
 ;; Maintainer:    Steve Youngs <steve@youngs.au.com>
 ;; Created:       2002-10-01
-;; Last-Modified: <2004-05-30 11:13:42 (steve)>
+;; Last-Modified: <2004-06-09 12:48:03 (steve)>
 ;; Homepage:      http://eicq.sf.net/
 ;; Keywords:      comm ICQ
 
@@ -48,8 +48,7 @@
   (require 'outline))
 
 (eval-when-compile
-  (require 'smiley)
-  (require 'goto-addr))
+  (require 'smiley))
 
 (defgroup eicq-log nil
   "Message logging preferences."
@@ -311,6 +310,7 @@ MESSAGES is an argument list for `format' to be inserted."
 	    (apply 'format messages) 
 	    eicq-log-buddy-status-flag eicq-log-buddy-status-mark))
 
+;;;FIXME: Add some extent magic to URLs in messages.
 (defun eicq-log-buddy-message (alias &rest messages)
   "See `eicq-log-buddy-message-flag'.
 ALIAS is an id to be logged under.
@@ -321,8 +321,7 @@ MESSAGES is an argument list for `format' to be inserted."
   (save-excursion
     (set-buffer eicq-log-buffer)
     (if eicq-smiley
-        (smiley-buffer))
-    (goto-address)))
+        (smiley-buffer))))
 
 (defun eicq-log-buddy-url (alias message url)
   "See `eicq-log-buddy-message-flag'.

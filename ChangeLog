@@ -1,5 +1,12 @@
 2004-06-09  Steve Youngs  <steve@youngs.au.com>
 
+	* eicq-log.el (eicq-log-buddy-message): Remove call to
+	`goto-addr'.  We'll write our own using XEmacs extents.
+	Don't require goto-addr.el, so we don't need the fsf-compat
+	package. 
+
+2004-06-09  Steve Youngs  <steve@youngs.au.com>
+
 	* eicq-v8.el: New file.
 
 2004-05-30  Steve Youngs  <steve@youngs.au.com>
